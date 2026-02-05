@@ -30,7 +30,9 @@ Ecco un semplice componente contatore React che potresti usare in un file MDX:
 export function Counter() {
   const [count, setCount] = React.useState(0);
 
-  return <button onClick={() => setCount(count + 1)}>Conteggio: {count}</button>;
+  return (
+    <button onClick={() => setCount(count + 1)}>Conteggio: {count}</button>
+  );
 }
 ```
 
