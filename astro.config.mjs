@@ -6,7 +6,7 @@ import remarkWikiLinks from "./src/plugins/remarkWikiLinks.ts";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://example.com",
+  site: "https://www.outerreach.life",
   i18n: {
     locales: ["en", "it"],
     defaultLocale: "en",
