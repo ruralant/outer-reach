@@ -1,0 +1,126 @@
+---
+import ThemeToggle from '../components/ThemeToggle.astro';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		{description && <meta name="description" content={description} />}
+		<script is:inline>
+			// Prevent theme flash by applying theme before page renders
+			(function() {
+				const savedTheme = localStorage.getItem('theme');
+				let themeToApply = savedTheme;
+				
+				// If no saved theme, check system preference
+				if (!themeToApply) {
+					const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+					themeToApply = prefersDark ? 'dark' : 'light';
+				}
+				
+				// Apply theme immediately
+				if (themeToApply === 'dark') {
+					document.documentElement.setAttribute('data-theme', 'dark');
+					document.documentElement.classList.add('dark-mode');
+				} else {
+					document.documentElement.setAttribute('data-theme', 'light');
+					document.documentElement.classList.add('light-mode');
+				}
+			})();
+		</script>
+	</head>
+	<body class="light-mode">
+		<div class="theme-toggle-wrapper">
+			<ThemeToggle />
+		</div>
+		<slot />
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		/* Light mode colors */
+		--color-text-primary: #333;
+		--color-text-secondary: #666;
+		--color-background: #ffffff;
+		--color-background-secondary: #fafafa;
+		--color-border: #e0e0e0;
+		--color-accent: #667eea;
+		--color-accent-dark: #764ba2;
+		--color-gradient-start: #667eea;
+		--color-gradient-end: #764ba2;
+		--color-card-background: #ffffff;
+		--color-card-shadow: rgba(0, 0, 0, 0.1);
+		--color-link-hover: #667eea;
+	}
+
+	[data-theme='dark'] {
+		/* Dark mode colors */
+		--color-text-primary: #e0e0e0;
+		--color-text-secondary: #b0b0b0;
+		--color-background: #1a1a1a;
+		--color-background-secondary: #2d2d2d;
+		--color-border: #404040;
+		--color-accent: #8b9eff;
+		--color-accent-dark: #9b7ecb;
+		--color-gradient-start: #667eea;
+		--color-gradient-end: #764ba2;
+		--color-card-background: #2d2d2d;
+		--color-card-shadow: rgba(0, 0, 0, 0.5);
+		--color-link-hover: #8b9eff;
+	}
+
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	body {
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+			'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+			sans-serif;
+		line-height: 1.6;
+		color: var(--color-text-primary);
+		background-color: var(--color-background);
+		transition: background-color 0.3s ease, color 0.3s ease;
+		min-height: 100vh;
+	}
+
+	.theme-toggle-wrapper {
+		position: fixed;
+		top: 1.5rem;
+		right: 1.5rem;
+		z-index: 1000;
+	}
+
+	a {
+		color: var(--color-accent);
+		text-decoration: none;
+		transition: color 0.3s ease;
+	}
+
+	a:hover {
+		color: var(--color-link-hover);
+		text-decoration: underline;
+	}
+
+	@media (max-width: 640px) {
+		.theme-toggle-wrapper {
+			top: 1rem;
+			right: 1rem;
+		}
+	}
+</style>
