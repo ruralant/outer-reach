@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getNotesForLocale } from '../../../../lib/garden';
+import { useTranslations, localePath, localeDateShort, gardenNotePath, slugFromNoteId } from '../../../../i18n/utils';
+import type { Lang } from '../../../../i18n/ui';
+
+export async function getStaticPaths() {
+	const allNotes = await getNotesForLocale('it');
+
+	const tagSet = new Set<string>();
+	for (const note of allNotes) {
+		for (const tag of note.data.tags) {
+			tagSet.add(tag);
+		}
+	}
+
+	return Array.from(tagSet).map((tag) => ({
+		params: { tag },
+		props: {
+			tag,
+			notes: allNotes
+				.filter((n) => n.data.tags.includes(tag))
+				.sort((a, b) => a.data.title.localeCompare(b.data.title)),
+		},
+	}));
+}
+
+const { tag, notes } = Astro.props;
+const lang = (Astro.currentLocale || 'it') as Lang;
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={`#${tag} — ${t('site.title')}`} description={`${t('note.notes')} ${t('garden.withThisTag')} "${tag}"`}>
+	<div class="container">
+		<nav class="top-nav">
+			<a href={localePath(lang, '/garden/tags/')}>{t('nav.backToTags')}</a>
+			<a href={localePath(lang, '/garden/')}>{t('nav.garden')}</a>
+		</nav>
+
+		<header class="tag-header">
+			<h1>#{tag}</h1>
+			<p class="subtitle">{notes.length} {notes.length === 1 ? t('note.note') : t('note.notes')} {t('garden.withThisTag')}</p>
+		</header>
+
+		<div class="notes-list">
+			{notes.map((note) => (
+				<article class="note-row">
+					<a href={gardenNotePath(lang, slugFromNoteId(note.id))} class="note-title">{note.data.title}</a>
+					<p class="note-desc">{note.data.description}</p>
+					<span class="note-date">
+						{localeDateShort(note.data.created, lang)}
+					</span>
+				</article>
+			))}
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.container { max-width: 640px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+	.top-nav { display: flex; justify-content: space-between; padding: 0.5rem 0 2rem; }
+	.top-nav a { font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-text-secondary); text-decoration: none; }
+	.top-nav a:hover { color: var(--color-accent); }
+	.tag-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--color-border); }
+	.tag-header h1 { font-size: 2rem; font-weight: 700; margin: 0 0 0.25rem 0; color: var(--color-text-primary); letter-spacing: -0.02em; }
+	.subtitle { font-size: 0.95rem; color: var(--color-text-secondary); margin: 0; }
+	.notes-list { display: flex; flex-direction: column; }
+	.note-row { padding: 1rem 0; border-bottom: 1px solid var(--color-border); }
+	.note-title { font-size: 1.05rem; font-weight: 600; color: var(--color-text-primary); text-decoration: none; }
+	.note-title:hover { color: var(--color-accent); }
+	.note-desc { font-size: 0.9rem; color: var(--color-text-secondary); margin: 0.25rem 0; line-height: 1.5; }
+	.note-date { font-size: 0.8rem; color: var(--color-text-secondary); opacity: 0.7; }
+</style>

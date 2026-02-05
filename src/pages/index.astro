@@ -1,359 +1,349 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import StatusBadge from '../components/StatusBadge.astro';
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
+import { getNotesForLocale } from '../lib/garden';
+import { useTranslations, localePath, localeDateShort, gardenNotePath, slugFromNoteId } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
 
-const allPosts = await getCollection('blog');
-const latestPosts = allPosts
-	.filter((post) => !post.data.draft)
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-	.slice(0, 6);
+const lang = (Astro.currentLocale || 'en') as Lang;
+const t = useTranslations(lang);
+
+const allNotes = await getNotesForLocale(lang);
+const latestNotes = allNotes
+	.sort((a, b) => b.data.created.valueOf() - a.data.created.valueOf())
+	.slice(0, 3);
 ---
 
-<BaseLayout title="Home - Astro Blog" description="Exploring web development, technology, and ideas">
-	<div class="container">
-			<header class="header">
-				<h1>Welcome to My Blog</h1>
-				<p class="tagline">Exploring web development, technology, and ideas</p>
-			</header>
+<BaseLayout title={t('site.title') as string} description={t('site.tagline') as string}>
+	<div class="manifesto">
+		<nav class="top-nav">
+			<LanguageSwitcher />
+			<div class="top-nav-right">
+				<a href={localePath(lang, '/garden/')}>{t('nav.garden')}</a>
+				<a href={localePath(lang, '/rss.xml')}>{t('nav.rss')}</a>
+			</div>
+		</nav>
 
-			<nav class="navigation">
-				<ul>
-					<li><a href="/blog/">Read Blog</a></li>
-					<li><a href="/rss.xml">RSS Feed</a></li>
-				</ul>
-			</nav>
+		<header class="hero">
+			<h1>{t('site.title')}</h1>
+			<p class="hero-lead">{t('site.tagline')}</p>
+		</header>
 
-			<main class="content">
-				<section>
-					<h2>About This Blog</h2>
-					<p>
-						This is a modern blog built with <strong>Astro v5</strong>, featuring:
-					</p>
-					<ul>
-						<li>⚡ Zero JavaScript by default for maximum performance</li>
-						<li>📝 Markdown-based content with Content Collections API</li>
-						<li>🎨 MDX support for interactive components in posts</li>
-						<li>📰 Automatic RSS feed generation</li>
-						<li>🗺️ Automatic sitemap for SEO</li>
-						<li>💅 Scoped CSS styling with no bloat</li>
-					</ul>
-				</section>
+		<div class="prose">
+			<p>{t('home.intro')}</p>
+			<p>{t('home.intro2')}</p>
 
-				<section>
-					<h2>Latest Posts</h2>
-					{latestPosts.length > 0 ? (
-						<div class="latest-posts-grid">
-							{latestPosts.map((post) => (
-								<article class="post-card-home">
-									<h3 class="post-card-home-title">
-										<a href={`/blog/${post.id}`}>{post.data.title}</a>
-									</h3>
-									<p class="post-card-home-description">{post.data.description}</p>
-									<div class="post-card-home-meta">
-										<span class="meta-author">{post.data.author}</span>
-										<span class="meta-date">
-											{post.data.pubDate.toLocaleDateString('en-US', {
-												year: 'numeric',
-												month: 'short',
-												day: 'numeric',
-											})}
-										</span>
-									</div>
-									<a href={`/blog/${post.id}`} class="read-more-home">Read More →</a>
-								</article>
-							))}
-						</div>
-					) : (
-						<p>No posts yet. Check back soon!</p>
-					)}
-					<div class="view-all-posts">
-						<a href="/blog/" class="view-all-link">View All Posts →</a>
-					</div>
-				</section>
+			<h2>{t('home.whatTitle')}</h2>
+			<p>{t('home.what1')}</p>
+			<p>{t('home.what2')}</p>
+			<p>{t('home.what3')}</p>
+			<p class="pull">{t('home.whatPull')}</p>
 
-				<section>
-					<h2>Getting Started</h2>
-					<p>Head over to the <a href="/blog/">blog</a> to read the latest posts, or subscribe to the <a href="/rss.xml">RSS feed</a> to stay updated.</p>
-				</section>
-			</main>
+			<h2>{t('home.swTitle')} <span class="aside">{t('home.swAside')}</span></h2>
+			<p>{t('home.sw1')}</p>
+			<p>{t('home.sw2')}</p>
+			<p>{t('home.sw3')}</p>
+			<p>{t('home.sw4')}</p>
+			<p>{t('home.sw5')}</p>
 
-			<footer class="footer">
-				<p>&copy; 2026 My Blog. Built with Astro.</p>
-			</footer>
+			<h2>{t('home.coreTitle')}</h2>
+			<p>{t('home.core1')}</p>
+			<p>{t('home.core2')}</p>
+			<ul>
+				{(t('home.coreList') as unknown as string[]).map((item) => (
+					<li>{item}</li>
+				))}
+			</ul>
+			<p>{t('home.core3')}</p>
+			<p>{t('home.core4')}</p>
+			<p class="pull">{t('home.corePull')}</p>
+
+			<h2>{t('home.lifeTitle')}</h2>
+			<p>{t('home.life1')}</p>
+			<p>{t('home.life2')}</p>
+			<p>{t('home.life3')}</p>
+			<ul>
+				{(t('home.lifeList') as unknown as string[]).map((item) => (
+					<li>{item}</li>
+				))}
+			</ul>
+			<p>{t('home.life4')}</p>
+
+			<h2>{t('home.findTitle')}</h2>
+			<p>{t('home.find1')}</p>
+			<p>{t('home.find2')}</p>
+			<ul>
+				{(t('home.findList') as unknown as string[]).map((item) => (
+					<li>{item}</li>
+				))}
+			</ul>
+			<p>{t('home.find3')}</p>
+			<p>{t('home.find4')}</p>
+			<p class="pull">{t('home.findPull')}</p>
 		</div>
+
+		{latestNotes.length > 0 && (
+			<section class="recent-notes">
+				<h2>{t('garden.recentNotes')}</h2>
+				<div class="notes-list">
+					{latestNotes.map((note) => (
+						<a href={gardenNotePath(lang, slugFromNoteId(note.id))} class="note-link">
+							<article class="note-item">
+								<div class="note-item-header">
+									<span class="note-item-title">{note.data.title}</span>
+									<StatusBadge status={note.data.status} size="sm" />
+								</div>
+								<p class="note-item-description">{note.data.description}</p>
+								<time class="note-item-date">
+									{localeDateShort(note.data.created, lang)}
+								</time>
+							</article>
+						</a>
+					))}
+				</div>
+				<div class="garden-cta">
+					<a href={localePath(lang, '/garden/')}>{t('nav.exploreGarden')}</a>
+				</div>
+			</section>
+		)}
+
+		<footer class="site-footer">
+			<p>{t('site.footer')}</p>
+		</footer>
+	</div>
 </BaseLayout>
 
 <style>
-	:global(body) {
-		background: linear-gradient(135deg, var(--color-gradient-start) 0%, var(--color-gradient-end) 100%);
-		min-height: 100vh;
-	}
-
-	.container {
-		max-width: 900px;
+	.manifesto {
+		max-width: 640px;
 		margin: 0 auto;
-		padding: 2rem 1rem;
+		padding: 2rem 1.5rem 4rem;
 	}
 
-	.header {
-		text-align: center;
-		color: white;
-		margin-bottom: 3rem;
-		margin-top: 2rem;
-	}
-
-	.header h1 {
-		font-size: 3.5rem;
-		font-weight: 700;
-		margin: 0;
-		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-	}
-
-	.tagline {
-		font-size: 1.3rem;
-		margin: 0.5rem 0 0 0;
-		opacity: 0.95;
-		text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-	}
-
-	.navigation {
-		text-align: center;
-		margin-bottom: 3rem;
-	}
-
-	.navigation ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
+	/* --- Top nav --- */
+	.top-nav {
 		display: flex;
-		justify-content: center;
-		gap: 2rem;
+		justify-content: space-between;
+		gap: 1.5rem;
+		padding: 0.5rem 0 2rem;
+	}
+
+	.top-nav-right {
+		display: flex;
+		gap: 1.5rem;
+	}
+
+	.top-nav a {
+		font-size: 0.85rem;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--color-text-secondary);
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.top-nav a:hover {
+		color: var(--color-accent);
+		text-decoration: none;
+	}
+
+	/* --- Hero --- */
+	.hero {
+		margin-bottom: 3rem;
+		padding-bottom: 2.5rem;
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.hero h1 {
+		font-size: 2.8rem;
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		margin: 0 0 0.75rem 0;
+		color: var(--color-text-primary);
+		line-height: 1.15;
+	}
+
+	.hero-lead {
+		font-size: 1.2rem;
+		color: var(--color-text-secondary);
+		margin: 0;
+		font-style: italic;
+	}
+
+	/* --- Prose --- */
+	.prose {
+		margin-bottom: 3rem;
+	}
+
+	.prose h2 {
+		font-size: 1.35rem;
+		font-weight: 600;
+		color: var(--color-text-primary);
+		margin: 2.5rem 0 1rem 0;
+		letter-spacing: -0.01em;
+	}
+
+	.prose h2 .aside {
+		font-weight: 400;
+		color: var(--color-text-secondary);
+		font-size: 0.95em;
+	}
+
+	.prose p {
+		margin: 0 0 1rem 0;
+		font-size: 1.05rem;
+		line-height: 1.75;
+		color: var(--color-text-primary);
+	}
+
+	.prose ul {
+		margin: 0 0 1rem 0;
+		padding-left: 1.25rem;
+		list-style: none;
+	}
+
+	.prose li {
+		font-size: 1.05rem;
+		line-height: 1.75;
+		color: var(--color-text-primary);
+		position: relative;
+		padding-left: 0.75rem;
+		margin-bottom: 0.25rem;
+	}
+
+	.prose li::before {
+		content: '—';
+		position: absolute;
+		left: -1rem;
+		color: var(--color-text-secondary);
+		opacity: 0.5;
+	}
+
+	.prose .pull {
+		font-size: 1.15rem;
+		font-style: italic;
+		color: var(--color-accent);
+		margin: 1.5rem 0;
+		padding-left: 1.25rem;
+		border-left: 2px solid var(--color-accent);
+		opacity: 0.9;
+	}
+
+	/* --- Recent notes --- */
+	.recent-notes {
+		border-top: 1px solid var(--color-border);
+		padding-top: 2.5rem;
+		margin-bottom: 3rem;
+	}
+
+	.recent-notes h2 {
+		font-size: 1.1rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-text-secondary);
+		margin: 0 0 1.25rem 0;
+	}
+
+	.notes-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.note-link {
+		text-decoration: none;
+		color: inherit;
+		display: block;
+	}
+
+	.note-link:hover {
+		text-decoration: none;
+	}
+
+	.note-item {
+		padding: 1rem 0;
+		border-bottom: 1px solid var(--color-border);
+		transition: opacity 0.2s ease;
+	}
+
+	.note-link:hover .note-item {
+		opacity: 0.7;
+	}
+
+	.note-item-header {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.25rem;
 		flex-wrap: wrap;
 	}
 
-	.navigation a {
-		color: white;
-		text-decoration: none;
+	.note-item-title {
 		font-weight: 600;
-		padding: 0.75rem 1.5rem;
-		background-color: rgba(255, 255, 255, 0.2);
-		border-radius: 50px;
-		transition: all 0.3s ease;
-		border: 2px solid rgba(255, 255, 255, 0.3);
-	}
-
-	.navigation a:hover {
-		background-color: rgba(255, 255, 255, 0.3);
-		border-color: rgba(255, 255, 255, 0.5);
-		transform: translateY(-2px);
-	}
-
-	.content {
-		background: var(--color-card-background);
-		border-radius: 12px;
-		padding: 2rem;
-		box-shadow: 0 20px 60px var(--color-card-shadow);
-		margin-bottom: 2rem;
-		color: var(--color-text-primary);
-	}
-
-	.content section {
-		margin-bottom: 2rem;
-	}
-
-	.content section:last-child {
-		margin-bottom: 0;
-	}
-
-	.content h2 {
-		font-size: 1.8rem;
-		font-weight: 700;
-		color: var(--color-accent);
-		margin: 0 0 1rem 0;
-	}
-
-	.content p {
-		margin: 0 0 1rem 0;
 		font-size: 1.05rem;
-	}
-
-	.content ul {
-		padding-left: 2rem;
-		margin: 1rem 0;
-	}
-
-	.content li {
-		margin: 0.5rem 0;
-		font-size: 1.05rem;
-	}
-
-	.content a:hover {
-		text-decoration: underline;
-	}
-
-	:global(.dark-mode) .content {
-		background: var(--color-card-background);
 		color: var(--color-text-primary);
 	}
 
-	.latest-posts-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-		gap: 1.5rem;
-		margin: 1.5rem 0;
-	}
-
-	.post-card-home {
-		background: rgba(255, 255, 255, 0.95);
-		border-radius: 8px;
-		padding: 1.5rem;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-		transition: box-shadow 0.3s ease, transform 0.3s ease;
-		display: flex;
-		flex-direction: column;
-	}
-
-	:global(.dark-mode) .post-card-home {
-		background: var(--color-card-background);
-		border: 1px solid var(--color-border);
-	}
-
-	.post-card-home:hover {
-		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-		transform: translateY(-2px);
-	}
-
-	:global(.dark-mode) .post-card-home:hover {
-		box-shadow: 0 4px 16px var(--color-card-shadow);
-	}
-
-	.post-card-home-title {
-		margin: 0 0 0.75rem 0;
-		font-size: 1.3rem;
-		font-weight: 600;
-		color: #333;
-	}
-
-	:global(.dark-mode) .post-card-home-title {
-		color: var(--color-text-primary);
-	}
-
-	.post-card-home-title a {
-		color: #333;
-		text-decoration: none;
-	}
-
-	:global(.dark-mode) .post-card-home-title a {
-		color: var(--color-text-primary);
-	}
-
-	.post-card-home-title a:hover {
-		color: #667eea;
-	}
-
-	:global(.dark-mode) .post-card-home-title a:hover {
-		color: var(--color-accent);
-	}
-
-	.post-card-home-description {
-		margin: 0 0 1rem 0;
-		color: #666;
-		font-size: 0.95rem;
-		flex-grow: 1;
+	.note-item-description {
+		font-size: 0.9rem;
+		color: var(--color-text-secondary);
+		margin: 0;
 		line-height: 1.5;
 	}
 
-	:global(.dark-mode) .post-card-home-description {
+	.note-item-date {
+		font-size: 0.8rem;
 		color: var(--color-text-secondary);
+		opacity: 0.7;
+		display: block;
+		margin-top: 0.35rem;
 	}
 
-	.post-card-home-meta {
-		display: flex;
-		gap: 1rem;
-		font-size: 0.85rem;
-		color: #999;
-		margin-bottom: 1rem;
+	.garden-cta {
+		margin-top: 1.5rem;
 	}
 
-	:global(.dark-mode) .post-card-home-meta {
-		color: var(--color-text-secondary);
-	}
-
-	.meta-author {
-		font-weight: 500;
-	}
-
-	.read-more-home {
-		color: #667eea;
-		text-decoration: none;
-		font-weight: 500;
-		margin-top: auto;
-		align-self: flex-start;
-	}
-
-	:global(.dark-mode) .read-more-home {
+	.garden-cta a {
+		font-size: 0.9rem;
 		color: var(--color-accent);
+		text-decoration: none;
 	}
 
-	.read-more-home:hover {
+	.garden-cta a:hover {
 		text-decoration: underline;
 	}
 
-	.view-all-posts {
+	/* --- Footer --- */
+	.site-footer {
+		padding-top: 2rem;
+		border-top: 1px solid var(--color-border);
 		text-align: center;
-		margin-top: 2rem;
-		padding-top: 1.5rem;
-		border-top: 1px solid rgba(255, 255, 255, 0.3);
 	}
 
-	:global(.dark-mode) .view-all-posts {
-		border-top-color: var(--color-border);
+	.site-footer p {
+		font-size: 0.8rem;
+		color: var(--color-text-secondary);
+		opacity: 0.6;
 	}
 
-	.view-all-link {
-		color: white;
-		text-decoration: none;
-		font-weight: 600;
-		padding: 0.75rem 1.5rem;
-		background-color: rgba(255, 255, 255, 0.2);
-		border-radius: 50px;
-		transition: all 0.3s ease;
-		border: 2px solid rgba(255, 255, 255, 0.3);
-		display: inline-block;
-	}
-
-	.view-all-link:hover {
-		background-color: rgba(255, 255, 255, 0.3);
-		border-color: rgba(255, 255, 255, 0.5);
-		transform: translateY(-2px);
-	}
-
-	.footer {
-		text-align: center;
-		color: white;
-		opacity: 0.9;
-		font-size: 0.95rem;
-	}
-
+	/* --- Responsive --- */
 	@media (max-width: 640px) {
-		.header h1 {
+		.manifesto {
+			padding: 1.5rem 1rem 3rem;
+		}
+
+		.hero h1 {
 			font-size: 2rem;
 		}
 
-		.tagline {
-			font-size: 1rem;
+		.hero-lead {
+			font-size: 1.05rem;
 		}
 
-		.navigation ul {
-			gap: 1rem;
-		}
-
-		.content {
-			padding: 1.5rem;
-		}
-
-		.content h2 {
-			font-size: 1.4rem;
+		.prose h2 {
+			font-size: 1.2rem;
 		}
 	}
 </style>

@@ -1,9 +1,10 @@
 ---
 title: "Getting Started with Astro"
 description: "Learn how to build fast, modern websites with Astro and markdown"
-pubDate: 2026-01-15
+created: 2026-01-15
 author: "Antonio Rossi"
 tags: ["astro", "web development", "markdown"]
+status: evergreen
 draft: false
 ---
 
@@ -42,3 +43,5 @@ const publishedPosts = posts.filter((p) => !p.data.draft);
 ## Conclusion
 
 Astro is an excellent choice for building modern blogs and content sites. With its focus on performance and developer experience, it's worth exploring for your next project.
+
+Once you're comfortable with the basics, check out how to enhance your content with [[mdx-interactive-components|interactive MDX components]].

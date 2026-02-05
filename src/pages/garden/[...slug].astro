@@ -1,0 +1,80 @@
+---
+import { render } from 'astro:content';
+import GardenNoteLayout from '../../layouts/GardenNoteLayout.astro';
+import { getNotesForLocale, getBacklinks, getRelatedNotes } from '../../lib/garden';
+import { useTranslations, slugFromNoteId } from '../../i18n/utils';
+import type { Lang } from '../../i18n/ui';
+
+export async function getStaticPaths() {
+	const allNotes = await getNotesForLocale('en');
+
+	return allNotes.map((note) => ({
+		params: { slug: slugFromNoteId(note.id) },
+		props: {
+			note,
+			backlinks: getBacklinks(note.id, allNotes),
+			relatedNotes: getRelatedNotes(note, allNotes),
+		},
+	}));
+}
+
+const { note, backlinks, relatedNotes } = Astro.props;
+const lang = (Astro.currentLocale || 'en') as Lang;
+const t = useTranslations(lang);
+const { Content, headings } = await render(note);
+---
+
+<GardenNoteLayout note={note} backlinks={backlinks} relatedNotes={relatedNotes}>
+	{headings.length > 2 && (
+		<details class="toc">
+			<summary>{t('note.contents')}</summary>
+			<ul>
+				{headings.map((heading) => (
+					<li style={{ marginLeft: `${(heading.depth - 2) * 1}rem` }}>
+						<a href={`#${heading.slug}`}>{heading.text}</a>
+					</li>
+				))}
+			</ul>
+		</details>
+	)}
+	<Content />
+</GardenNoteLayout>
+
+<style>
+	.toc {
+		margin-bottom: 2rem;
+		padding: 1rem 1.25rem;
+		border: 1px solid var(--color-border);
+		border-radius: 4px;
+		font-size: 0.9rem;
+	}
+
+	.toc summary {
+		cursor: pointer;
+		font-weight: 600;
+		color: var(--color-text-secondary);
+		font-size: 0.85rem;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+	}
+
+	.toc ul {
+		list-style: none;
+		padding: 0;
+		margin: 0.75rem 0 0 0;
+	}
+
+	.toc li {
+		margin: 0.35rem 0;
+		line-height: 1.4;
+	}
+
+	.toc a {
+		color: var(--color-text-secondary);
+		text-decoration: none;
+	}
+
+	.toc a:hover {
+		color: var(--color-accent);
+	}
+</style>
