@@ -26,7 +26,10 @@ export function useTranslations(lang: Lang | string | undefined) {
  * English (default locale) → no prefix: `/garden/slug`
  * Italian → prefixed: `/it/garden/slug`
  */
-export function localePath(lang: Lang | string | undefined, path: string): string {
+export function localePath(
+  lang: Lang | string | undefined,
+  path: string,
+): string {
   const l = lang ?? defaultLang;
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
   if (l === defaultLang) return cleanPath;
@@ -43,7 +46,7 @@ export function localeDateString(
     year: "numeric",
     month: "long",
     day: "numeric",
-  }
+  },
 ): string {
   const localeMap: Record<string, string> = {
     en: "en-GB",
@@ -58,7 +61,7 @@ export function localeDateString(
  */
 export function localeDateShort(
   date: Date,
-  lang: Lang | string | undefined
+  lang: Lang | string | undefined,
 ): string {
   return localeDateString(date, lang, {
     year: "numeric",
@@ -97,6 +100,9 @@ export function slugFromNoteId(noteId: string): string {
 /**
  * Build a garden note URL.
  */
-export function gardenNotePath(lang: Lang | string | undefined, slug: string): string {
+export function gardenNotePath(
+  lang: Lang | string | undefined,
+  slug: string,
+): string {
   return localePath(lang, `/garden/${slug}`);
 }
