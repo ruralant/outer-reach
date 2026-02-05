@@ -1,0 +1,9 @@
+{
+	"servers": {
+		"my-mcp-server-58b808d1": {
+			"url": "https://mcp.docs.astro.build/mcp",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}

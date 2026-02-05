@@ -1,0 +1,108 @@
+---
+import { getCollection, render } from 'astro:content';
+import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
+}
+
+interface Props {
+	post: (typeof import('astro:content'))['CollectionEntry']['blog'];
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+---
+
+<BlogPostLayout post={post}>
+	<div class="post-wrapper">
+		{headings.length > 0 && (
+			<aside class="toc-sidebar">
+				<nav class="toc">
+					<h3>Table of Contents</h3>
+					<ul>
+						{headings.map((heading) => (
+							<li style={{ marginLeft: `${(heading.depth - 1) * 1}rem` }}>
+								<a href={`#${heading.slug}`}>{heading.text}</a>
+							</li>
+						))}
+					</ul>
+				</nav>
+			</aside>
+		)}
+		<div class="post-main">
+			<Content />
+		</div>
+	</div>
+</BlogPostLayout>
+
+<style>
+	.post-wrapper {
+		display: grid;
+		grid-template-columns: 1fr 250px;
+		gap: 2rem;
+	}
+
+	.post-main {
+		min-width: 0;
+	}
+
+	.toc-sidebar {
+		position: sticky;
+		top: 2rem;
+		height: fit-content;
+	}
+
+	.toc {
+		background-color: #f9f9f9;
+		border: 1px solid #e0e0e0;
+		border-radius: 6px;
+		padding: 1rem;
+		font-size: 0.9rem;
+	}
+
+	.toc h3 {
+		margin: 0 0 1rem 0;
+		font-size: 1rem;
+		font-weight: 600;
+	}
+
+	.toc ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.toc li {
+		margin: 0.5rem 0;
+	}
+
+	.toc a {
+		color: #007acc;
+		text-decoration: none;
+		display: block;
+		padding: 0.25rem 0;
+	}
+
+	.toc a:hover {
+		text-decoration: underline;
+	}
+
+	@media (max-width: 1024px) {
+		.post-wrapper {
+			grid-template-columns: 1fr;
+		}
+
+		.toc-sidebar {
+			position: static;
+		}
+
+		.toc {
+			margin-bottom: 2rem;
+		}
+	}
+</style>

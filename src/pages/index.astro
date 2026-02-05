@@ -1,0 +1,359 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const latestPosts = allPosts
+	.filter((post) => !post.data.draft)
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 6);
+---
+
+<BaseLayout title="Home - Astro Blog" description="Exploring web development, technology, and ideas">
+	<div class="container">
+			<header class="header">
+				<h1>Welcome to My Blog</h1>
+				<p class="tagline">Exploring web development, technology, and ideas</p>
+			</header>
+
+			<nav class="navigation">
+				<ul>
+					<li><a href="/blog/">Read Blog</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</nav>
+
+			<main class="content">
+				<section>
+					<h2>About This Blog</h2>
+					<p>
+						This is a modern blog built with <strong>Astro v5</strong>, featuring:
+					</p>
+					<ul>
+						<li>⚡ Zero JavaScript by default for maximum performance</li>
+						<li>📝 Markdown-based content with Content Collections API</li>
+						<li>🎨 MDX support for interactive components in posts</li>
+						<li>📰 Automatic RSS feed generation</li>
+						<li>🗺️ Automatic sitemap for SEO</li>
+						<li>💅 Scoped CSS styling with no bloat</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Latest Posts</h2>
+					{latestPosts.length > 0 ? (
+						<div class="latest-posts-grid">
+							{latestPosts.map((post) => (
+								<article class="post-card-home">
+									<h3 class="post-card-home-title">
+										<a href={`/blog/${post.id}`}>{post.data.title}</a>
+									</h3>
+									<p class="post-card-home-description">{post.data.description}</p>
+									<div class="post-card-home-meta">
+										<span class="meta-author">{post.data.author}</span>
+										<span class="meta-date">
+											{post.data.pubDate.toLocaleDateString('en-US', {
+												year: 'numeric',
+												month: 'short',
+												day: 'numeric',
+											})}
+										</span>
+									</div>
+									<a href={`/blog/${post.id}`} class="read-more-home">Read More →</a>
+								</article>
+							))}
+						</div>
+					) : (
+						<p>No posts yet. Check back soon!</p>
+					)}
+					<div class="view-all-posts">
+						<a href="/blog/" class="view-all-link">View All Posts →</a>
+					</div>
+				</section>
+
+				<section>
+					<h2>Getting Started</h2>
+					<p>Head over to the <a href="/blog/">blog</a> to read the latest posts, or subscribe to the <a href="/rss.xml">RSS feed</a> to stay updated.</p>
+				</section>
+			</main>
+
+			<footer class="footer">
+				<p>&copy; 2026 My Blog. Built with Astro.</p>
+			</footer>
+		</div>
+</BaseLayout>
+
+<style>
+	:global(body) {
+		background: linear-gradient(135deg, var(--color-gradient-start) 0%, var(--color-gradient-end) 100%);
+		min-height: 100vh;
+	}
+
+	.container {
+		max-width: 900px;
+		margin: 0 auto;
+		padding: 2rem 1rem;
+	}
+
+	.header {
+		text-align: center;
+		color: white;
+		margin-bottom: 3rem;
+		margin-top: 2rem;
+	}
+
+	.header h1 {
+		font-size: 3.5rem;
+		font-weight: 700;
+		margin: 0;
+		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	}
+
+	.tagline {
+		font-size: 1.3rem;
+		margin: 0.5rem 0 0 0;
+		opacity: 0.95;
+		text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	}
+
+	.navigation {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+
+	.navigation ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		justify-content: center;
+		gap: 2rem;
+		flex-wrap: wrap;
+	}
+
+	.navigation a {
+		color: white;
+		text-decoration: none;
+		font-weight: 600;
+		padding: 0.75rem 1.5rem;
+		background-color: rgba(255, 255, 255, 0.2);
+		border-radius: 50px;
+		transition: all 0.3s ease;
+		border: 2px solid rgba(255, 255, 255, 0.3);
+	}
+
+	.navigation a:hover {
+		background-color: rgba(255, 255, 255, 0.3);
+		border-color: rgba(255, 255, 255, 0.5);
+		transform: translateY(-2px);
+	}
+
+	.content {
+		background: var(--color-card-background);
+		border-radius: 12px;
+		padding: 2rem;
+		box-shadow: 0 20px 60px var(--color-card-shadow);
+		margin-bottom: 2rem;
+		color: var(--color-text-primary);
+	}
+
+	.content section {
+		margin-bottom: 2rem;
+	}
+
+	.content section:last-child {
+		margin-bottom: 0;
+	}
+
+	.content h2 {
+		font-size: 1.8rem;
+		font-weight: 700;
+		color: var(--color-accent);
+		margin: 0 0 1rem 0;
+	}
+
+	.content p {
+		margin: 0 0 1rem 0;
+		font-size: 1.05rem;
+	}
+
+	.content ul {
+		padding-left: 2rem;
+		margin: 1rem 0;
+	}
+
+	.content li {
+		margin: 0.5rem 0;
+		font-size: 1.05rem;
+	}
+
+	.content a:hover {
+		text-decoration: underline;
+	}
+
+	:global(.dark-mode) .content {
+		background: var(--color-card-background);
+		color: var(--color-text-primary);
+	}
+
+	.latest-posts-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: 1.5rem;
+		margin: 1.5rem 0;
+	}
+
+	.post-card-home {
+		background: rgba(255, 255, 255, 0.95);
+		border-radius: 8px;
+		padding: 1.5rem;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		transition: box-shadow 0.3s ease, transform 0.3s ease;
+		display: flex;
+		flex-direction: column;
+	}
+
+	:global(.dark-mode) .post-card-home {
+		background: var(--color-card-background);
+		border: 1px solid var(--color-border);
+	}
+
+	.post-card-home:hover {
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+		transform: translateY(-2px);
+	}
+
+	:global(.dark-mode) .post-card-home:hover {
+		box-shadow: 0 4px 16px var(--color-card-shadow);
+	}
+
+	.post-card-home-title {
+		margin: 0 0 0.75rem 0;
+		font-size: 1.3rem;
+		font-weight: 600;
+		color: #333;
+	}
+
+	:global(.dark-mode) .post-card-home-title {
+		color: var(--color-text-primary);
+	}
+
+	.post-card-home-title a {
+		color: #333;
+		text-decoration: none;
+	}
+
+	:global(.dark-mode) .post-card-home-title a {
+		color: var(--color-text-primary);
+	}
+
+	.post-card-home-title a:hover {
+		color: #667eea;
+	}
+
+	:global(.dark-mode) .post-card-home-title a:hover {
+		color: var(--color-accent);
+	}
+
+	.post-card-home-description {
+		margin: 0 0 1rem 0;
+		color: #666;
+		font-size: 0.95rem;
+		flex-grow: 1;
+		line-height: 1.5;
+	}
+
+	:global(.dark-mode) .post-card-home-description {
+		color: var(--color-text-secondary);
+	}
+
+	.post-card-home-meta {
+		display: flex;
+		gap: 1rem;
+		font-size: 0.85rem;
+		color: #999;
+		margin-bottom: 1rem;
+	}
+
+	:global(.dark-mode) .post-card-home-meta {
+		color: var(--color-text-secondary);
+	}
+
+	.meta-author {
+		font-weight: 500;
+	}
+
+	.read-more-home {
+		color: #667eea;
+		text-decoration: none;
+		font-weight: 500;
+		margin-top: auto;
+		align-self: flex-start;
+	}
+
+	:global(.dark-mode) .read-more-home {
+		color: var(--color-accent);
+	}
+
+	.read-more-home:hover {
+		text-decoration: underline;
+	}
+
+	.view-all-posts {
+		text-align: center;
+		margin-top: 2rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.3);
+	}
+
+	:global(.dark-mode) .view-all-posts {
+		border-top-color: var(--color-border);
+	}
+
+	.view-all-link {
+		color: white;
+		text-decoration: none;
+		font-weight: 600;
+		padding: 0.75rem 1.5rem;
+		background-color: rgba(255, 255, 255, 0.2);
+		border-radius: 50px;
+		transition: all 0.3s ease;
+		border: 2px solid rgba(255, 255, 255, 0.3);
+		display: inline-block;
+	}
+
+	.view-all-link:hover {
+		background-color: rgba(255, 255, 255, 0.3);
+		border-color: rgba(255, 255, 255, 0.5);
+		transform: translateY(-2px);
+	}
+
+	.footer {
+		text-align: center;
+		color: white;
+		opacity: 0.9;
+		font-size: 0.95rem;
+	}
+
+	@media (max-width: 640px) {
+		.header h1 {
+			font-size: 2rem;
+		}
+
+		.tagline {
+			font-size: 1rem;
+		}
+
+		.navigation ul {
+			gap: 1rem;
+		}
+
+		.content {
+			padding: 1.5rem;
+		}
+
+		.content h2 {
+			font-size: 1.4rem;
+		}
+	}
+</style>

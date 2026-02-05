@@ -1,0 +1,56 @@
+---
+title: "Building Interactive Components with MDX"
+description: "Discover how to use MDX to add interactive components to your blog posts"
+pubDate: 2026-01-10
+author: "Antonio Rossi"
+tags: ["mdx", "astro", "interactivity", "components"]
+draft: false
+---
+
+## What is MDX?
+
+MDX is a powerful tool that allows you to use JSX components directly in your markdown files. This means you can write blog posts that include interactive elements, not just static content.
+
+## Why Use MDX?
+
+Traditional markdown has limitations when you need interactivity:
+
+- **Limited to HTML** - Markdown generates static HTML
+- **No dynamic behavior** - You can't add interactive elements
+- **Hard to extend** - Adding custom functionality requires workarounds
+
+MDX solves these problems by combining markdown with JSX.
+
+## Example: Creating a Counter Component
+
+Here's a simple React counter component you could use in an MDX file:
+
+```jsx
+export function Counter() {
+  const [count, setCount] = React.useState(0);
+
+  return <button onClick={() => setCount(count + 1)}>Count: {count}</button>;
+}
+```
+
+## Benefits in Astro
+
+In Astro, MDX gives you:
+
+1. **Easy to write** - Still looks and feels like markdown
+2. **Powerful** - Full access to JavaScript and components
+3. **Interactive** - Add client-side interactivity where needed
+4. **Type-safe** - With TypeScript support
+
+## Best Practices
+
+When using MDX in your blog:
+
+- Keep components focused and simple
+- Use MDX sparingly for interactive elements
+- Consider performance implications
+- Document custom components clearly
+
+## Conclusion
+
+MDX is a great way to add interactivity to your Astro blog while keeping the simplicity and readability of markdown. It's perfect for technical blogs that need code examples, diagrams, or interactive demos.
