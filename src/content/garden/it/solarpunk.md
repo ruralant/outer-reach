@@ -53,12 +53,12 @@ Non serve aspettare la rivoluzione. I valori solarpunk possono essere praticati 
 
 Il solarpunk è nato nella narrativa e nell'arte, e questo conta. Prima di poter costruire un mondo migliore, bisogna immaginarlo. Le storie che raccontiamo plasmano i futuri che consideriamo possibili.
 
-La narrativa distopica ha il suo posto — ci avverte su cosa evitare. Ma abbiamo anche bisogno di narrativa che ci mostri cosa a cui mirare. Non come propaganda, non come promessa, ma come *invito*. Ecco un mondo che potrebbe funzionare. Ecco come potrebbe essere un lunedì mattina se facciamo le cose per bene.
+La narrativa distopica ha il suo posto — ci avverte su cosa evitare. Ma abbiamo anche bisogno di narrativa che ci mostri cosa a cui mirare. Non come propaganda, non come promessa, ma come _invito_. Ecco un mondo che potrebbe funzionare. Ecco come potrebbe essere un lunedì mattina se facciamo le cose per bene.
 
 ## Perché è Importante
 
 Siamo a un punto in cui le persone, specialmente i giovani, stanno annegando nell'angoscia per il futuro. L'ansia climatica è reale. Il pessimismo politico è reale. E le risposte standard — "la tecnologia ci salverà" o "siamo spacciati" — non sono utili.
 
-Il solarpunk offre una terza opzione: *possiamo costruire qualcosa di meglio, e la costruzione stessa è significativa, anche se non facciamo tutto perfettamente*. Non è ottimismo. È qualcosa di più difficile e più utile dell'ottimismo. È agentività.
+Il solarpunk offre una terza opzione: _possiamo costruire qualcosa di meglio, e la costruzione stessa è significativa, anche se non facciamo tutto perfettamente_. Non è ottimismo. È qualcosa di più difficile e più utile dell'ottimismo. È agentività.
 
 Il futuro non è scritto. È piantato, curato e coltivato.
