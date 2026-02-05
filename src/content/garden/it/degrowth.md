@@ -16,7 +16,7 @@ La decrescita è il ridimensionamento deliberato e democratico della produzione 
 
 ## Cosa Significa Realmente Decrescita
 
-La decrescita non significa povertà. Significa sufficienza. Significa chiedersi: *Quanto è abbastanza?*
+La decrescita non significa povertà. Significa sufficienza. Significa chiedersi: _Quanto è abbastanza?_
 
 > "Qualsiasi sciocco intelligente può rendere le cose più grandi, più complesse e più violente. Ci vuole un tocco di genialità — e molto coraggio — per muoversi nella direzione opposta." — E.F. Schumacher
 
@@ -35,13 +35,13 @@ C'è anche una connessione profonda con la [[rural-living|vita rurale]]. Le comu
 
 ## La Connessione Solarpunk
 
-Dove la decrescita descrive *cosa smettere di fare*, il [[solarpunk]] immagina *cosa costruire al suo posto*. Un mondo solarpunk funziona con energia rinnovabile, valorizza l'artigianato e la riparazione, e progetta città attorno alle persone piuttosto che alle auto. La decrescita prepara il terreno; il solarpunk pianta il giardino.
+Dove la decrescita descrive _cosa smettere di fare_, il [[solarpunk]] immagina _cosa costruire al suo posto_. Un mondo solarpunk funziona con energia rinnovabile, valorizza l'artigianato e la riparazione, e progetta città attorno alle persone piuttosto che alle auto. La decrescita prepara il terreno; il solarpunk pianta il giardino.
 
 I due movimenti hanno bisogno l'uno dell'altro. Senza la critica della decrescita, il solarpunk rischia di diventare capitalismo verde — lo stesso sistema estrattivo con pannelli solari sopra. Senza l'immaginazione del solarpunk, la decrescita rischia di essere percepita come austerità, sacrificio, un ritorno al passato.
 
 ## Obiezioni Comuni
 
-**"Le persone non perderanno il lavoro?"** — I sostenitori della decrescita propongono la condivisione del lavoro, settimane lavorative più corte e un reddito di base universale. L'obiettivo è meno *lavoro*, non meno mezzi di sussistenza.
+**"Le persone non perderanno il lavoro?"** — I sostenitori della decrescita propongono la condivisione del lavoro, settimane lavorative più corte e un reddito di base universale. L'obiettivo è meno _lavoro_, non meno mezzi di sussistenza.
 
 **"E i paesi in via di sviluppo?"** — La decrescita è rivolta principalmente alle nazioni ricche e ad alto consumo. Il Sud globale ha bisogno di spazio per svilupparsi — il che significa che il Nord globale deve contrarsi.
 

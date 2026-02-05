@@ -80,9 +80,7 @@ const remarkWikiLinks: Plugin<[], Root> = () => {
 };
 
 function titleCase(slug: string): string {
-  return slug
-    .replace(/-/g, " ")
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+  return slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 export default remarkWikiLinks;

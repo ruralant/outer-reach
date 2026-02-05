@@ -61,13 +61,11 @@ export const ui = {
     "status.seed.description": "An early idea, just planted",
     "status.growing.description": "Developing, still being refined",
     "status.evergreen.description": "Mature, well-developed content",
-    "status.experimental.description":
-      "Exploratory, may change significantly",
+    "status.experimental.description": "Exploratory, may change significantly",
 
     // RSS
     "rss.title": "Digital Garden",
-    "rss.description":
-      "A digital garden of interconnected notes and ideas",
+    "rss.description": "A digital garden of interconnected notes and ideas",
 
     // Accessibility
     "a11y.toggleTheme": "Toggle theme",
@@ -199,8 +197,7 @@ export const ui = {
 
     // RSS
     "rss.title": "Giardino Digitale",
-    "rss.description":
-      "Un giardino digitale di note e idee interconnesse",
+    "rss.description": "Un giardino digitale di note e idee interconnesse",
 
     // Accessibility
     "a11y.toggleTheme": "Cambia tema",

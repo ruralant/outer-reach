@@ -5,7 +5,7 @@ import { slugFromNoteId } from "../../i18n/utils";
 export async function GET(context) {
   const notes = await getNotesForLocale("it");
   const publishedNotes = notes.sort(
-    (a, b) => b.data.created.valueOf() - a.data.created.valueOf()
+    (a, b) => b.data.created.valueOf() - a.data.created.valueOf(),
   );
 
   return rss({

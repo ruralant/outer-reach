@@ -17,9 +17,7 @@ export async function getAllNotes(): Promise<GardenNote[]> {
 /**
  * Get all published notes for a specific locale.
  */
-export async function getNotesForLocale(
-  locale: string
-): Promise<GardenNote[]> {
+export async function getNotesForLocale(locale: string): Promise<GardenNote[]> {
   const notes = await getAllNotes();
   return notes.filter((note) => note.id.startsWith(`${locale}/`));
 }
@@ -54,7 +52,7 @@ export function extractWikiLinks(body: string): string[] {
  */
 export function getBacklinks(
   currentId: string,
-  allNotes: GardenNote[]
+  allNotes: GardenNote[],
 ): GardenNote[] {
   const currentSlug = slugFromNoteId(currentId);
   return allNotes.filter((note) => {
@@ -71,7 +69,7 @@ export function getBacklinks(
 export function getRelatedNotes(
   currentNote: GardenNote,
   allNotes: GardenNote[],
-  limit = 5
+  limit = 5,
 ): GardenNote[] {
   const currentTags = new Set(currentNote.data.tags);
   if (currentTags.size === 0) return [];

@@ -30,7 +30,7 @@ La vita frugale non è una singola tecnica — è una disposizione. Alcuni punti
 
 In un'economia dei consumi, scegliere di aver bisogno di meno è un atto politico. Ogni euro non speso è un voto contro la sovrapproduzione, contro l'obsolescenza programmata, contro la macchina pubblicitaria che ti dice che la soddisfazione è sempre a un acquisto di distanza.
 
-È qui che la vita frugale si connette alla [[degrowth|decrescita]]. La decrescita chiede: e se l'intera economia smettesse di crescere? La vita frugale pone la stessa domanda a livello personale. E se *io* smettessi di far crescere il mio consumo? E se trovassi un plateau e ci restassi?
+È qui che la vita frugale si connette alla [[degrowth|decrescita]]. La decrescita chiede: e se l'intera economia smettesse di crescere? La vita frugale pone la stessa domanda a livello personale. E se _io_ smettessi di far crescere il mio consumo? E se trovassi un plateau e ci restassi?
 
 La risposta, per molte persone, è pace. Meno debiti. Meno disordine. Meno ansia di stare al passo.
 
@@ -50,6 +50,6 @@ Finché quel futuro non arriva, la vita frugale è come ci esercitiamo per esso.
 
 La parte più difficile della vita frugale non è la meccanica. È la psicologia. La cultura del consumo ci ha addestrato ad associare di più con meglio, spendere con status, accumulare con sicurezza.
 
-La frugalità ti chiede di trovare il tuo *punto del sufficiente* — la soglia oltre la quale più cose, più spese, più attività non rendono la vita effettivamente migliore. La maggior parte delle persone, quando esamina onestamente la propria vita, scopre che quella soglia è molto più bassa di quanto si aspettasse.
+La frugalità ti chiede di trovare il tuo _punto del sufficiente_ — la soglia oltre la quale più cose, più spese, più attività non rendono la vita effettivamente migliore. La maggior parte delle persone, quando esamina onestamente la propria vita, scopre che quella soglia è molto più bassa di quanto si aspettasse.
 
 Quella scoperta è l'inizio della libertà.
