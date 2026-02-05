@@ -1,0 +1,92 @@
+---
+import { type NoteStatus } from '../lib/garden';
+import { useTranslations } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+	status: NoteStatus;
+	size?: 'sm' | 'md';
+}
+
+const { status, size = 'md' } = Astro.props;
+const lang = (Astro.currentLocale || 'en') as Lang;
+const t = useTranslations(lang);
+
+const STATUS_EMOJI: Record<NoteStatus, string> = {
+	seed: '🌱',
+	growing: '🌿',
+	evergreen: '🌳',
+	experimental: '🧪',
+};
+
+const emoji = STATUS_EMOJI[status];
+const label = t(`status.${status}` as any) as string;
+const description = t(`status.${status}.description` as any) as string;
+---
+
+<span class:list={['status-badge', `status-${status}`, `size-${size}`]} title={description}>
+	<span class="status-emoji">{emoji}</span>
+	<span class="status-label">{label}</span>
+</span>
+
+<style>
+	.status-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		padding: 0.2rem 0.65rem;
+		border-radius: 1rem;
+		font-weight: 600;
+		line-height: 1.4;
+		white-space: nowrap;
+	}
+
+	.size-md {
+		font-size: 0.85rem;
+	}
+
+	.size-sm {
+		font-size: 0.75rem;
+		padding: 0.15rem 0.5rem;
+	}
+
+	.status-seed {
+		background-color: rgba(76, 175, 80, 0.15);
+		color: #2e7d32;
+	}
+
+	.status-growing {
+		background-color: rgba(56, 142, 60, 0.15);
+		color: #1b5e20;
+	}
+
+	.status-evergreen {
+		background-color: rgba(27, 94, 32, 0.15);
+		color: #1b5e20;
+	}
+
+	.status-experimental {
+		background-color: rgba(156, 39, 176, 0.15);
+		color: #7b1fa2;
+	}
+
+	:global([data-theme='dark']) .status-seed {
+		background-color: rgba(76, 175, 80, 0.2);
+		color: #81c784;
+	}
+
+	:global([data-theme='dark']) .status-growing {
+		background-color: rgba(56, 142, 60, 0.2);
+		color: #66bb6a;
+	}
+
+	:global([data-theme='dark']) .status-evergreen {
+		background-color: rgba(27, 94, 32, 0.2);
+		color: #4caf50;
+	}
+
+	:global([data-theme='dark']) .status-experimental {
+		background-color: rgba(156, 39, 176, 0.2);
+		color: #ce93d8;
+	}
+</style>

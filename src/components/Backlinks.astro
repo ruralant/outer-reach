@@ -1,0 +1,72 @@
+---
+import type { GardenNote } from '../lib/garden';
+import StatusBadge from './StatusBadge.astro';
+import { useTranslations, gardenNotePath, slugFromNoteId } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+	backlinks: GardenNote[];
+}
+
+const { backlinks } = Astro.props;
+const lang = (Astro.currentLocale || 'en') as Lang;
+const t = useTranslations(lang);
+---
+
+{backlinks.length > 0 && (
+	<section class="backlinks">
+		<h2 class="backlinks-title">{t('note.linkedFrom')}</h2>
+		<ul class="backlinks-list">
+			{backlinks.map((note) => (
+				<li class="backlink-item">
+					<a href={gardenNotePath(lang, slugFromNoteId(note.id))} class="backlink-link">
+						{note.data.title}
+					</a>
+					<StatusBadge status={note.data.status} size="sm" />
+				</li>
+			))}
+		</ul>
+	</section>
+)}
+
+<style>
+	.backlinks {
+		margin-top: 2rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.backlinks-title {
+		font-size: 0.85rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-text-secondary);
+		margin: 0 0 0.75rem 0;
+	}
+
+	.backlinks-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+
+	.backlink-item {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.backlink-link {
+		color: var(--color-accent);
+		text-decoration: none;
+		font-size: 0.95rem;
+	}
+
+	.backlink-link:hover {
+		text-decoration: underline;
+	}
+</style>

@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getNotesForLocale, ALL_STATUSES, type NoteStatus } from '../../../../lib/garden';
+import { useTranslations, localePath, localeDateShort, gardenNotePath, slugFromNoteId } from '../../../../i18n/utils';
+import type { Lang } from '../../../../i18n/ui';
+
+export async function getStaticPaths() {
+	const allNotes = await getNotesForLocale('it');
+
+	return ALL_STATUSES.map((status) => ({
+		params: { status },
+		props: {
+			status,
+			notes: allNotes
+				.filter((n) => n.data.status === status)
+				.sort((a, b) => a.data.title.localeCompare(b.data.title)),
+		},
+	}));
+}
+
+const { status, notes } = Astro.props as { status: NoteStatus; notes: any[] };
+const lang = (Astro.currentLocale || 'it') as Lang;
+const t = useTranslations(lang);
+
+const STATUS_EMOJI: Record<NoteStatus, string> = {
+	seed: '🌱', growing: '🌿', evergreen: '🌳', experimental: '🧪',
+};
+const emoji = STATUS_EMOJI[status];
+const label = t(`status.${status}` as any) as string;
+const description = t(`status.${status}.description` as any) as string;
+---
+
+<BaseLayout title={`${emoji} ${label} — ${t('site.title')}`} description={description}>
+	<div class="container">
+		<nav class="top-nav">
+			<a href={localePath(lang, '/garden/')}>{t('nav.backToGarden')}</a>
+		</nav>
+
+		<header class="status-header">
+			<h1>{emoji} {label}</h1>
+			<p class="subtitle">{description}</p>
+			<p class="count">{notes.length} {notes.length === 1 ? t('note.note') : t('note.notes')}</p>
+		</header>
+
+		{notes.length === 0 ? (
+			<p class="no-notes">{t('garden.noNotesStatus')}</p>
+		) : (
+			<div class="notes-list">
+				{notes.map((note) => (
+					<article class="note-row">
+						<a href={gardenNotePath(lang, slugFromNoteId(note.id))} class="note-title">{note.data.title}</a>
+						<p class="note-desc">{note.data.description}</p>
+						<div class="note-meta">
+							<span class="note-date">
+								{localeDateShort(note.data.created, lang)}
+							</span>
+							{note.data.tags.length > 0 && (
+								<span class="note-tags">
+									{note.data.tags.map((tag: string) => (
+										<a href={localePath(lang, `/garden/tags/${tag}`)} class="tag">#{tag}</a>
+									))}
+								</span>
+							)}
+						</div>
+					</article>
+				))}
+			</div>
+		)}
+	</div>
+</BaseLayout>
+
+<style>
+	.container { max-width: 640px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+	.top-nav { padding: 0.5rem 0 2rem; }
+	.top-nav a { font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-text-secondary); text-decoration: none; }
+	.top-nav a:hover { color: var(--color-accent); }
+	.status-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--color-border); }
+	.status-header h1 { font-size: 2rem; font-weight: 700; margin: 0 0 0.25rem 0; color: var(--color-text-primary); letter-spacing: -0.02em; }
+	.subtitle { font-size: 0.95rem; color: var(--color-text-secondary); margin: 0 0 0.25rem 0; }
+	.count { font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; opacity: 0.7; }
+	.no-notes { color: var(--color-text-secondary); padding: 2rem 0; }
+	.notes-list { display: flex; flex-direction: column; }
+	.note-row { padding: 1rem 0; border-bottom: 1px solid var(--color-border); }
+	.note-title { font-size: 1.05rem; font-weight: 600; color: var(--color-text-primary); text-decoration: none; }
+	.note-title:hover { color: var(--color-accent); }
+	.note-desc { font-size: 0.9rem; color: var(--color-text-secondary); margin: 0.25rem 0; line-height: 1.5; }
+	.note-meta { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+	.note-date { font-size: 0.8rem; color: var(--color-text-secondary); opacity: 0.7; }
+	.note-tags { display: flex; gap: 0.5rem; }
+	.tag { font-size: 0.8rem; color: var(--color-text-secondary); text-decoration: none; }
+	.tag:hover { color: var(--color-accent); }
+</style>

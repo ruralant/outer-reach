@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import StatusBadge from '../../../components/StatusBadge.astro';
+import LanguageSwitcher from '../../../components/LanguageSwitcher.astro';
+import { getNotesForLocale, getAllTags, ALL_STATUSES } from '../../../lib/garden';
+import { useTranslations, localePath, localeDateShort, gardenNotePath, slugFromNoteId } from '../../../i18n/utils';
+import type { Lang } from '../../../i18n/ui';
+
+const lang = (Astro.currentLocale || 'it') as Lang;
+const t = useTranslations(lang);
+
+const allNotes = await getNotesForLocale(lang);
+const tags = getAllTags(allNotes);
+
+const sortedNotes = allNotes.sort((a, b) =>
+	a.data.title.localeCompare(b.data.title)
+);
+
+const slugs = sortedNotes.map((n) => slugFromNoteId(n.id));
+---
+
+<BaseLayout title={`${t('garden.title')} — ${t('site.title')}`} description={t('garden.subtitle') as string}>
+	<div class="garden-page">
+		<nav class="top-nav">
+			<a href={localePath(lang, '/')}>{t('nav.home')}</a>
+			<div class="top-nav-right">
+				<LanguageSwitcher />
+				<a href={localePath(lang, '/rss.xml')}>{t('nav.rss')}</a>
+			</div>
+		</nav>
+
+		<header class="garden-header">
+			<h1>{t('garden.title')}</h1>
+			<p class="subtitle">{t('garden.subtitle')}</p>
+		</header>
+
+		<nav class="filter-nav">
+			<div class="filter-row">
+				<span class="filter-label">{t('garden.filterStatus')}</span>
+				<div class="filter-links">
+					{ALL_STATUSES.map((status) => {
+						const count = allNotes.filter((n) => n.data.status === status).length;
+						const emoji = { seed: '🌱', growing: '🌿', evergreen: '🌳', experimental: '🧪' }[status];
+						const label = t(`status.${status}` as any);
+						return count > 0 ? (
+							<a href={localePath(lang, `/garden/status/${status}`)} class="filter-chip">
+								{emoji} {label}
+								<span class="chip-count">({count})</span>
+							</a>
+						) : null;
+					})}
+				</div>
+			</div>
+			<div class="filter-row">
+				<span class="filter-label">{t('garden.filterTags')}</span>
+				<div class="filter-links">
+					{tags.map((tag) => {
+						const count = allNotes.filter((n) => n.data.tags.includes(tag)).length;
+						return (
+							<a href={localePath(lang, `/garden/tags/${tag}`)} class="filter-chip">
+								{tag} <span class="chip-count">({count})</span>
+							</a>
+						);
+					})}
+				</div>
+			</div>
+			<div class="filter-row filter-actions">
+				<button id="random-note-btn" class="random-btn" data-slugs={JSON.stringify(slugs)} data-lang={lang}>
+					{t('garden.randomNote')}
+				</button>
+			</div>
+		</nav>
+
+		{sortedNotes.length === 0 ? (
+			<p class="empty">{t('garden.noNotes')}</p>
+		) : (
+			<div class="notes-list">
+				{sortedNotes.map((note) => (
+					<a href={gardenNotePath(lang, slugFromNoteId(note.id))} class="note-link">
+						<article class="note-item">
+							<div class="note-item-header">
+								<span class="note-item-title">{note.data.title}</span>
+								<StatusBadge status={note.data.status} size="sm" />
+							</div>
+							<p class="note-item-description">{note.data.description}</p>
+							<div class="note-item-footer">
+								<time class="note-item-date">
+									{localeDateShort(note.data.created, lang)}
+								</time>
+								{note.data.tags.length > 0 && (
+									<span class="note-item-tags">
+										{note.data.tags.join(' · ')}
+									</span>
+								)}
+							</div>
+						</article>
+					</a>
+				))}
+			</div>
+		)}
+
+		<footer class="page-footer">
+			<p>{t('site.footer')}</p>
+		</footer>
+	</div>
+</BaseLayout>
+
+<script is:inline>
+	document.getElementById('random-note-btn')?.addEventListener('click', function() {
+		const slugs = JSON.parse(this.dataset.slugs || '[]');
+		const lang = this.dataset.lang || 'en';
+		if (slugs.length > 0) {
+			const random = slugs[Math.floor(Math.random() * slugs.length)];
+			const prefix = lang === 'en' ? '' : '/' + lang;
+			window.location.href = prefix + '/garden/' + random;
+		}
+	});
+</script>
+
+<style>
+	.garden-page { max-width: 640px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+	.top-nav { display: flex; justify-content: space-between; gap: 1.5rem; padding: 0.5rem 0 2rem; }
+	.top-nav-right { display: flex; gap: 1.5rem; }
+	.top-nav a { font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-text-secondary); text-decoration: none; }
+	.top-nav a:hover { color: var(--color-accent); text-decoration: none; }
+	.garden-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--color-border); }
+	.garden-header h1 { font-size: 2.8rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 0.75rem 0; color: var(--color-text-primary); line-height: 1.15; }
+	.subtitle { font-size: 1.05rem; color: var(--color-text-secondary); margin: 0; line-height: 1.6; }
+	.filter-nav { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--color-border); }
+	.filter-row { margin-bottom: 0.75rem; }
+	.filter-row:last-child { margin-bottom: 0; }
+	.filter-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-secondary); margin-right: 0.75rem; }
+	.filter-links { display: inline-flex; flex-wrap: wrap; gap: 0.4rem; }
+	.filter-chip { font-size: 0.85rem; color: var(--color-text-secondary); text-decoration: none; padding: 0.15rem 0; transition: color 0.2s ease; }
+	.filter-chip:hover { color: var(--color-accent); text-decoration: none; }
+	.filter-chip + .filter-chip::before { content: '·'; margin-right: 0.4rem; color: var(--color-border); }
+	.chip-count { font-size: 0.75rem; opacity: 0.6; }
+	.filter-actions { margin-top: 0.5rem; }
+	.random-btn { font-size: 0.85rem; color: var(--color-accent); background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; transition: opacity 0.2s ease; }
+	.random-btn:hover { opacity: 0.7; }
+	.empty { color: var(--color-text-secondary); font-style: italic; }
+	.notes-list { display: flex; flex-direction: column; gap: 0; }
+	.note-link { text-decoration: none; color: inherit; display: block; }
+	.note-link:hover { text-decoration: none; }
+	.note-item { padding: 1.25rem 0; border-bottom: 1px solid var(--color-border); transition: opacity 0.2s ease; }
+	.note-link:first-child .note-item { padding-top: 0; }
+	.note-link:hover .note-item { opacity: 0.7; }
+	.note-item-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem; flex-wrap: wrap; }
+	.note-item-title { font-weight: 600; font-size: 1.1rem; color: var(--color-text-primary); }
+	.note-item-description { font-size: 0.95rem; color: var(--color-text-secondary); margin: 0; line-height: 1.5; }
+	.note-item-footer { display: flex; gap: 1rem; margin-top: 0.35rem; align-items: center; }
+	.note-item-date { font-size: 0.8rem; color: var(--color-text-secondary); opacity: 0.6; }
+	.note-item-tags { font-size: 0.8rem; color: var(--color-text-secondary); opacity: 0.5; }
+	.page-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border); text-align: center; }
+	.page-footer p { font-size: 0.8rem; color: var(--color-text-secondary); opacity: 0.6; }
+	@media (max-width: 640px) { .garden-page { padding: 1.5rem 1rem 3rem; } .garden-header h1 { font-size: 2rem; } }
+</style>
