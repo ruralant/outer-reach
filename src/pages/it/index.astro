@@ -1,12 +1,17 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import StatusBadge from '../components/StatusBadge.astro';
-import LanguageSwitcher from '../components/LanguageSwitcher.astro';
-import { getNotesForLocale } from '../lib/garden';
-import { useTranslations, localePath, localeDateShort, gardenNotePath, slugFromNoteId } from '../i18n/utils';
-import type { Lang } from '../i18n/ui';
+/**
+ * Italian homepage — re-uses the same layout and logic as the root index.
+ * Astro.currentLocale is automatically set to "it" because this page
+ * lives under src/pages/it/.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import LanguageSwitcher from '../../components/LanguageSwitcher.astro';
+import { getNotesForLocale } from '../../lib/garden';
+import { useTranslations, localePath, localeDateShort, gardenNotePath, slugFromNoteId } from '../../i18n/utils';
+import type { Lang } from '../../i18n/ui';
 
-const lang = (Astro.currentLocale || 'en') as Lang;
+const lang = (Astro.currentLocale || 'it') as Lang;
 const t = useTranslations(lang);
 
 const allNotes = await getNotesForLocale(lang);
@@ -120,20 +125,16 @@ const latestNotes = allNotes
 		margin: 0 auto;
 		padding: 2rem 1.5rem 4rem;
 	}
-
-	/* --- Top nav --- */
 	.top-nav {
 		display: flex;
 		justify-content: space-between;
 		gap: 1.5rem;
 		padding: 0.5rem 0 2rem;
 	}
-
 	.top-nav-right {
 		display: flex;
 		gap: 1.5rem;
 	}
-
 	.top-nav a {
 		font-size: 0.85rem;
 		letter-spacing: 0.05em;
@@ -142,19 +143,15 @@ const latestNotes = allNotes
 		text-decoration: none;
 		transition: color 0.2s ease;
 	}
-
 	.top-nav a:hover {
 		color: var(--color-accent);
 		text-decoration: none;
 	}
-
-	/* --- Hero --- */
 	.hero {
 		margin-bottom: 3rem;
 		padding-bottom: 2.5rem;
 		border-bottom: 1px solid var(--color-border);
 	}
-
 	.hero h1 {
 		font-size: 2.8rem;
 		font-weight: 700;
@@ -163,19 +160,13 @@ const latestNotes = allNotes
 		color: var(--color-text-primary);
 		line-height: 1.15;
 	}
-
 	.hero-lead {
 		font-size: 1.2rem;
 		color: var(--color-text-secondary);
 		margin: 0;
 		font-style: italic;
 	}
-
-	/* --- Prose --- */
-	.prose {
-		margin-bottom: 3rem;
-	}
-
+	.prose { margin-bottom: 3rem; }
 	.prose h2 {
 		font-size: 1.35rem;
 		font-weight: 600;
@@ -183,26 +174,22 @@ const latestNotes = allNotes
 		margin: 2.5rem 0 1rem 0;
 		letter-spacing: -0.01em;
 	}
-
 	.prose h2 .aside {
 		font-weight: 400;
 		color: var(--color-text-secondary);
 		font-size: 0.95em;
 	}
-
 	.prose p {
 		margin: 0 0 1rem 0;
 		font-size: 1.05rem;
 		line-height: 1.75;
 		color: var(--color-text-primary);
 	}
-
 	.prose ul {
 		margin: 0 0 1rem 0;
 		padding-left: 1.25rem;
 		list-style: none;
 	}
-
 	.prose li {
 		font-size: 1.05rem;
 		line-height: 1.75;
@@ -211,7 +198,6 @@ const latestNotes = allNotes
 		padding-left: 0.75rem;
 		margin-bottom: 0.25rem;
 	}
-
 	.prose li::before {
 		content: '—';
 		position: absolute;
@@ -219,7 +205,6 @@ const latestNotes = allNotes
 		color: var(--color-text-secondary);
 		opacity: 0.5;
 	}
-
 	.prose .pull {
 		font-size: 1.15rem;
 		font-style: italic;
@@ -229,14 +214,11 @@ const latestNotes = allNotes
 		border-left: 2px solid var(--color-accent);
 		opacity: 0.9;
 	}
-
-	/* --- Recent notes --- */
 	.recent-notes {
 		border-top: 1px solid var(--color-border);
 		padding-top: 2.5rem;
 		margin-bottom: 3rem;
 	}
-
 	.recent-notes h2 {
 		font-size: 1.1rem;
 		font-weight: 600;
@@ -245,33 +227,15 @@ const latestNotes = allNotes
 		color: var(--color-text-secondary);
 		margin: 0 0 1.25rem 0;
 	}
-
-	.notes-list {
-		display: flex;
-		flex-direction: column;
-		gap: 0;
-	}
-
-	.note-link {
-		text-decoration: none;
-		color: inherit;
-		display: block;
-	}
-
-	.note-link:hover {
-		text-decoration: none;
-	}
-
+	.notes-list { display: flex; flex-direction: column; gap: 0; }
+	.note-link { text-decoration: none; color: inherit; display: block; }
+	.note-link:hover { text-decoration: none; }
 	.note-item {
 		padding: 1rem 0;
 		border-bottom: 1px solid var(--color-border);
 		transition: opacity 0.2s ease;
 	}
-
-	.note-link:hover .note-item {
-		opacity: 0.7;
-	}
-
+	.note-link:hover .note-item { opacity: 0.7; }
 	.note-item-header {
 		display: flex;
 		align-items: center;
@@ -279,20 +243,17 @@ const latestNotes = allNotes
 		margin-bottom: 0.25rem;
 		flex-wrap: wrap;
 	}
-
 	.note-item-title {
 		font-weight: 600;
 		font-size: 1.05rem;
 		color: var(--color-text-primary);
 	}
-
 	.note-item-description {
 		font-size: 0.9rem;
 		color: var(--color-text-secondary);
 		margin: 0;
 		line-height: 1.5;
 	}
-
 	.note-item-date {
 		font-size: 0.8rem;
 		color: var(--color-text-secondary);
@@ -300,50 +261,27 @@ const latestNotes = allNotes
 		display: block;
 		margin-top: 0.35rem;
 	}
-
-	.garden-cta {
-		margin-top: 1.5rem;
-	}
-
+	.garden-cta { margin-top: 1.5rem; }
 	.garden-cta a {
 		font-size: 0.9rem;
 		color: var(--color-accent);
 		text-decoration: none;
 	}
-
-	.garden-cta a:hover {
-		text-decoration: underline;
-	}
-
-	/* --- Footer --- */
+	.garden-cta a:hover { text-decoration: underline; }
 	.site-footer {
 		padding-top: 2rem;
 		border-top: 1px solid var(--color-border);
 		text-align: center;
 	}
-
 	.site-footer p {
 		font-size: 0.8rem;
 		color: var(--color-text-secondary);
 		opacity: 0.6;
 	}
-
-	/* --- Responsive --- */
 	@media (max-width: 640px) {
-		.manifesto {
-			padding: 1.5rem 1rem 3rem;
-		}
-
-		.hero h1 {
-			font-size: 2rem;
-		}
-
-		.hero-lead {
-			font-size: 1.05rem;
-		}
-
-		.prose h2 {
-			font-size: 1.2rem;
-		}
+		.manifesto { padding: 1.5rem 1rem 3rem; }
+		.hero h1 { font-size: 2rem; }
+		.hero-lead { font-size: 1.05rem; }
+		.prose h2 { font-size: 1.2rem; }
 	}
 </style>
