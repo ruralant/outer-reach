@@ -1,0 +1,287 @@
+---
+/**
+ * Italian homepage — re-uses the same layout and logic as the root index.
+ * Astro.currentLocale is automatically set to "it" because this page
+ * lives under src/pages/it/.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import LanguageSwitcher from '../../components/LanguageSwitcher.astro';
+import { getNotesForLocale } from '../../lib/garden';
+import { useTranslations, localePath, localeDateShort, gardenNotePath, slugFromNoteId } from '../../i18n/utils';
+import type { Lang } from '../../i18n/ui';
+
+const lang = (Astro.currentLocale || 'it') as Lang;
+const t = useTranslations(lang);
+
+const allNotes = await getNotesForLocale(lang);
+const latestNotes = allNotes
+	.sort((a, b) => b.data.created.valueOf() - a.data.created.valueOf())
+	.slice(0, 3);
+---
+
+<BaseLayout title={t('site.title') as string} description={t('site.tagline') as string}>
+	<div class="manifesto">
+		<nav class="top-nav">
+			<LanguageSwitcher />
+			<div class="top-nav-right">
+				<a href={localePath(lang, '/garden/')}>{t('nav.garden')}</a>
+				<a href={localePath(lang, '/rss.xml')}>{t('nav.rss')}</a>
+			</div>
+		</nav>
+
+		<header class="hero">
+			<h1>{t('site.title')}</h1>
+			<p class="hero-lead">{t('site.tagline')}</p>
+		</header>
+
+		<div class="prose">
+			<p>{t('home.intro')}</p>
+			<p>{t('home.intro2')}</p>
+
+			<h2>{t('home.whatTitle')}</h2>
+			<p>{t('home.what1')}</p>
+			<p>{t('home.what2')}</p>
+			<p>{t('home.what3')}</p>
+			<p class="pull">{t('home.whatPull')}</p>
+
+			<h2>{t('home.swTitle')} <span class="aside">{t('home.swAside')}</span></h2>
+			<p>{t('home.sw1')}</p>
+			<p>{t('home.sw2')}</p>
+			<p>{t('home.sw3')}</p>
+			<p>{t('home.sw4')}</p>
+			<p>{t('home.sw5')}</p>
+
+			<h2>{t('home.coreTitle')}</h2>
+			<p>{t('home.core1')}</p>
+			<p>{t('home.core2')}</p>
+			<ul>
+				{(t('home.coreList') as unknown as string[]).map((item) => (
+					<li>{item}</li>
+				))}
+			</ul>
+			<p>{t('home.core3')}</p>
+			<p>{t('home.core4')}</p>
+			<p class="pull">{t('home.corePull')}</p>
+
+			<h2>{t('home.lifeTitle')}</h2>
+			<p>{t('home.life1')}</p>
+			<p>{t('home.life2')}</p>
+			<p>{t('home.life3')}</p>
+			<ul>
+				{(t('home.lifeList') as unknown as string[]).map((item) => (
+					<li>{item}</li>
+				))}
+			</ul>
+			<p>{t('home.life4')}</p>
+
+			<h2>{t('home.findTitle')}</h2>
+			<p>{t('home.find1')}</p>
+			<p>{t('home.find2')}</p>
+			<ul>
+				{(t('home.findList') as unknown as string[]).map((item) => (
+					<li>{item}</li>
+				))}
+			</ul>
+			<p>{t('home.find3')}</p>
+			<p>{t('home.find4')}</p>
+			<p class="pull">{t('home.findPull')}</p>
+		</div>
+
+		{latestNotes.length > 0 && (
+			<section class="recent-notes">
+				<h2>{t('garden.recentNotes')}</h2>
+				<div class="notes-list">
+					{latestNotes.map((note) => (
+						<a href={gardenNotePath(lang, slugFromNoteId(note.id))} class="note-link">
+							<article class="note-item">
+								<div class="note-item-header">
+									<span class="note-item-title">{note.data.title}</span>
+									<StatusBadge status={note.data.status} size="sm" />
+								</div>
+								<p class="note-item-description">{note.data.description}</p>
+								<time class="note-item-date">
+									{localeDateShort(note.data.created, lang)}
+								</time>
+							</article>
+						</a>
+					))}
+				</div>
+				<div class="garden-cta">
+					<a href={localePath(lang, '/garden/')}>{t('nav.exploreGarden')}</a>
+				</div>
+			</section>
+		)}
+
+		<footer class="site-footer">
+			<p>{t('site.footer')}</p>
+		</footer>
+	</div>
+</BaseLayout>
+
+<style>
+	.manifesto {
+		max-width: 640px;
+		margin: 0 auto;
+		padding: 2rem 1.5rem 4rem;
+	}
+	.top-nav {
+		display: flex;
+		justify-content: space-between;
+		gap: 1.5rem;
+		padding: 0.5rem 0 2rem;
+	}
+	.top-nav-right {
+		display: flex;
+		gap: 1.5rem;
+	}
+	.top-nav a {
+		font-size: 0.85rem;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--color-text-secondary);
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+	.top-nav a:hover {
+		color: var(--color-accent);
+		text-decoration: none;
+	}
+	.hero {
+		margin-bottom: 3rem;
+		padding-bottom: 2.5rem;
+		border-bottom: 1px solid var(--color-border);
+	}
+	.hero h1 {
+		font-size: 2.8rem;
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		margin: 0 0 0.75rem 0;
+		color: var(--color-text-primary);
+		line-height: 1.15;
+	}
+	.hero-lead {
+		font-size: 1.2rem;
+		color: var(--color-text-secondary);
+		margin: 0;
+		font-style: italic;
+	}
+	.prose { margin-bottom: 3rem; }
+	.prose h2 {
+		font-size: 1.35rem;
+		font-weight: 600;
+		color: var(--color-text-primary);
+		margin: 2.5rem 0 1rem 0;
+		letter-spacing: -0.01em;
+	}
+	.prose h2 .aside {
+		font-weight: 400;
+		color: var(--color-text-secondary);
+		font-size: 0.95em;
+	}
+	.prose p {
+		margin: 0 0 1rem 0;
+		font-size: 1.05rem;
+		line-height: 1.75;
+		color: var(--color-text-primary);
+	}
+	.prose ul {
+		margin: 0 0 1rem 0;
+		padding-left: 1.25rem;
+		list-style: none;
+	}
+	.prose li {
+		font-size: 1.05rem;
+		line-height: 1.75;
+		color: var(--color-text-primary);
+		position: relative;
+		padding-left: 0.75rem;
+		margin-bottom: 0.25rem;
+	}
+	.prose li::before {
+		content: '—';
+		position: absolute;
+		left: -1rem;
+		color: var(--color-text-secondary);
+		opacity: 0.5;
+	}
+	.prose .pull {
+		font-size: 1.15rem;
+		font-style: italic;
+		color: var(--color-accent);
+		margin: 1.5rem 0;
+		padding-left: 1.25rem;
+		border-left: 2px solid var(--color-accent);
+		opacity: 0.9;
+	}
+	.recent-notes {
+		border-top: 1px solid var(--color-border);
+		padding-top: 2.5rem;
+		margin-bottom: 3rem;
+	}
+	.recent-notes h2 {
+		font-size: 1.1rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-text-secondary);
+		margin: 0 0 1.25rem 0;
+	}
+	.notes-list { display: flex; flex-direction: column; gap: 0; }
+	.note-link { text-decoration: none; color: inherit; display: block; }
+	.note-link:hover { text-decoration: none; }
+	.note-item {
+		padding: 1rem 0;
+		border-bottom: 1px solid var(--color-border);
+		transition: opacity 0.2s ease;
+	}
+	.note-link:hover .note-item { opacity: 0.7; }
+	.note-item-header {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.25rem;
+		flex-wrap: wrap;
+	}
+	.note-item-title {
+		font-weight: 600;
+		font-size: 1.05rem;
+		color: var(--color-text-primary);
+	}
+	.note-item-description {
+		font-size: 0.9rem;
+		color: var(--color-text-secondary);
+		margin: 0;
+		line-height: 1.5;
+	}
+	.note-item-date {
+		font-size: 0.8rem;
+		color: var(--color-text-secondary);
+		opacity: 0.7;
+		display: block;
+		margin-top: 0.35rem;
+	}
+	.garden-cta { margin-top: 1.5rem; }
+	.garden-cta a {
+		font-size: 0.9rem;
+		color: var(--color-accent);
+		text-decoration: none;
+	}
+	.garden-cta a:hover { text-decoration: underline; }
+	.site-footer {
+		padding-top: 2rem;
+		border-top: 1px solid var(--color-border);
+		text-align: center;
+	}
+	.site-footer p {
+		font-size: 0.8rem;
+		color: var(--color-text-secondary);
+		opacity: 0.6;
+	}
+	@media (max-width: 640px) {
+		.manifesto { padding: 1.5rem 1rem 3rem; }
+		.hero h1 { font-size: 2rem; }
+		.hero-lead { font-size: 1.05rem; }
+		.prose h2 { font-size: 1.2rem; }
+	}
+</style>

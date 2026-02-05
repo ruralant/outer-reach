@@ -10,7 +10,7 @@ const { title, description } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={Astro.currentLocale || 'en'}>
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -51,35 +51,35 @@ const { title, description } = Astro.props;
 
 <style is:global>
 	:root {
-		/* Light mode colors */
-		--color-text-primary: #333;
-		--color-text-secondary: #666;
-		--color-background: #ffffff;
-		--color-background-secondary: #fafafa;
-		--color-border: #e0e0e0;
-		--color-accent: #667eea;
-		--color-accent-dark: #764ba2;
-		--color-gradient-start: #667eea;
-		--color-gradient-end: #764ba2;
+		/* Light mode — warm parchment, quiet and grounded */
+		--color-text-primary: #2c2c2c;
+		--color-text-secondary: #6b6b6b;
+		--color-background: #f8f6f1;
+		--color-background-secondary: #f0ede6;
+		--color-border: #ddd8ce;
+		--color-accent: #5a7a9b;
+		--color-accent-dark: #3d5a73;
+		--color-gradient-start: #5a7a9b;
+		--color-gradient-end: #3d5a73;
 		--color-card-background: #ffffff;
-		--color-card-shadow: rgba(0, 0, 0, 0.1);
-		--color-link-hover: #667eea;
+		--color-card-shadow: rgba(0, 0, 0, 0.06);
+		--color-link-hover: #3d5a73;
 	}
 
 	[data-theme='dark'] {
-		/* Dark mode colors */
-		--color-text-primary: #e0e0e0;
-		--color-text-secondary: #b0b0b0;
-		--color-background: #1a1a1a;
-		--color-background-secondary: #2d2d2d;
-		--color-border: #404040;
-		--color-accent: #8b9eff;
-		--color-accent-dark: #9b7ecb;
-		--color-gradient-start: #667eea;
-		--color-gradient-end: #764ba2;
-		--color-card-background: #2d2d2d;
-		--color-card-shadow: rgba(0, 0, 0, 0.5);
-		--color-link-hover: #8b9eff;
+		/* Dark mode — deep space, stars and void */
+		--color-text-primary: #c8c8d0;
+		--color-text-secondary: #808090;
+		--color-background: #0d0d12;
+		--color-background-secondary: #14141c;
+		--color-border: #252530;
+		--color-accent: #7b9fc2;
+		--color-accent-dark: #5a7a9b;
+		--color-gradient-start: #1a1a2e;
+		--color-gradient-end: #0d0d12;
+		--color-card-background: #14141c;
+		--color-card-shadow: rgba(0, 0, 0, 0.4);
+		--color-link-hover: #a0c4e8;
 	}
 
 	* {
