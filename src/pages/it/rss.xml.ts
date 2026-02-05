@@ -9,8 +9,9 @@ export async function GET(context) {
   );
 
   return rss({
-    title: "Giardino Digitale",
-    description: "Un giardino digitale di note e idee interconnesse",
+    title: "Outer Reach",
+    description:
+      "Un viaggio verso una vita rurale e sufficiente ai margini della società.",
     site: context.site,
     items: publishedNotes.map((note) => ({
       title: note.data.title,

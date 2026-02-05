@@ -64,8 +64,8 @@ export const ui = {
     "status.experimental.description": "Exploratory, may change significantly",
 
     // RSS
-    "rss.title": "Digital Garden",
-    "rss.description": "A digital garden of interconnected notes and ideas",
+    "rss.title": "Outer Reach",
+    "rss.description": "",
 
     // Accessibility
     "a11y.toggleTheme": "Toggle theme",
