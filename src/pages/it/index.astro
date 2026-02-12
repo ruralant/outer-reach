@@ -24,9 +24,12 @@ const latestNotes = allNotes
 <BaseLayout title={t('site.title') as string} description={t('site.tagline') as string}>
 	<div class="manifesto">
 		<nav class="top-nav">
-			<LanguageSwitcher />
-			<div class="top-nav-right">
+			<div class="top-nav-left">
 				<a href={localePath(lang, '/garden/')}>{t('nav.garden')}</a>
+				<a href={localePath(lang, '/blog/')}>{t('nav.blog')}</a>
+			</div>
+			<div class="top-nav-right">
+				<LanguageSwitcher />
 				<ThemeToggle />
 			</div>
 		</nav>
@@ -141,6 +144,11 @@ const latestNotes = allNotes
 		padding: 0.5rem 0 2rem;
 	}
 	.top-nav-right {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+	}
+	.top-nav-left {
 		display: flex;
 		align-items: center;
 		gap: 1.5rem;
