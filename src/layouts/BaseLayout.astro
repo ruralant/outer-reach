@@ -1,6 +1,4 @@
 ---
-import ThemeToggle from '../components/ThemeToggle.astro';
-
 interface Props {
 	title: string;
 	description?: string;
@@ -42,9 +40,6 @@ const { title, description } = Astro.props;
 		</script>
 	</head>
 	<body class="light-mode">
-		<div class="theme-toggle-wrapper">
-			<ThemeToggle />
-		</div>
 		<slot />
 	</body>
 </html>
@@ -99,13 +94,6 @@ const { title, description } = Astro.props;
 		min-height: 100vh;
 	}
 
-	.theme-toggle-wrapper {
-		position: fixed;
-		top: 1.5rem;
-		right: 1.5rem;
-		z-index: 1000;
-	}
-
 	a {
 		color: var(--color-accent);
 		text-decoration: none;
@@ -117,10 +105,4 @@ const { title, description } = Astro.props;
 		text-decoration: underline;
 	}
 
-	@media (max-width: 640px) {
-		.theme-toggle-wrapper {
-			top: 1rem;
-			right: 1rem;
-		}
-	}
 </style>
