@@ -17,4 +17,17 @@ const garden = defineCollection({
   }),
 });
 
-export const collections = { garden };
+const blog = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    tags: z.array(z.string()).default([]),
+    published: z.coerce.date(),
+    updated: z.coerce.date().optional(),
+    author: z.string().optional(),
+    draft: z.boolean().optional().default(false),
+  }),
+});
+
+export const collections = { garden, blog };

@@ -8,7 +8,7 @@ const targetLang: Lang = currentLang === 'en' ? 'it' : 'en';
 ---
 
 <a href={alternateUrl} class="lang-switch" aria-label={languages[targetLang]}>
-	{languages[targetLang]}
+	{targetLang.toUpperCase()}
 </a>
 
 <style>

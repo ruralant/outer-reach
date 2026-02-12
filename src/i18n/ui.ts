@@ -20,10 +20,13 @@ export const ui = {
 
     // Navigation
     "nav.garden": "Garden",
+    "nav.blog": "Blog",
     "nav.home": "Home",
     "nav.rss": "RSS",
     "nav.backToGarden": "← Garden",
     "nav.backToGardenLong": "← Back to Garden",
+    "nav.backToBlog": "← Blog",
+    "nav.backToBlogLong": "← Back to Blog",
     "nav.backToTags": "← Tags",
     "nav.exploreGarden": "Explore the Garden →",
 
@@ -38,6 +41,18 @@ export const ui = {
     "garden.noNotes": "No notes yet. Start planting seeds.",
     "garden.noNotesStatus": "No notes with this status yet.",
     "garden.withThisTag": "with this tag",
+
+    // Blog
+    "blog.title": "Blog",
+    "blog.subtitle": "Monthly reflections, updates, and dispatches from the edge.",
+    "blog.published": "Published",
+    "blog.updated": "Updated",
+    "blog.noPosts": "No posts yet.",
+    "blog.post": "post",
+    "blog.posts": "posts",
+    "blog.tagsSubtitle": "Browse blog posts by topic",
+    "blog.postsTagged": "Posts tagged",
+    "blog.recentPosts": "Recent Posts",
 
     // Note meta
     "note.by": "By",
@@ -151,10 +166,13 @@ export const ui = {
 
     // Navigation
     "nav.garden": "Giardino",
+    "nav.blog": "Blog",
     "nav.home": "Home",
     "nav.rss": "RSS",
     "nav.backToGarden": "← Giardino",
     "nav.backToGardenLong": "← Torna al Giardino",
+    "nav.backToBlog": "← Blog",
+    "nav.backToBlogLong": "← Torna al Blog",
     "nav.backToTags": "← Tag",
     "nav.exploreGarden": "Esplora il Giardino →",
 
@@ -169,6 +187,18 @@ export const ui = {
     "garden.noNotes": "Ancora nessuna nota. Inizia a piantare semi.",
     "garden.noNotesStatus": "Ancora nessuna nota con questo stato.",
     "garden.withThisTag": "con questo tag",
+
+    // Blog
+    "blog.title": "Blog",
+    "blog.subtitle": "Riflessioni mensili, aggiornamenti e dispacci dal margine.",
+    "blog.published": "Pubblicato",
+    "blog.updated": "Aggiornato",
+    "blog.noPosts": "Ancora nessun articolo.",
+    "blog.post": "articolo",
+    "blog.posts": "articoli",
+    "blog.tagsSubtitle": "Esplora gli articoli per argomento",
+    "blog.postsTagged": "Articoli con tag",
+    "blog.recentPosts": "Articoli Recenti",
 
     // Note meta
     "note.by": "Di",
