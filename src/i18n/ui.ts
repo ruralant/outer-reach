@@ -16,7 +16,7 @@ export const ui = {
     // Site-wide
     "site.title": "Outer Reach",
     "site.tagline": "A way of living, not a place on a map.",
-    "site.footer": "Outer Reach · Built with Astro",
+    "site.footer": "© 2025-2026 · Outer Reach · Made with ❤️ by... myself",
 
     // Navigation
     "nav.garden": "Garden",
@@ -44,7 +44,8 @@ export const ui = {
 
     // Blog
     "blog.title": "Blog",
-    "blog.subtitle": "Monthly reflections, updates, and dispatches from the edge.",
+    "blog.subtitle":
+      "Monthly reflections, updates, and dispatches from the edge.",
     "blog.published": "Published",
     "blog.updated": "Updated",
     "blog.noPosts": "No posts yet.",
@@ -162,7 +163,7 @@ export const ui = {
     // Site-wide
     "site.title": "Outer Reach",
     "site.tagline": "Un modo di vivere, non un punto sulla mappa.",
-    "site.footer": "Outer Reach · Costruito con Astro",
+    "site.footer": `© 2025-2026 · Outer Reach · Realizzato con ❤️ da... me`,
 
     // Navigation
     "nav.garden": "Giardino",
@@ -190,7 +191,8 @@ export const ui = {
 
     // Blog
     "blog.title": "Blog",
-    "blog.subtitle": "Riflessioni mensili, aggiornamenti e dispacci dal margine.",
+    "blog.subtitle":
+      "Riflessioni mensili, aggiornamenti e dispacci dal margine.",
     "blog.published": "Pubblicato",
     "blog.updated": "Aggiornato",
     "blog.noPosts": "Ancora nessun articolo.",
