@@ -22,7 +22,6 @@ export default defineConfig({
   },
   integrations: [mdx(), sitemap()],
   markdown: {
-    syntaxHighlight: "prism",
     gfm: true,
     remarkPlugins: [remarkWikiLinks],
   },
