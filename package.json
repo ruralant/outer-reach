@@ -1,7 +1,7 @@
 {
   "name": "outer-reach",
   "type": "module",
-  "version": "0.9.1",
+  "version": "0.9.5",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -9,10 +9,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.13",
-    "@astrojs/rss": "^4.0.15",
-    "@astrojs/sitemap": "^3.7.0",
-    "astro": "^5.18.0",
-    "exifreader": "^4.36.2"
+    "@astrojs/mdx": "^5.0.0",
+    "@astrojs/rss": "^4.0.17",
+    "@astrojs/sitemap": "^3.7.1",
+    "astro": "^6.0.3",
+    "exifreader": "^4.37.0"
   }
 }
