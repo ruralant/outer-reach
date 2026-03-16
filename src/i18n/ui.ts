@@ -16,7 +16,7 @@ export const ui = {
     // Site-wide
     "site.title": "Outer Reach",
     "site.tagline": "A way of living, not a place on a map.",
-    "site.footer": "© 2025-2026 · Outer Reach · Made with ❤️ by... myself",
+    "site.footer": `© 2025-2026 · Outer Reach · Made with ❤️ by... myself`,
 
     // Navigation
     "nav.garden": "Garden",
@@ -158,6 +158,11 @@ export const ui = {
       "Outer Reach isn't about going backwards. It's about going sideways — into spaces where other futures are still possible.",
     "home.find4": "If you're here, you might already feel it too.",
     "home.findPull": "Welcome to the edge.",
+
+    // Now page
+    "now.title": "Now",
+    "now.lastUpdated": "Last updated",
+    "now.easterEgg": "What I'm up to now →",
   },
   it: {
     // Site-wide
@@ -306,5 +311,10 @@ export const ui = {
       "Outer Reach non significa tornare indietro. Significa andare di lato — in spazi dove altri futuri sono ancora possibili.",
     "home.find4": "Se sei qui, forse lo senti anche tu.",
     "home.findPull": "Benvenuto ai margini.",
+
+    // Now page
+    "now.title": "Ora",
+    "now.lastUpdated": "Ultimo aggiornamento",
+    "now.easterEgg": "Cosa sto facendo ora →",
   },
 } as const;
