@@ -33,6 +33,7 @@ const latestNotes = allNotes
 		<header class="hero">
 			<h1>{t('site.title')}</h1>
 			<p class="hero-lead">{t('site.tagline')}</p>
+			<a href={localePath(lang, '/now/')} class="now-hint">{t('now.easterEgg')}</a>
 		</header>
 
 		<div class="prose">
@@ -189,6 +190,21 @@ const latestNotes = allNotes
 		color: var(--color-text-secondary);
 		margin: 0;
 		font-style: italic;
+	}
+
+	.now-hint {
+		display: inline-block;
+		margin-top: 0.6rem;
+		font-size: 0.75rem;
+		color: var(--color-text-secondary);
+		text-decoration: none;
+		opacity: 0.4;
+		transition: opacity 0.2s ease;
+	}
+
+	.now-hint:hover {
+		opacity: 0.8;
+		color: var(--color-accent);
 	}
 
 	/* --- Prose --- */
