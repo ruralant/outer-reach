@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TopNav from '../../../components/TopNav.astro';
+import Footer from '../../../components/Footer.astro';
 import StatusBadge from '../../../components/StatusBadge.astro';
 import { getNotesForLocale, ALL_STATUSES, type NoteStatus } from '../../../lib/garden';
 import { useTranslations, localePath, localeDateShort, gardenNotePath, slugFromNoteId } from '../../../i18n/utils';
@@ -34,9 +36,7 @@ const description = t(`status.${status}.description` as any) as string;
 
 <BaseLayout title={`${emoji} ${label} — ${t('site.title')}`} description={description}>
 	<div class="container">
-		<nav class="top-nav">
-			<a href={localePath(lang, '/garden/')}>{t('nav.backToGarden')}</a>
-		</nav>
+		<TopNav lang={lang} currentPath={Astro.url.pathname} />
 
 		<header class="status-header">
 			<h1>{emoji} {label}</h1>
@@ -68,6 +68,8 @@ const description = t(`status.${status}.description` as any) as string;
 				))}
 			</div>
 		)}
+
+		<Footer lang={lang} />
 	</div>
 </BaseLayout>
 

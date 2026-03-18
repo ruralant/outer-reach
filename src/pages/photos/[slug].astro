@@ -1,8 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ThemeToggle from '../../components/ThemeToggle.astro';
+import TopNav from '../../components/TopNav.astro';
+import Footer from '../../components/Footer.astro';
 import { getPhotos } from '../../lib/photos';
 import type { Photo } from '../../lib/photos';
+import type { Lang } from '../../i18n/ui';
 
 export async function getStaticPaths() {
 	const photos = await getPhotos();
@@ -18,6 +20,7 @@ interface Props {
 
 const { photo } = Astro.props;
 const { exif } = photo;
+const lang = (Astro.currentLocale || 'en') as Lang;
 
 const formattedDate = exif.date
 	? exif.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -26,12 +29,7 @@ const formattedDate = exif.date
 
 <BaseLayout title={`${photo.slug} — Photos`} description={`Photo: ${photo.filename}`}>
 	<div class="photo-detail">
-		<nav class="top-nav">
-			<a href="/photos/">← Photos</a>
-			<div class="top-nav-right">
-				<ThemeToggle />
-			</div>
-		</nav>
+		<TopNav lang={lang} currentPath={Astro.url.pathname} />
 
 		<div class="photo-container">
 			<img
@@ -126,40 +124,15 @@ const formattedDate = exif.date
 			</div>
 		)}
 
-		<footer class="site-footer">
-			<p>Outer Reach</p>
-		</footer>
+		<Footer lang={lang} />
 	</div>
 </BaseLayout>
 
 <style>
 	.photo-detail {
-		max-width: 1200px;
+		max-width: 640px;
 		margin: 0 auto;
 		padding: 2rem 1.5rem 4rem;
-	}
-
-	.top-nav {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 2rem;
-		font-size: 0.9rem;
-	}
-
-	.top-nav a {
-		color: var(--color-text-secondary);
-		text-decoration: none;
-	}
-
-	.top-nav a:hover {
-		color: var(--color-accent);
-	}
-
-	.top-nav-right {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
 	}
 
 	.photo-container {
@@ -203,14 +176,6 @@ const formattedDate = exif.date
 	.exif-item span {
 		color: var(--color-text-primary);
 		font-weight: 500;
-	}
-
-	.site-footer {
-		margin-top: 4rem;
-		padding-top: 2rem;
-		border-top: 1px solid var(--color-border);
-		font-size: 0.8rem;
-		color: var(--color-text-secondary);
 	}
 
 	@media (max-width: 500px) {
