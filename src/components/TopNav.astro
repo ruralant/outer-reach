@@ -1,0 +1,104 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { useTranslations, localePath } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+	lang: Lang;
+	currentPath: string;
+}
+
+const { lang, currentPath } = Astro.props;
+const t = useTranslations(lang);
+
+const path = currentPath.replace(/\/$/, '') || '/';
+
+function isActive(section: string): boolean {
+	if (section === 'home') {
+		return path === '' || path === '/' || path === '/it';
+	}
+	const prefixes = lang === 'en'
+		? [`/${section}`]
+		: [`/${lang}/${section}`];
+	return prefixes.some(p => path.startsWith(p));
+}
+---
+
+<nav class="top-nav">
+	<div class="top-nav-left">
+		<a href={localePath(lang, '/')} class:list={[{ active: isActive('home') }]} aria-label={t('nav.home') as string}>
+			<svg class="home-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+				<polyline points="9 22 9 12 15 12 15 22"></polyline>
+			</svg>
+		</a>
+		<a href={localePath(lang, '/blog/')} class:list={[{ active: isActive('blog') }]}>{t('nav.blog')}</a>
+		<a href={localePath(lang, '/now/')} class:list={[{ active: isActive('now') }]}>{t('nav.now')}</a>
+		<a href="/photos/" class:list={[{ active: isActive('photos') }]}>{t('nav.photos')}</a>
+		<a href={localePath(lang, '/garden/')} class:list={[{ active: isActive('garden') }]}>{t('nav.garden')}</a>
+	</div>
+	<div class="top-nav-right">
+		<LanguageSwitcher />
+		<ThemeToggle />
+	</div>
+</nav>
+
+<style>
+	.top-nav {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		padding: 0.5rem 0 2rem;
+	}
+
+	.top-nav-left {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+	}
+
+	.top-nav-right {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+	}
+
+	.top-nav a {
+		font-size: 0.85rem;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--color-text-secondary);
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.top-nav a:hover {
+		color: var(--color-accent);
+	}
+
+	.top-nav a.active {
+		color: var(--color-accent);
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+
+	.home-icon {
+		display: block;
+	}
+
+	@media (max-width: 640px) {
+		.top-nav-left {
+			gap: 0.75rem;
+		}
+
+		.top-nav-right {
+			gap: 0.75rem;
+		}
+
+		.top-nav a {
+			font-size: 0.75rem;
+		}
+	}
+</style>

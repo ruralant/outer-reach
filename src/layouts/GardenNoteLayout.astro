@@ -1,11 +1,10 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
-import ThemeToggle from '../components/ThemeToggle.astro';
+import TopNav from '../components/TopNav.astro';
 import StatusBadge from '../components/StatusBadge.astro';
 import Backlinks from '../components/Backlinks.astro';
 import RelatedNotes from '../components/RelatedNotes.astro';
-import LanguageSwitcher from '../components/LanguageSwitcher.astro';
 import type { GardenNote } from '../lib/garden';
 import { useTranslations, localePath, localeDateString, slugFromNoteId } from '../i18n/utils';
 import type { Lang } from '../i18n/ui';
@@ -27,13 +26,7 @@ const formattedUpdated = updated ? localeDateString(updated, lang) : null;
 
 <BaseLayout title={`${title} — ${t('site.title')}`} description={description}>
 	<article class="garden-note">
-		<nav class="top-nav">
-			<a href={localePath(lang, '/garden/')}>{t('nav.backToGarden')}</a>
-			<div class="top-nav-right">
-				<LanguageSwitcher />
-				<ThemeToggle />
-			</div>
-		</nav>
+		<TopNav lang={lang} currentPath={Astro.url.pathname} />
 
 		<header class="note-header">
 			<div class="note-status-row">
@@ -87,32 +80,6 @@ const formattedUpdated = updated ? localeDateString(updated, lang) : null;
 		max-width: 640px;
 		margin: 0 auto;
 		padding: 2rem 1.5rem 4rem;
-	}
-
-	.top-nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 0.5rem 0 2rem;
-	}
-
-	.top-nav-right {
-		display: flex;
-		align-items: center;
-		gap: 1.5rem;
-	}
-
-	.top-nav a {
-		font-size: 0.85rem;
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
-		color: var(--color-text-secondary);
-		text-decoration: none;
-	}
-
-	.top-nav a:hover {
-		color: var(--color-accent);
-		text-decoration: none;
 	}
 
 	.note-header {

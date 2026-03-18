@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TopNav from '../../../components/TopNav.astro';
+import Footer from '../../../components/Footer.astro';
 import { getSortedPosts } from '../../../lib/blog';
 import { useTranslations, localePath, localeDateShort } from '../../../i18n/utils';
 import type { Lang } from '../../../i18n/ui';
@@ -32,10 +34,7 @@ const t = useTranslations(lang);
 
 <BaseLayout title={`#${tag} — ${t('blog.title')} — ${t('site.title')}`} description={`${t('blog.postsTagged')} "${tag}"`}>
 	<div class="container">
-		<nav class="top-nav">
-			<a href={localePath(lang, '/blog/tags/')}>{t('nav.backToTags')}</a>
-			<a href={localePath(lang, '/blog/')}>{t('nav.blog')}</a>
-		</nav>
+		<TopNav lang={lang} currentPath={Astro.url.pathname} />
 
 		<header class="tag-header">
 			<h1>#{tag}</h1>
@@ -53,6 +52,8 @@ const t = useTranslations(lang);
 				</article>
 			))}
 		</div>
+
+		<Footer lang={lang} />
 	</div>
 </BaseLayout>
 
@@ -61,24 +62,6 @@ const t = useTranslations(lang);
 		max-width: 640px;
 		margin: 0 auto;
 		padding: 2rem 1.5rem 4rem;
-	}
-
-	.top-nav {
-		display: flex;
-		justify-content: space-between;
-		padding: 0.5rem 0 2rem;
-	}
-
-	.top-nav a {
-		font-size: 0.85rem;
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
-		color: var(--color-text-secondary);
-		text-decoration: none;
-	}
-
-	.top-nav a:hover {
-		color: var(--color-accent);
 	}
 
 	.tag-header {
