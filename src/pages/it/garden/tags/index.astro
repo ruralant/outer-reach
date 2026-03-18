@@ -3,6 +3,7 @@ import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { getNotesForLocale, getAllTags } from '../../../../lib/garden';
 import { useTranslations, localePath } from '../../../../i18n/utils';
 import type { Lang } from '../../../../i18n/ui';
+import '../../../../styles/garden-tags-index.css';
 
 const lang = (Astro.currentLocale || 'it') as Lang;
 const t = useTranslations(lang);
@@ -33,17 +34,4 @@ const tags = getAllTags(allNotes);
 	</div>
 </BaseLayout>
 
-<style>
-	.container { max-width: 640px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-	.top-nav { padding: 0.5rem 0 2rem; }
-	.top-nav a { font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-text-secondary); text-decoration: none; }
-	.top-nav a:hover { color: var(--color-accent); }
-	.tags-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--color-border); }
-	.tags-header h1 { font-size: 2rem; font-weight: 700; margin: 0 0 0.25rem 0; color: var(--color-text-primary); letter-spacing: -0.02em; }
-	.subtitle { font-size: 1rem; color: var(--color-text-secondary); margin: 0; }
-	.tags-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
-	.tags-list li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border); }
-	.tags-list a { color: var(--color-accent); text-decoration: none; font-size: 1.05rem; }
-	.tags-list a:hover { text-decoration: underline; }
-	.count { font-size: 0.85rem; color: var(--color-text-secondary); opacity: 0.7; }
-</style>
+
