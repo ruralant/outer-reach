@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ThemeToggle from '../../components/ThemeToggle.astro';
+import TopNav from '../../components/TopNav.astro';
+import Footer from '../../components/Footer.astro';
 import StatusBadge from '../../components/StatusBadge.astro';
-import LanguageSwitcher from '../../components/LanguageSwitcher.astro';
 import { getNotesForLocale, getAllTags, ALL_STATUSES } from '../../lib/garden';
 import { useTranslations, localePath, localeDateShort, gardenNotePath, slugFromNoteId } from '../../i18n/utils';
 import type { Lang } from '../../i18n/ui';
@@ -25,13 +25,7 @@ const slugs = sortedNotes.map((n) => slugFromNoteId(n.id));
 
 <BaseLayout title={`${t('garden.title')} — ${t('site.title')}`} description={t('garden.subtitle') as string}>
 	<div class="garden-page">
-		<nav class="top-nav">
-			<a href={localePath(lang, '/')}>{t('nav.home')}</a>
-			<div class="top-nav-right">
-				<LanguageSwitcher />
-				<ThemeToggle />
-			</div>
-		</nav>
+		<TopNav lang={lang} currentPath={Astro.url.pathname} />
 
 		<header class="garden-header">
 			<h1>{t('garden.title')}</h1>
@@ -103,16 +97,7 @@ const slugs = sortedNotes.map((n) => slugFromNoteId(n.id));
 			</div>
 		)}
 
-		<footer class="page-footer">
-			<a href={localePath(lang, '/rss.xml')} class="rss-link" aria-label="RSS Feed">
-				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<path d="M4 11a9 9 0 0 1 9 9"></path>
-					<path d="M4 4a16 16 0 0 1 16 16"></path>
-					<circle cx="5" cy="19" r="1"></circle>
-				</svg>
-			</a>
-			<p>{t('site.footer')}</p>
-		</footer>
+		<Footer lang={lang} />
 	</div>
 </BaseLayout>
 

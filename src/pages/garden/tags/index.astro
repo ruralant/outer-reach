@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TopNav from '../../../components/TopNav.astro';
+import Footer from '../../../components/Footer.astro';
 import { getNotesForLocale, getAllTags } from '../../../lib/garden';
 import { useTranslations, localePath } from '../../../i18n/utils';
 import type { Lang } from '../../../i18n/ui';
@@ -14,9 +16,7 @@ const tags = getAllTags(allNotes);
 
 <BaseLayout title={`${t('tags.title')} — ${t('site.title')}`} description={t('tags.subtitle') as string}>
 	<div class="container">
-		<nav class="top-nav">
-			<a href={localePath(lang, '/garden/')}>{t('nav.backToGarden')}</a>
-		</nav>
+		<TopNav lang={lang} currentPath={Astro.url.pathname} />
 
 		<header class="tags-header">
 			<h1>{t('tags.title')}</h1>
@@ -31,6 +31,8 @@ const tags = getAllTags(allNotes);
 				);
 			})}
 		</ul>
+
+		<Footer lang={lang} />
 	</div>
 </BaseLayout>
 

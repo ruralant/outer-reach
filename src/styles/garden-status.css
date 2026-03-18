@@ -4,22 +4,6 @@
   padding: 2rem 1.5rem 4rem;
 }
 
-.top-nav {
-  padding: 0.5rem 0 2rem;
-}
-
-.top-nav a {
-  font-size: 0.85rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--color-text-secondary);
-  text-decoration: none;
-}
-
-.top-nav a:hover {
-  color: var(--color-accent);
-}
-
 .status-header {
   margin-bottom: 2rem;
   padding-bottom: 1rem;

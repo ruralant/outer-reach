@@ -1,19 +1,17 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ThemeToggle from '../../components/ThemeToggle.astro';
+import TopNav from '../../components/TopNav.astro';
+import Footer from '../../components/Footer.astro';
 import { getPhotos } from '../../lib/photos';
+import type { Lang } from '../../i18n/ui';
 
 const photos = await getPhotos();
+const lang = (Astro.currentLocale || 'en') as Lang;
 ---
 
 <BaseLayout title="Photos — Outer Reach" description="A collection of photographs.">
 	<div class="photos-page">
-		<nav class="top-nav">
-			<a href="/">← Home</a>
-			<div class="top-nav-right">
-				<ThemeToggle />
-			</div>
-		</nav>
+		<TopNav lang={lang} currentPath={Astro.url.pathname} />
 
 		<header class="photos-header">
 			<h1>Photos</h1>
@@ -36,40 +34,15 @@ const photos = await getPhotos();
 			</div>
 		)}
 
-		<footer class="site-footer">
-			<p>Outer Reach</p>
-		</footer>
+		<Footer lang={lang} />
 	</div>
 </BaseLayout>
 
 <style>
 	.photos-page {
-		max-width: 1200px;
+		max-width: 640px;
 		margin: 0 auto;
 		padding: 2rem 1.5rem 4rem;
-	}
-
-	.top-nav {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 2rem;
-		font-size: 0.9rem;
-	}
-
-	.top-nav a {
-		color: var(--color-text-secondary);
-		text-decoration: none;
-	}
-
-	.top-nav a:hover {
-		color: var(--color-accent);
-	}
-
-	.top-nav-right {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
 	}
 
 	.photos-header {
@@ -90,7 +63,7 @@ const photos = await getPhotos();
 
 	.photos-grid {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(2, 1fr);
 		gap: 1rem;
 	}
 
@@ -118,20 +91,6 @@ const photos = await getPhotos();
 
 	.photo-card:hover img {
 		transform: scale(1.03);
-	}
-
-	.site-footer {
-		margin-top: 4rem;
-		padding-top: 2rem;
-		border-top: 1px solid var(--color-border);
-		font-size: 0.8rem;
-		color: var(--color-text-secondary);
-	}
-
-	@media (max-width: 900px) {
-		.photos-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
 	}
 
 	@media (max-width: 500px) {

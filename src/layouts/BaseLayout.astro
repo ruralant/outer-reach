@@ -4,7 +4,6 @@ interface Props {
 	description?: string;
 }
 
-const version: string = __APP_VERSION__;
 const { title, description } = Astro.props;
 ---
 
@@ -44,7 +43,6 @@ const { title, description } = Astro.props;
         <main>
             <slot />
         </main>
-        <div class="site-version">v{version}</div>
     </body>
 </html>
 
@@ -107,15 +105,6 @@ const { title, description } = Astro.props;
 	a:hover {
 		color: var(--color-link-hover);
 		text-decoration: underline;
-	}
-
-	.site-version {
-		text-align: center;
-		font-size: 0.65rem;
-		color: var(--color-text-secondary);
-		opacity: 0.4;
-		padding: 0.5rem 0 1rem;
-		user-select: none;
 	}
 
 </style>
