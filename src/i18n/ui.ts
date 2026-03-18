@@ -21,6 +21,8 @@ export const ui = {
     // Navigation
     "nav.garden": "Garden",
     "nav.blog": "Blog",
+    "nav.now": "Now",
+    "nav.photos": "Photos",
     "nav.home": "Home",
     "nav.rss": "RSS",
     "nav.backToGarden": "← Garden",
@@ -81,7 +83,8 @@ export const ui = {
 
     // RSS
     "rss.title": "Outer Reach",
-    "rss.description": "",
+    "rss.description":
+      "A journey towards a rural and sufficient life at the far edge of society.",
 
     // Accessibility
     "a11y.toggleTheme": "Toggle theme",
@@ -162,7 +165,6 @@ export const ui = {
     // Now page
     "now.title": "Now",
     "now.lastUpdated": "Last updated",
-    "now.easterEgg": "What I'm up to now →",
   },
   it: {
     // Site-wide
@@ -173,6 +175,8 @@ export const ui = {
     // Navigation
     "nav.garden": "Giardino",
     "nav.blog": "Blog",
+    "nav.now": "Ora",
+    "nav.photos": "Foto",
     "nav.home": "Home",
     "nav.rss": "RSS",
     "nav.backToGarden": "← Giardino",
@@ -315,6 +319,5 @@ export const ui = {
     // Now page
     "now.title": "Ora",
     "now.lastUpdated": "Ultimo aggiornamento",
-    "now.easterEgg": "Cosa sto facendo ora →",
   },
 } as const;

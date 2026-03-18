@@ -1,13 +1,14 @@
 ---
 import { languages, type Lang } from '../i18n/ui';
-import { getAlternateLocaleUrl } from '../i18n/utils';
+import { getAlternateLocaleUrl, useTranslations } from '../i18n/utils';
 
 const currentLang = (Astro.currentLocale || 'en') as Lang;
+const t = useTranslations(currentLang);
 const alternateUrl = getAlternateLocaleUrl(Astro.url, currentLang);
 const targetLang: Lang = currentLang === 'en' ? 'it' : 'en';
 ---
 
-<a href={alternateUrl} class="lang-switch" aria-label={languages[targetLang]}>
+<a href={alternateUrl} class="lang-switch" aria-label={t('a11y.switchLang') as string}>
 	{targetLang.toUpperCase()}
 </a>
 

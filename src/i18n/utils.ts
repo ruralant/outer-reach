@@ -1,16 +1,6 @@
 import { ui, defaultLang, type Lang } from "./ui";
 
 /**
- * Extract the current language from the URL path.
- * With `prefixDefaultLocale: false`, English pages have no prefix.
- */
-export function getLangFromUrl(url: URL): Lang {
-  const [, maybeLang] = url.pathname.split("/");
-  if (maybeLang in ui) return maybeLang as Lang;
-  return defaultLang;
-}
-
-/**
  * Returns a `t(key)` function bound to a specific language.
  * Falls back to `defaultLang` for missing keys.
  */

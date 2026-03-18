@@ -1,7 +1,12 @@
 ---
+import { useTranslations } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
+
+const lang = (Astro.currentLocale || 'en') as Lang;
+const t = useTranslations(lang);
 ---
 
-<button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+<button id="theme-toggle" class="theme-toggle" aria-label={t('a11y.toggleTheme') as string}>
 	<svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 		<circle cx="12" cy="12" r="5"></circle>
 		<line x1="12" y1="1" x2="12" y2="3"></line>

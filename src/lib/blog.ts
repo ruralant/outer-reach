@@ -6,7 +6,7 @@ export type BlogPost = CollectionEntry<"blog">;
 /**
  * Get all published (non-draft) blog posts.
  */
-export async function getAllPosts(): Promise<BlogPost[]> {
+async function getAllPosts(): Promise<BlogPost[]> {
   const posts = await getCollection("blog");
   return posts.filter((post) => !post.data.draft);
 }
