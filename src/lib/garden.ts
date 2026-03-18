@@ -9,7 +9,7 @@ export type NoteStatus = "seed" | "growing" | "evergreen" | "experimental";
 /**
  * Get all published (non-draft) garden notes.
  */
-export async function getAllNotes(): Promise<GardenNote[]> {
+async function getAllNotes(): Promise<GardenNote[]> {
   const notes = await getCollection("garden");
   return notes.filter((note) => !note.data.draft);
 }
@@ -31,7 +31,7 @@ export async function getNotesForLocale(locale: string): Promise<GardenNote[]> {
  *
  * Returns an array of unique slugs (lowercased, trimmed).
  */
-export function extractWikiLinks(body: string): string[] {
+function extractWikiLinks(body: string): string[] {
   const regex = /\[\[([^\]|]+?)(?:\|[^\]]+?)?\]\]/g;
   const slugs = new Set<string>();
   let match: RegExpExecArray | null;
@@ -141,32 +141,3 @@ export const ALL_STATUSES: NoteStatus[] = [
   "seed",
   "experimental",
 ];
-
-/**
- * Status display metadata.
- */
-export const STATUS_META: Record<
-  NoteStatus,
-  { label: string; emoji: string; description: string }
-> = {
-  seed: {
-    label: "Seed",
-    emoji: "🌱",
-    description: "An early idea, just planted",
-  },
-  growing: {
-    label: "Growing",
-    emoji: "🌿",
-    description: "Developing, still being refined",
-  },
-  evergreen: {
-    label: "Evergreen",
-    emoji: "🌳",
-    description: "Mature, well-developed content",
-  },
-  experimental: {
-    label: "Experimental",
-    emoji: "🧪",
-    description: "Exploratory, may change significantly",
-  },
-};
