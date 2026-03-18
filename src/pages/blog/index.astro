@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ThemeToggle from '../../components/ThemeToggle.astro';
-import LanguageSwitcher from '../../components/LanguageSwitcher.astro';
+import TopNav from '../../components/TopNav.astro';
+import Footer from '../../components/Footer.astro';
 import { getSortedPosts, getAllBlogTags } from '../../lib/blog';
 import { useTranslations, localePath, localeDateShort } from '../../i18n/utils';
 import type { Lang } from '../../i18n/ui';
@@ -15,13 +15,7 @@ const tags = getAllBlogTags(posts);
 
 <BaseLayout title={`${t('blog.title')} — ${t('site.title')}`} description={t('blog.subtitle') as string}>
 	<div class="blog-page">
-		<nav class="top-nav">
-			<a href={localePath(lang, '/')}>{t('nav.home')}</a>
-			<div class="top-nav-right">
-				<LanguageSwitcher />
-				<ThemeToggle />
-			</div>
-		</nav>
+		<TopNav lang={lang} currentPath={Astro.url.pathname} />
 
 		<header class="blog-header">
 			<h1>{t('blog.title')}</h1>
@@ -73,16 +67,7 @@ const tags = getAllBlogTags(posts);
 			</div>
 		)}
 
-		<footer class="page-footer">
-			<a href={localePath(lang, '/rss.xml')} class="rss-link" aria-label="RSS Feed">
-				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<path d="M4 11a9 9 0 0 1 9 9"></path>
-					<path d="M4 4a16 16 0 0 1 16 16"></path>
-					<circle cx="5" cy="19" r="1"></circle>
-				</svg>
-			</a>
-			<p>{t('site.footer')}</p>
-		</footer>
+		<Footer lang={lang} />
 	</div>
 </BaseLayout>
 
@@ -91,33 +76,6 @@ const tags = getAllBlogTags(posts);
 		max-width: 640px;
 		margin: 0 auto;
 		padding: 2rem 1.5rem 4rem;
-	}
-
-	.top-nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1.5rem;
-		padding: 0.5rem 0 2rem;
-	}
-
-	.top-nav-right {
-		display: flex;
-		align-items: center;
-		gap: 1.5rem;
-	}
-
-	.top-nav a {
-		font-size: 0.85rem;
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
-		color: var(--color-text-secondary);
-		text-decoration: none;
-	}
-
-	.top-nav a:hover {
-		color: var(--color-accent);
-		text-decoration: none;
 	}
 
 	.blog-header {
@@ -270,34 +228,6 @@ const tags = getAllBlogTags(posts);
 		font-size: 0.8rem;
 		color: var(--color-text-secondary);
 		opacity: 0.5;
-	}
-
-	/* --- Footer --- */
-	.page-footer {
-		margin-top: 3rem;
-		padding-top: 2rem;
-		border-top: 1px solid var(--color-border);
-		text-align: center;
-	}
-
-	.rss-link {
-		display: inline-flex;
-		color: var(--color-text-secondary);
-		opacity: 0.5;
-		transition: opacity 0.2s ease, color 0.2s ease;
-	}
-
-	.rss-link:hover {
-		opacity: 1;
-		color: var(--color-accent);
-		text-decoration: none;
-	}
-
-	.page-footer p {
-		font-size: 0.8rem;
-		color: var(--color-text-secondary);
-		opacity: 0.6;
-		margin-top: 0.75rem;
 	}
 
 	@media (max-width: 640px) {

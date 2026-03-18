@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ThemeToggle from '../../components/ThemeToggle.astro';
-import LanguageSwitcher from '../../components/LanguageSwitcher.astro';
-import { useTranslations, localePath } from '../../i18n/utils';
+import TopNav from '../../components/TopNav.astro';
+import Footer from '../../components/Footer.astro';
+import { useTranslations } from '../../i18n/utils';
 import type { Lang } from '../../i18n/ui';
 import '../../styles/now.css';
 import NowContent from '../../content/now/it.md';
@@ -13,13 +13,7 @@ const t = useTranslations(lang);
 
 <BaseLayout title={`${t('now.title')} — ${t('site.title')}`}>
 	<article class="now-page">
-		<nav class="top-nav">
-			<a href={localePath(lang, '/')}>{t('nav.home')}</a>
-			<div class="top-nav-right">
-				<LanguageSwitcher />
-				<ThemeToggle />
-			</div>
-		</nav>
+		<TopNav lang={lang} currentPath={Astro.url.pathname} />
 
 		<div class="now-meta">
 			<span>{t('now.lastUpdated')}: Marzo 2026</span>
@@ -29,9 +23,7 @@ const t = useTranslations(lang);
 			<NowContent />
 		</div>
 
-		<footer class="now-footer">
-			<a href={localePath(lang, '/')}>← {t('nav.home')}</a>
-		</footer>
+		<Footer lang={lang} />
 	</article>
 </BaseLayout>
 
