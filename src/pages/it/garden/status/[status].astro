@@ -3,6 +3,7 @@ import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { getNotesForLocale, ALL_STATUSES, type NoteStatus } from '../../../../lib/garden';
 import { useTranslations, localePath, localeDateShort, gardenNotePath, slugFromNoteId } from '../../../../i18n/utils';
 import type { Lang } from '../../../../i18n/ui';
+import '../../../../styles/garden-status.css';
 
 export async function getStaticPaths() {
 	const allNotes = await getNotesForLocale('it');
@@ -69,24 +70,4 @@ const description = t(`status.${status}.description` as any) as string;
 	</div>
 </BaseLayout>
 
-<style>
-	.container { max-width: 640px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-	.top-nav { padding: 0.5rem 0 2rem; }
-	.top-nav a { font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-text-secondary); text-decoration: none; }
-	.top-nav a:hover { color: var(--color-accent); }
-	.status-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--color-border); }
-	.status-header h1 { font-size: 2rem; font-weight: 700; margin: 0 0 0.25rem 0; color: var(--color-text-primary); letter-spacing: -0.02em; }
-	.subtitle { font-size: 0.95rem; color: var(--color-text-secondary); margin: 0 0 0.25rem 0; }
-	.count { font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; opacity: 0.7; }
-	.no-notes { color: var(--color-text-secondary); padding: 2rem 0; }
-	.notes-list { display: flex; flex-direction: column; }
-	.note-row { padding: 1rem 0; border-bottom: 1px solid var(--color-border); }
-	.note-title { font-size: 1.05rem; font-weight: 600; color: var(--color-text-primary); text-decoration: none; }
-	.note-title:hover { color: var(--color-accent); }
-	.note-desc { font-size: 0.9rem; color: var(--color-text-secondary); margin: 0.25rem 0; line-height: 1.5; }
-	.note-meta { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
-	.note-date { font-size: 0.8rem; color: var(--color-text-secondary); opacity: 0.7; }
-	.note-tags { display: flex; gap: 0.5rem; }
-	.tag { font-size: 0.8rem; color: var(--color-text-secondary); text-decoration: none; }
-	.tag:hover { color: var(--color-accent); }
-</style>
+

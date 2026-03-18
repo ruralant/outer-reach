@@ -1,17 +1,17 @@
 import rss from "@astrojs/rss";
 import { getNotesForLocale } from "../lib/garden";
-import { slugFromNoteId } from "../i18n/utils";
+import { useTranslations, slugFromNoteId } from "../i18n/utils";
 
 export async function GET(context) {
+  const t = useTranslations("en");
   const notes = await getNotesForLocale("en");
   const publishedNotes = notes.sort(
     (a, b) => b.data.created.valueOf() - a.data.created.valueOf(),
   );
 
   return rss({
-    title: "Outer Reach",
-    description:
-      "A journey towards a rural and sufficient life at the far edge of society.",
+    title: t("rss.title") as string,
+    description: t("rss.description") as string,
     site: context.site,
     items: publishedNotes.map((note) => ({
       title: note.data.title,
