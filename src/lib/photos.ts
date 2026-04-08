@@ -83,7 +83,7 @@ function readExifDate(filePath: string): Date | undefined {
   } catch {
     return undefined;
   } finally {
-    if (fd !== undefined) fs.closeSync(fd)
+    if (fd !== undefined) fs.closeSync(fd);
   }
 }
 
