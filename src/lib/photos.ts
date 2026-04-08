@@ -140,5 +140,5 @@ export async function getPhotos(options?: GetPhotosOptions): Promise<Photo[]> {
 		return a.filename.localeCompare(b.filename);
 	});
 
-	return limit ? photos.slice(0, limit) : photos;
+	return limit !== undefined ? photos.slice(0, limit) : photos;
 }
