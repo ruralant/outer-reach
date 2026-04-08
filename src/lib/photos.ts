@@ -45,7 +45,68 @@ function tagDescription(tag: { description?: string } | undefined): string | und
 	return tag?.description ?? undefined;
 }
 
-export async function getPhotos(): Promise<Photo[]> {
+interface GetPhotosOptions {
+	/** Maximum number of photos to return. */
+	limit?: number;
+	/** When true, only extract the date from EXIF (for sorting) and skip the rest. */
+	lite?: boolean;
+}
+
+/** Read only the first 64 KB — enough to cover EXIF headers without loading the full JPEG. */
+const LITE_READ_BYTES = 65_536;
+
+function readExifDate(filePath: string): Date | undefined {
+	const fd = fs.openSync(filePath, 'r');
+	try {
+		const buf = Buffer.alloc(LITE_READ_BYTES);
+		const bytesRead = fs.readSync(fd, buf, 0, LITE_READ_BYTES, 0);
+		const tags = ExifReader.load(buf.subarray(0, bytesRead), { expanded: true });
+		const exifTags = tags.exif ?? {};
+		const dateStr = tagDescription(exifTags.DateTimeOriginal) || tagDescription(exifTags.DateTime);
+		return dateStr ? new Date(dateStr.replace(/^(\d{4}):(\d{2}):(\d{2})/, '$1-$2-$3')) : undefined;
+	} catch {
+		return undefined;
+	} finally {
+		fs.closeSync(fd);
+	}
+}
+
+function readFullExif(filePath: string): PhotoExif {
+	try {
+		const buffer = fs.readFileSync(filePath);
+		const tags = ExifReader.load(buffer, { expanded: true });
+
+		const exifTags = tags.exif ?? {};
+		const make = tagDescription(exifTags.Make);
+		const model = tagDescription(exifTags.Model);
+		const fNumberDesc = tagDescription(exifTags.FNumber);
+		const exposureDesc = tagDescription(exifTags.ExposureTime);
+		const isoTag = exifTags.ISOSpeedRatings;
+		const iso = isoTag ? (Array.isArray(isoTag.value) ? isoTag.value[0] : isoTag.value) : undefined;
+		const focalLengthDesc = tagDescription(exifTags.FocalLength);
+		const lensModel = tagDescription(exifTags.LensModel);
+		const dateStr = tagDescription(exifTags.DateTimeOriginal) || tagDescription(exifTags.DateTime);
+		const imgWidth = tagValue<number>(exifTags.PixelXDimension) ?? (tags.file?.['Image Width'] as { value?: number } | undefined)?.value;
+		const imgHeight = tagValue<number>(exifTags.PixelYDimension) ?? (tags.file?.['Image Height'] as { value?: number } | undefined)?.value;
+
+		return {
+			camera: formatCamera(make, model),
+			lens: lensModel || undefined,
+			focalLength: focalLengthDesc ? focalLengthDesc.replace(/\s+/g, '') : undefined,
+			aperture: fNumberDesc || undefined,
+			shutterSpeed: exposureDesc ? `${exposureDesc}s` : undefined,
+			iso: iso || undefined,
+			date: dateStr ? new Date(dateStr.replace(/^(\d{4}):(\d{2}):(\d{2})/, '$1-$2-$3')) : undefined,
+			width: imgWidth || undefined,
+			height: imgHeight || undefined,
+		};
+	} catch {
+		return {};
+	}
+}
+
+export async function getPhotos(options?: GetPhotosOptions): Promise<Photo[]> {
+	const { limit, lite = false } = options ?? {};
 	const photosDir = path.join(process.cwd(), 'public', 'photos');
 
 	if (!fs.existsSync(photosDir)) return [];
@@ -58,41 +119,10 @@ export async function getPhotos(): Promise<Photo[]> {
 	const photos: Photo[] = [];
 
 	for (const file of files) {
-		const filePath = path.join(photosDir, file);
+		const fp = path.join(photosDir, file);
 		const slug = path.basename(file, path.extname(file));
 
-		let exif: PhotoExif = {};
-		try {
-			const buffer = fs.readFileSync(filePath);
-			const tags = ExifReader.load(buffer, { expanded: true });
-
-			const exifTags = tags.exif ?? {};
-			const make = tagDescription(exifTags.Make);
-			const model = tagDescription(exifTags.Model);
-			const fNumberDesc = tagDescription(exifTags.FNumber);
-			const exposureDesc = tagDescription(exifTags.ExposureTime);
-			const isoTag = exifTags.ISOSpeedRatings;
-			const iso = isoTag ? (Array.isArray(isoTag.value) ? isoTag.value[0] : isoTag.value) : undefined;
-			const focalLengthDesc = tagDescription(exifTags.FocalLength);
-			const lensModel = tagDescription(exifTags.LensModel);
-			const dateStr = tagDescription(exifTags.DateTimeOriginal) || tagDescription(exifTags.DateTime);
-			const imgWidth = tagValue<number>(exifTags.PixelXDimension) ?? (tags.file?.['Image Width'] as { value?: number } | undefined)?.value;
-			const imgHeight = tagValue<number>(exifTags.PixelYDimension) ?? (tags.file?.['Image Height'] as { value?: number } | undefined)?.value;
-
-			exif = {
-				camera: formatCamera(make, model),
-				lens: lensModel || undefined,
-				focalLength: focalLengthDesc ? focalLengthDesc.replace(/\s+/g, '') : undefined,
-				aperture: fNumberDesc || undefined,
-				shutterSpeed: exposureDesc ? `${exposureDesc}s` : undefined,
-				iso: iso || undefined,
-				date: dateStr ? new Date(dateStr.replace(/^(\d{4}):(\d{2}):(\d{2})/, '$1-$2-$3')) : undefined,
-				width: imgWidth || undefined,
-				height: imgHeight || undefined,
-			};
-		} catch {
-			// EXIF extraction failed — continue with empty exif
-		}
+		const exif: PhotoExif = lite ? { date: readExifDate(fp) } : readFullExif(fp);
 
 		photos.push({
 			filename: file,
@@ -110,5 +140,5 @@ export async function getPhotos(): Promise<Photo[]> {
 		return a.filename.localeCompare(b.filename);
 	});
 
-	return photos;
+	return limit !== undefined ? photos.slice(0, limit) : photos;
 }
