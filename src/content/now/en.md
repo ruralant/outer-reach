@@ -4,26 +4,18 @@
 
 ## Working on
 
-- Building greener software — optimising web performance and reducing carbon footprint across projects.
-- Exploring Svelte 5 and its runes-based reactivity for my personal projects.
-- Reading about regenerative technologies and climate adaptation strategies.
+- Perfecting attic insulation to address cold spots highlighted by the thermal camera loaned me by my energy provider.
+- Fixing rear break of the bike I was gifted by a friend. Calibrating the gears and replacing the brake pads.
+- Implementing plant guild on the side of the pavement leading to the back garden.
 
 ## Reading
 
-- _Transformative Adaptation_ by Rupert Read, Morgan Phillips and Amanda Scott.
-- _Compost_ by Charles Dowding.
-
-## Outside work
-
-- Trail running in the Berkshire countryside.
-- Growing vegetables in my allotment — spring planting season is underway.
-- Planning a long-distance walk for the summer.
+- _From source to sea_ by David Thompson.
+- _Why buddhism is true_ by Robert Wright.
 
 ## Thinking about
 
-- How software engineers can contribute to climate adaptation.
-- The intersection of sustainability and web development.
-- Slow travel and its environmental benefits.
+- How balcony solar could be implemented in my house. I live in a conservation area and the south facing side of the house is looking at the street, so I can't put panels there.
 
 ---
 

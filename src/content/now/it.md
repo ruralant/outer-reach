@@ -2,28 +2,20 @@
 
 ## Cosa sto facendo in questo momento
 
-## Lavoro
+## A cosa sto lavorando
 
-- Costruire software più verde — ottimizzare le prestazioni web e ridurre l'impronta di carbonio nei progetti.
-- Esplorare Svelte 5 e la sua reattività basata sulle rune per i miei progetti personali.
-- Leggere di tecnologie rigenerative e strategie di adattamento climatico.
+- Migliorare l'isolamento della soffitta per risolvere i punti freddi evidenziati dalla termocamera prestatami dal mio fornitore di energia.
+- Riparare il freno posteriore della bici che mi ha regalato un amico. Regolare il cambio e sostituire le pastiglie dei freni.
+- Creare una gilda di piante sul lato del vialetto che porta al giardino sul retro.
 
 ## Letture
 
-- *Transformative Adaptation* di Rupert Read, Morgan Phillips e Amanda Scott.
-- *Compost* di Charles Dowding.
+- _From source to sea_ di David Thompson.
+- _Why buddhism is true_ di Robert Wright.
 
-## Fuori dal lavoro
+## Sto pensando a
 
-- Trail running nella campagna del Berkshire.
-- Coltivare ortaggi nel mio orto — la stagione delle semine primaverili è iniziata.
-- Pianificare una camminata a lunga distanza per l'estate.
-
-## Pensieri
-
-- Come gli ingegneri del software possono contribuire all'adattamento climatico.
-- L'intersezione tra sostenibilità e sviluppo web.
-- Viaggiare lentamente e i suoi benefici ambientali.
+- Come si potrebbe implementare un impianto solare da balcone nella mia casa. Vivo in un'area soggetta a tutela paesaggistica e il lato sud della casa affaccia sulla strada, quindi non posso installare pannelli lì.
 
 ---
 
