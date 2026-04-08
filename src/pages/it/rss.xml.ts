@@ -30,7 +30,7 @@ export async function GET(context) {
         link: `/it/blog/${slugFromNoteId(post.id)}/`,
         author: post.data.author,
       })),
-    ],
+    ].sort((a, b) => b.pubDate.valueOf() - a.pubDate.valueOf()),
     customData: `<language>it</language>`,
   });
 }
