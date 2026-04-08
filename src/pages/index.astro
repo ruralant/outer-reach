@@ -19,7 +19,7 @@ const latestNotes = allNotes
 	.slice(0, 3);
 
 const latestPosts = (await getSortedPosts()).slice(0, 3);
-const latestPhotos = (await getPhotos()).slice(0, 3);
+const latestPhotos = await getPhotos({ limit: 3, lite: true });
 ---
 
 <BaseLayout title={t('site.title') as string} description={t('site.tagline') as string}>
