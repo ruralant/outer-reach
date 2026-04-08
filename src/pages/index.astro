@@ -4,7 +4,7 @@ import TopNav from '../components/TopNav.astro';
 import Footer from '../components/Footer.astro';
 import StatusBadge from '../components/StatusBadge.astro';
 import { getNotesForLocale } from '../lib/garden';
-import { getSortedPosts } from '../lib/blog';
+import { getSortedPostsForLocale } from '../lib/blog';
 import { getPhotos } from '../lib/photos';
 import { useTranslations, localePath, localeDateShort, gardenNotePath, slugFromNoteId } from '../i18n/utils';
 import type { Lang } from '../i18n/ui';
@@ -18,7 +18,7 @@ const latestNotes = allNotes
 	.sort((a, b) => b.data.created.valueOf() - a.data.created.valueOf())
 	.slice(0, 3);
 
-const latestPosts = (await getSortedPosts()).slice(0, 3);
+const latestPosts = (await getSortedPostsForLocale(lang)).slice(0, 3);
 const latestPhotos = await getPhotos({ limit: 3, lite: true });
 ---
 
@@ -39,7 +39,7 @@ const latestPhotos = await getPhotos({ limit: 3, lite: true });
 				<h2>{t('blog.recentPosts')}</h2>
 				<div class="posts-list">
 					{latestPosts.map((post) => (
-						<a href={localePath(lang, `/blog/${post.id}`)} class="post-item">
+						<a href={localePath(lang, `/blog/${slugFromNoteId(post.id)}`)} class="post-item">
 							<span class="post-item-title">{post.data.title}</span>
 							<p class="post-item-description">{post.data.description}</p>
 							<time class="post-item-date">
