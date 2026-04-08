@@ -16,7 +16,7 @@ export const ui = {
     // Site-wide
     "site.title": "Outer Reach",
     "site.tagline": "A way of living, not a place on a map.",
-    "site.footer": `© 2025-2026 · Outer Reach · Made with ❤️ by... myself`,
+    "site.footer": `© 2025-2026 · Outer Reach · Made with ❤️ and care for the 🌍`,
 
     // Navigation
     "nav.garden": "Garden",
@@ -31,6 +31,10 @@ export const ui = {
     "nav.backToBlogLong": "← Back to Blog",
     "nav.backToTags": "← Tags",
     "nav.exploreGarden": "Explore the Garden →",
+    "nav.manifesto": "Read the manifesto →",
+
+    // Homepage
+    "home.recentPhotos": "Recent Photos",
 
     // Garden index
     "garden.title": "Garden",
@@ -185,6 +189,10 @@ export const ui = {
     "nav.backToBlogLong": "← Torna al Blog",
     "nav.backToTags": "← Tag",
     "nav.exploreGarden": "Esplora il Giardino →",
+    "nav.manifesto": "Leggi il manifesto →",
+
+    // Homepage
+    "home.recentPhotos": "Foto Recenti",
 
     // Garden index
     "garden.title": "Giardino",

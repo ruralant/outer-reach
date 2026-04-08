@@ -9,6 +9,8 @@ import TopNav from '../../components/TopNav.astro';
 import Footer from '../../components/Footer.astro';
 import StatusBadge from '../../components/StatusBadge.astro';
 import { getNotesForLocale } from '../../lib/garden';
+import { getSortedPosts } from '../../lib/blog';
+import { getPhotos } from '../../lib/photos';
 import { useTranslations, localePath, localeDateShort, gardenNotePath, slugFromNoteId } from '../../i18n/utils';
 import type { Lang } from '../../i18n/ui';
 import '../../styles/home.css';
@@ -20,6 +22,9 @@ const allNotes = await getNotesForLocale(lang);
 const latestNotes = allNotes
 	.sort((a, b) => b.data.created.valueOf() - a.data.created.valueOf())
 	.slice(0, 3);
+
+const latestPosts = (await getSortedPosts()).slice(0, 3);
+const latestPhotos = (await getPhotos()).slice(0, 3);
 ---
 
 <BaseLayout title={t('site.title') as string} description={t('site.tagline') as string}>
@@ -28,61 +33,46 @@ const latestNotes = allNotes
 
 		<header class="hero">
 			<h1>{t('site.title')}</h1>
-			<p class="hero-lead">{t('site.tagline')}</p>
+			<div class="hero-subtitle-row">
+				<p class="hero-lead">{t('site.tagline')}</p>
+				<a class="manifesto-btn" href={localePath(lang, '/manifesto/')}>{t('nav.manifesto')}</a>
+			</div>
 		</header>
 
-		<div class="prose">
-			<p>{t('home.intro')}</p>
-			<p>{t('home.intro2')}</p>
+		{latestPosts.length > 0 && (
+			<section class="recent-section">
+				<h2>{t('blog.recentPosts')}</h2>
+				<div class="posts-list">
+					{latestPosts.map((post) => (
+						<a href={localePath(lang, `/blog/${post.id}`)} class="post-item">
+							<span class="post-item-title">{post.data.title}</span>
+							<p class="post-item-description">{post.data.description}</p>
+							<time class="post-item-date">
+								{localeDateShort(post.data.published, lang)}
+							</time>
+						</a>
+					))}
+				</div>
+			</section>
+		)}
 
-			<h2>{t('home.whatTitle')}</h2>
-			<p>{t('home.what1')}</p>
-			<p>{t('home.what2')}</p>
-			<p>{t('home.what3')}</p>
-			<p class="pull">{t('home.whatPull')}</p>
-
-			<h2>{t('home.swTitle')} <span class="aside">{t('home.swAside')}</span></h2>
-			<p>{t('home.sw1')}</p>
-			<p>{t('home.sw2')}</p>
-			<p>{t('home.sw3')}</p>
-			<p>{t('home.sw4')}</p>
-			<p>{t('home.sw5')}</p>
-
-			<h2>{t('home.coreTitle')}</h2>
-			<p>{t('home.core1')}</p>
-			<p>{t('home.core2')}</p>
-			<ul>
-				{(t('home.coreList') as unknown as string[]).map((item) => (
-					<li>{item}</li>
-				))}
-			</ul>
-			<p>{t('home.core3')}</p>
-			<p>{t('home.core4')}</p>
-			<p class="pull">{t('home.corePull')}</p>
-
-			<h2>{t('home.lifeTitle')}</h2>
-			<p>{t('home.life1')}</p>
-			<p>{t('home.life2')}</p>
-			<p>{t('home.life3')}</p>
-			<ul>
-				{(t('home.lifeList') as unknown as string[]).map((item) => (
-					<li>{item}</li>
-				))}
-			</ul>
-			<p>{t('home.life4')}</p>
-
-			<h2>{t('home.findTitle')}</h2>
-			<p>{t('home.find1')}</p>
-			<p>{t('home.find2')}</p>
-			<ul>
-				{(t('home.findList') as unknown as string[]).map((item) => (
-					<li>{item}</li>
-				))}
-			</ul>
-			<p>{t('home.find3')}</p>
-			<p>{t('home.find4')}</p>
-			<p class="pull">{t('home.findPull')}</p>
-		</div>
+		{latestPhotos.length > 0 && (
+			<section class="recent-section">
+				<h2>{t('home.recentPhotos')}</h2>
+				<div class="cards-grid">
+					{latestPhotos.map((photo) => (
+						<a href={`/photos/${photo.slug}`} class="photo-card">
+							<img
+								src={photo.src}
+								alt={photo.filename}
+								loading="lazy"
+								decoding="async"
+							/>
+						</a>
+					))}
+				</div>
+			</section>
+		)}
 
 		{latestNotes.length > 0 && (
 			<section class="recent-notes">
