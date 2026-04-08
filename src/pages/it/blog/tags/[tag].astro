@@ -1,13 +1,13 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import TopNav from '../../../components/TopNav.astro';
-import Footer from '../../../components/Footer.astro';
-import { getSortedPostsForLocale } from '../../../lib/blog';
-import { useTranslations, localePath, localeDateShort, slugFromNoteId } from '../../../i18n/utils';
-import type { Lang } from '../../../i18n/ui';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import TopNav from '../../../../components/TopNav.astro';
+import Footer from '../../../../components/Footer.astro';
+import { getSortedPostsForLocale } from '../../../../lib/blog';
+import { useTranslations, localePath, localeDateShort, slugFromNoteId } from '../../../../i18n/utils';
+import type { Lang } from '../../../../i18n/ui';
 
 export async function getStaticPaths() {
-	const posts = await getSortedPostsForLocale('en');
+	const posts = await getSortedPostsForLocale('it');
 
 	const tagSet = new Set<string>();
 	for (const post of posts) {
@@ -28,7 +28,7 @@ export async function getStaticPaths() {
 }
 
 const { tag, posts } = Astro.props;
-const lang = (Astro.currentLocale || 'en') as Lang;
+const lang = (Astro.currentLocale || 'it') as Lang;
 const t = useTranslations(lang);
 ---
 
@@ -108,7 +108,7 @@ const t = useTranslations(lang);
 	.post-desc {
 		font-size: 0.9rem;
 		color: var(--color-text-secondary);
-		margin: 0.25rem 0 0.25rem 0;
+		margin: 0.25rem 0;
 		line-height: 1.5;
 	}
 

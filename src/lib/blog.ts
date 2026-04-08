@@ -12,10 +12,28 @@ async function getAllPosts(): Promise<BlogPost[]> {
 }
 
 /**
+ * Get all published posts for a specific locale.
+ */
+export async function getPostsForLocale(locale: string): Promise<BlogPost[]> {
+  const posts = await getAllPosts();
+  return posts.filter((post) => post.id.startsWith(`${locale}/`));
+}
+
+/**
  * Get all published posts sorted by published date (newest first).
  */
 export async function getSortedPosts(): Promise<BlogPost[]> {
   const posts = await getAllPosts();
+  return posts.sort(
+    (a, b) => b.data.published.valueOf() - a.data.published.valueOf(),
+  );
+}
+
+/**
+ * Get all published posts for a locale, sorted by published date (newest first).
+ */
+export async function getSortedPostsForLocale(locale: string): Promise<BlogPost[]> {
+  const posts = await getPostsForLocale(locale);
   return posts.sort(
     (a, b) => b.data.published.valueOf() - a.data.published.valueOf(),
   );

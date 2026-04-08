@@ -1,12 +1,12 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import TopNav from '../../components/TopNav.astro';
-import Footer from '../../components/Footer.astro';
-import { getSortedPostsForLocale, getAllBlogTags } from '../../lib/blog';
-import { useTranslations, localePath, localeDateShort, slugFromNoteId } from '../../i18n/utils';
-import type { Lang } from '../../i18n/ui';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TopNav from '../../../components/TopNav.astro';
+import Footer from '../../../components/Footer.astro';
+import { getSortedPostsForLocale, getAllBlogTags } from '../../../lib/blog';
+import { useTranslations, localePath, localeDateShort, slugFromNoteId } from '../../../i18n/utils';
+import type { Lang } from '../../../i18n/ui';
 
-const lang = (Astro.currentLocale || 'en') as Lang;
+const lang = (Astro.currentLocale || 'it') as Lang;
 const t = useTranslations(lang);
 
 const posts = await getSortedPostsForLocale(lang);
@@ -199,13 +199,14 @@ const tags = getAllBlogTags(posts);
 	}
 
 	.post-item-title {
+		font-size: 1.15rem;
 		font-weight: 600;
-		font-size: 1.1rem;
 		color: var(--color-text-primary);
+		letter-spacing: -0.01em;
 	}
 
 	.post-item-description {
-		font-size: 0.95rem;
+		font-size: 0.9rem;
 		color: var(--color-text-secondary);
 		margin: 0;
 		line-height: 1.5;
@@ -213,15 +214,15 @@ const tags = getAllBlogTags(posts);
 
 	.post-item-footer {
 		display: flex;
-		gap: 1rem;
-		margin-top: 0.35rem;
 		align-items: center;
+		gap: 0.75rem;
+		margin-top: 0.4rem;
 	}
 
 	.post-item-date {
 		font-size: 0.8rem;
 		color: var(--color-text-secondary);
-		opacity: 0.6;
+		opacity: 0.7;
 	}
 
 	.post-item-tags {
@@ -231,10 +232,6 @@ const tags = getAllBlogTags(posts);
 	}
 
 	@media (max-width: 640px) {
-		.blog-page {
-			padding: 1.5rem 1rem 3rem;
-		}
-
 		.blog-header h1 {
 			font-size: 2rem;
 		}
