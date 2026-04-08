@@ -2,14 +2,14 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TopNav from '../../components/TopNav.astro';
 import Footer from '../../components/Footer.astro';
-import { getSortedPosts, getAllBlogTags } from '../../lib/blog';
-import { useTranslations, localePath, localeDateShort } from '../../i18n/utils';
+import { getSortedPostsForLocale, getAllBlogTags } from '../../lib/blog';
+import { useTranslations, localePath, localeDateShort, slugFromNoteId } from '../../i18n/utils';
 import type { Lang } from '../../i18n/ui';
 
 const lang = (Astro.currentLocale || 'en') as Lang;
 const t = useTranslations(lang);
 
-const posts = await getSortedPosts();
+const posts = await getSortedPostsForLocale(lang);
 const tags = getAllBlogTags(posts);
 ---
 
@@ -45,7 +45,7 @@ const tags = getAllBlogTags(posts);
 		) : (
 			<div class="posts-list">
 				{posts.map((post) => (
-					<a href={localePath(lang, `/blog/${post.id}`)} class="post-link">
+					<a href={localePath(lang, `/blog/${slugFromNoteId(post.id)}`)} class="post-link">
 						<article class="post-item">
 							<div class="post-item-header">
 								<span class="post-item-title">{post.data.title}</span>

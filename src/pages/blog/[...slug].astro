@@ -1,13 +1,14 @@
 ---
 import { render } from 'astro:content';
 import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
-import { getSortedPosts } from '../../lib/blog';
+import { getSortedPostsForLocale } from '../../lib/blog';
+import { slugFromNoteId } from '../../i18n/utils';
 
 export async function getStaticPaths() {
-	const posts = await getSortedPosts();
+	const posts = await getSortedPostsForLocale('en');
 
 	return posts.map((post) => ({
-		params: { slug: post.id },
+		params: { slug: slugFromNoteId(post.id) },
 		props: { post },
 	}));
 }

@@ -2,12 +2,12 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import TopNav from '../../../components/TopNav.astro';
 import Footer from '../../../components/Footer.astro';
-import { getSortedPosts } from '../../../lib/blog';
-import { useTranslations, localePath, localeDateShort } from '../../../i18n/utils';
+import { getSortedPostsForLocale } from '../../../lib/blog';
+import { useTranslations, localePath, localeDateShort, slugFromNoteId } from '../../../i18n/utils';
 import type { Lang } from '../../../i18n/ui';
 
 export async function getStaticPaths() {
-	const posts = await getSortedPosts();
+	const posts = await getSortedPostsForLocale('en');
 
 	const tagSet = new Set<string>();
 	for (const post of posts) {
@@ -44,7 +44,7 @@ const t = useTranslations(lang);
 		<div class="posts-list">
 			{posts.map((post) => (
 				<article class="post-row">
-					<a href={localePath(lang, `/blog/${post.id}`)} class="post-title">{post.data.title}</a>
+					<a href={localePath(lang, `/blog/${slugFromNoteId(post.id)}`)} class="post-title">{post.data.title}</a>
 					<p class="post-desc">{post.data.description}</p>
 					<span class="post-date">
 						{localeDateShort(post.data.published, lang)}
