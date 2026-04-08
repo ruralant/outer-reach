@@ -245,8 +245,9 @@ export const ui = {
       "Esplorativo, potrebbe cambiare significativamente",
 
     // RSS
-    "rss.title": "Giardino Digitale",
-    "rss.description": "Un giardino digitale di note e idee interconnesse",
+    "rss.title": "Note del giardino e articoli del blog",
+    "rss.description":
+      "Feed RSS con le note del giardino e gli articoli del blog in italiano.",
 
     // Accessibility
     "a11y.toggleTheme": "Cambia tema",

@@ -1,11 +1,11 @@
 ---
 import { render } from 'astro:content';
-import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
-import { getSortedPostsForLocale } from '../../lib/blog';
-import { slugFromNoteId } from '../../i18n/utils';
+import BlogPostLayout from '../../../layouts/BlogPostLayout.astro';
+import { getSortedPostsForLocale } from '../../../lib/blog';
+import { slugFromNoteId } from '../../../i18n/utils';
 
 export async function getStaticPaths() {
-	const posts = await getSortedPostsForLocale('en');
+	const posts = await getSortedPostsForLocale('it');
 
 	return posts.map((post) => ({
 		params: { slug: slugFromNoteId(post.id) },

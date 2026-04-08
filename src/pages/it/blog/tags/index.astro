@@ -1,12 +1,12 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import TopNav from '../../../components/TopNav.astro';
-import Footer from '../../../components/Footer.astro';
-import { getSortedPostsForLocale, getAllBlogTags } from '../../../lib/blog';
-import { useTranslations, localePath } from '../../../i18n/utils';
-import type { Lang } from '../../../i18n/ui';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import TopNav from '../../../../components/TopNav.astro';
+import Footer from '../../../../components/Footer.astro';
+import { getSortedPostsForLocale, getAllBlogTags } from '../../../../lib/blog';
+import { useTranslations, localePath } from '../../../../i18n/utils';
+import type { Lang } from '../../../../i18n/ui';
 
-const lang = (Astro.currentLocale || 'en') as Lang;
+const lang = (Astro.currentLocale || 'it') as Lang;
 const t = useTranslations(lang);
 
 const posts = await getSortedPostsForLocale(lang);
