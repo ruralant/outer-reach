@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TopNav from '../../components/TopNav.astro';
+import Footer from '../../components/Footer.astro';
+import { useTranslations, localePath } from '../../i18n/utils';
+import type { Lang } from '../../i18n/ui';
+import '../../styles/home.css';
+
+const lang = (Astro.currentLocale || 'it') as Lang;
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={`Manifesto — ${t('site.title')}`} description={t('site.tagline') as string}>
+	<div class="manifesto">
+		<TopNav lang={lang} currentPath={Astro.url.pathname} />
+
+		<header class="hero">
+			<h1>{t('site.title')}</h1>
+			<p class="hero-lead">{t('site.tagline')}</p>
+		</header>
+
+		<div class="prose">
+			<p>{t('home.intro')}</p>
+			<p>{t('home.intro2')}</p>
+
+			<h2>{t('home.whatTitle')}</h2>
+			<p>{t('home.what1')}</p>
+			<p>{t('home.what2')}</p>
+			<p>{t('home.what3')}</p>
+			<p class="pull">{t('home.whatPull')}</p>
+
+			<h2>{t('home.swTitle')} <span class="aside">{t('home.swAside')}</span></h2>
+			<p>{t('home.sw1')}</p>
+			<p>{t('home.sw2')}</p>
+			<p>{t('home.sw3')}</p>
+			<p>{t('home.sw4')}</p>
+			<p>{t('home.sw5')}</p>
+
+			<h2>{t('home.coreTitle')}</h2>
+			<p>{t('home.core1')}</p>
+			<p>{t('home.core2')}</p>
+			<ul>
+				{(t('home.coreList') as unknown as string[]).map((item) => (
+					<li>{item}</li>
+				))}
+			</ul>
+			<p>{t('home.core3')}</p>
+			<p>{t('home.core4')}</p>
+			<p class="pull">{t('home.corePull')}</p>
+
+			<h2>{t('home.lifeTitle')}</h2>
+			<p>{t('home.life1')}</p>
+			<p>{t('home.life2')}</p>
+			<p>{t('home.life3')}</p>
+			<ul>
+				{(t('home.lifeList') as unknown as string[]).map((item) => (
+					<li>{item}</li>
+				))}
+			</ul>
+			<p>{t('home.life4')}</p>
+
+			<h2>{t('home.findTitle')}</h2>
+			<p>{t('home.find1')}</p>
+			<p>{t('home.find2')}</p>
+			<ul>
+				{(t('home.findList') as unknown as string[]).map((item) => (
+					<li>{item}</li>
+				))}
+			</ul>
+			<p>{t('home.find3')}</p>
+			<p>{t('home.find4')}</p>
+			<p class="pull">{t('home.findPull')}</p>
+		</div>
+
+		<div class="manifesto-back">
+			<a href={localePath(lang, '/')}>← {t('nav.home')}</a>
+		</div>
+
+		<Footer lang={lang} />
+	</div>
+</BaseLayout>
