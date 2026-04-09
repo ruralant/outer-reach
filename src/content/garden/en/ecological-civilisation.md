@@ -50,6 +50,6 @@ This doesn't require waiting for systemic transformation to begin. The periphery
 
 ## Not a Blueprint
 
-Ecological civilisation is not a destination with a fixed address. It's a direction — away from extraction and acceleration, toward sufficiency, repair, and reciprocity with the living systems we depend on. It will look different in the Thames Valley than in the Dolomites, different in a terraced house than on a [[rural-living|mountain smallholding]]. That's the point. The universalism of industrial modernity — the same supply chains, the same built environments, the same rhythms everywhere — is precisely what ecological civilisation refuses.
+Ecological civilisation is not a destination with a fixed address. It's a direction — away from extraction and acceleration, toward sufficiency, repair, and [[animism-and-the-living-world|reciprocity with the living world]]. It will look different in the Thames Valley than in the Dolomites, different in a terraced house than on a [[rural-living|mountain smallholding]]. That's the point. The universalism of industrial modernity — the same supply chains, the same built environments, the same rhythms everywhere — is precisely what ecological civilisation refuses.
 
 What it offers instead is the invitation to take seriously the question that growth economies render unaskable: *what if this were enough?*

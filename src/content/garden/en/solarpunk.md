@@ -31,7 +31,7 @@ Solarpunk isn't just aesthetics. It's a set of commitments:
 - **Renewable energy for all.** Solar, wind, geothermal — energy as a commons, not a commodity.
 - **Decentralization.** Power (both electrical and political) distributed to communities. No single point of control or failure.
 - **Repair culture.** Right-to-repair laws, community fix-it clinics, products designed to last and be maintained. The opposite of planned obsolescence.
-- **Biodiversity.** Cities that make room for ecosystems. Rewilded spaces. Food forests. Pollinator gardens. An end to the war on nature.
+- **Biodiversity.** Cities that make room for ecosystems. Rewilded spaces. Food forests. Pollinator gardens. An end to the war on nature — and perhaps the beginning of an [[animism-and-the-living-world|older way of paying attention]] to it.
 - **Social equity.** There's no solarpunk without justice. A beautiful, sustainable society that only works for the privileged isn't solarpunk — it's a gated community with nice landscaping.
 
 ## Solarpunk and Degrowth
