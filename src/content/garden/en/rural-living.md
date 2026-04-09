@@ -23,7 +23,7 @@ Some realities:
 - **Distance is constant.** Everything is a drive. Groceries, hardware, doctors, friends. You learn to batch errands, plan ahead, and keep a well-stocked pantry.
 - **Infrastructure is sparse.** Internet may be slow. Cell service may be unreliable. Power outages last longer. You develop backup plans for your backup plans.
 - **Community is small.** In a village of 200 people, everyone knows everyone. This can be wonderful (mutual aid, shared meals, borrowed tools) or suffocating (gossip, conformity, limited social circles). Usually it's both.
-- **The land demands attention.** If you have acreage, it needs maintenance. Fences, drainage, fire breaks, invasive species. Land is not a passive asset — it's a relationship.
+- **The land demands attention.** If you have acreage, it needs maintenance. Fences, drainage, fire breaks, invasive species. Land is not a passive asset — it's a [[animism-and-the-living-world|relationship]].
 
 ## The Economics
 
