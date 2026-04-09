@@ -53,12 +53,12 @@ You don't need to wait for the revolution. Solarpunk values can be practiced tod
 
 Solarpunk started in fiction and art, and that matters. Before you can build a better world, you have to imagine it. The stories we tell shape the futures we consider possible.
 
-Dystopian fiction has its place — it warns us about what to avoid. But we also need fiction that shows us what to aim for. Not as propaganda, not as promise, but as *invitation*. Here's a world that could work. Here's what Monday morning might look like if we get this right.
+Dystopian fiction has its place — it warns us about what to avoid. But we also need fiction that shows us what to aim for. Not as propaganda, not as promise, but as _invitation_. Here's a world that could work. Here's what Monday morning might look like if we get this right.
 
 ## Why It Matters
 
 We're at a point where people, especially young people, are drowning in dread about the future. Climate anxiety is real. Political pessimism is real. And the standard responses — "technology will save us" or "we're doomed" — aren't helpful.
 
-Solarpunk offers a third option: *we can build something better, and the building itself is meaningful, even if we don't get everything right*. It's not optimism. It's something harder and more useful than optimism. It's agency.
+Solarpunk offers a third option: _we can build something better, and the building itself is meaningful, even if we don't get everything right_. It's not optimism. It's something harder and more useful than optimism. It's agency.
 
 The future isn't written. It's planted, tended, and grown.

@@ -10,7 +10,7 @@ draft: false
 
 # Animism and the Living World
 
-*On the oldest way of paying attention*
+_On the oldest way of paying attention_
 
 ---
 
@@ -42,7 +42,7 @@ Animism's contemporary resonance extends beyond Indigenous rights and environmen
 
 The "new materialisms" — the work of Jane Bennett, Karen Barad, Timothy Morton, and others — have spent the last two decades arguing that matter is not passive. Bennett's concept of "vibrant matter" explicitly draws on animist intuitions: the capacity of things (a dead rat, a bottle cap, a power grid) to exert agency, to act in ways that exceed human intention. This is not a wholesale adoption of Indigenous ontology — and it should not be mistaken for one — but it represents a significant crack in the naturalist consensus. Western thought is slowly, unevenly arriving at conclusions that animist cultures have inhabited for millennia.
 
-There is a similar convergence in ecological science. The mycologist Merlin Sheldrake's work on fungal networks, Suzanne Simard's research on forest communication, and the broader field of biosemiotics all point toward a living world far more interconnected, communicative, and — the word is hard to avoid — *intentional* than the mechanistic model allows. None of this proves animism in a metaphysical sense. But it narrows the gap between what animist peoples have always said and what Western empiricism is now prepared to hear.
+There is a similar convergence in ecological science. The mycologist Merlin Sheldrake's work on fungal networks, Suzanne Simard's research on forest communication, and the broader field of biosemiotics all point toward a living world far more interconnected, communicative, and — the word is hard to avoid — _intentional_ than the mechanistic model allows. None of this proves animism in a metaphysical sense. But it narrows the gap between what animist peoples have always said and what Western empiricism is now prepared to hear.
 
 ## Limits and care
 
@@ -56,10 +56,10 @@ For those of us shaped by Western naturalism, the more honest path is probably n
 
 ## Paying attention at the periphery
 
-I think about this often in the small, overlooked encounters of [[rural-living|a life lived at the periphery]]. The fox that crosses the garden at dusk. The self-seeded buddleia splitting the pavement. The particular way a south-facing brick wall holds warmth into the evening. None of these require a metaphysical commitment. They require a willingness to be addressed — to let the world be a interlocutor rather than a backdrop.
+I think about this often in the small, overlooked encounters of [[rural-living|a life lived at the periphery]]. The fox that crosses the garden at dusk. The self-seeded buddleia splitting the pavement. The particular way a south-facing brick wall holds warmth into the evening. None of these require a metaphysical commitment. They require a willingness to be addressed — to let the world be an interlocutor rather than a backdrop.
 
 This is, perhaps, the most practical thing animism offers to anyone trying to live differently within an extractive system: a reminder that the world is not waiting for us to save it. It is already doing something. The question is whether we are paying enough attention to notice.
 
 ---
 
-*Further reading: Philippe Descola, Beyond Nature and Culture (2013); Graham Harvey, Animism: Respecting the Living World (2005); Jane Bennett, Vibrant Matter (2010); Irving Hallowell, "Ojibwa Ontology, Behavior, and World View" (1960).*
+_Further reading: Philippe Descola, Beyond Nature and Culture (2013); Graham Harvey, Animism: Respecting the Living World (2005); Jane Bennett, Vibrant Matter (2010); Irving Hallowell, "Ojibwa Ontology, Behavior, and World View" (1960)._

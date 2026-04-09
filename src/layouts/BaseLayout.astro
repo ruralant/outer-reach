@@ -18,7 +18,7 @@ const { title, description } = Astro.props;
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		{description && <meta name="description" content={description} />}
-		<Font cssVariable="--font-roboto-serif" preload />
+		<Font cssVariable="--font-roboto-serif" />
 		<script is:inline>
 			// Prevent theme flash by applying theme before page renders
 			(function() {

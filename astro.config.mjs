@@ -31,12 +31,12 @@ export default defineConfig({
           {
             weight: "100 900",
             style: "normal",
-            src: ["./src/assets/fonts/RobotoSerif-VariableFont_GRAD,opsz,wdth,wght.ttf"],
+            src: ["./src/assets/fonts/RobotoSerif-Variable.woff2"],
           },
           {
             weight: "100 900",
             style: "italic",
-            src: ["./src/assets/fonts/RobotoSerif-Italic-VariableFont_GRAD,opsz,wdth,wght.ttf"],
+            src: ["./src/assets/fonts/RobotoSerif-Italic-Variable.woff2"],
           },
         ],
       },

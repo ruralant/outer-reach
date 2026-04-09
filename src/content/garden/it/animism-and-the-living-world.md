@@ -10,7 +10,7 @@ draft: false
 
 # Animismo e il Mondo Vivente
 
-*Sul più antico modo di prestare attenzione*
+_Sul più antico modo di prestare attenzione_
 
 ---
 
@@ -42,7 +42,7 @@ La risonanza contemporanea dell'animismo si estende oltre i diritti indigeni e i
 
 I "nuovi materialismi" — il lavoro di Jane Bennett, Karen Barad, Timothy Morton e altri — hanno trascorso gli ultimi due decenni sostenendo che la materia non è passiva. Il concetto di "materia vibrante" di Bennett attinge esplicitamente alle intuizioni animiste: la capacità delle cose (un ratto morto, un tappo di bottiglia, una rete elettrica) di esercitare agentività, di agire in modi che eccedono l'intenzione umana. Questa non è un'adozione totale dell'ontologia indigena — e non dovrebbe essere scambiata per tale — ma rappresenta una crepa significativa nel consenso naturalista. Il pensiero occidentale sta arrivando, lentamente e in modo disomogeneo, a conclusioni che le culture animiste abitano da millenni.
 
-C'è una convergenza simile nella scienza ecologica. Il lavoro del micologo Merlin Sheldrake sulle reti fungine, le ricerche di Suzanne Simard sulla comunicazione delle foreste, e il più ampio campo della biosemiotica indicano tutti un mondo vivente molto più interconnesso, comunicativo e — la parola è difficile da evitare — *intenzionale* di quanto il modello meccanicistico permetta. Niente di tutto ciò dimostra l'animismo in senso metafisico. Ma riduce la distanza tra ciò che i popoli animisti hanno sempre detto e ciò che l'empirismo occidentale è ora disposto ad ascoltare.
+C'è una convergenza simile nella scienza ecologica. Il lavoro del micologo Merlin Sheldrake sulle reti fungine, le ricerche di Suzanne Simard sulla comunicazione delle foreste, e il più ampio campo della biosemiotica indicano tutti un mondo vivente molto più interconnesso, comunicativo e — la parola è difficile da evitare — _intenzionale_ di quanto il modello meccanicistico permetta. Niente di tutto ciò dimostra l'animismo in senso metafisico. Ma riduce la distanza tra ciò che i popoli animisti hanno sempre detto e ciò che l'empirismo occidentale è ora disposto ad ascoltare.
 
 ## Limiti e cautela
 
@@ -62,4 +62,4 @@ Questo è, forse, la cosa più pratica che l'animismo offre a chiunque cerchi di
 
 ---
 
-*Letture consigliate: Philippe Descola, Par-delà nature et culture (2005); Graham Harvey, Animism: Respecting the Living World (2005); Jane Bennett, Vibrant Matter (2010); Irving Hallowell, "Ojibwa Ontology, Behavior, and World View" (1960).*
+_Letture consigliate: Philippe Descola, Par-delà nature et culture (2005); Graham Harvey, Animism: Respecting the Living World (2005); Jane Bennett, Vibrant Matter (2010); Irving Hallowell, "Ojibwa Ontology, Behavior, and World View" (1960)._
