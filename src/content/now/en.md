@@ -10,7 +10,7 @@
 
 ## Reading
 
-- _From source to sea_ by David Thompson.
+- _Frontierland_ by David Hazel Sheffield.
 - _Why buddhism is true_ by Robert Wright.
 
 ## Thinking about
