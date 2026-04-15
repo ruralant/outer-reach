@@ -10,7 +10,7 @@
 
 ## Letture
 
-- _From source to sea_ di David Thompson.
+- _Frontierland_ di David Hazel Sheffield.
 - _Why buddhism is true_ di Robert Wright.
 
 ## Sto pensando a
