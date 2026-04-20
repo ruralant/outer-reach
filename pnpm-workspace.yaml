@@ -1,0 +1,5 @@
+allowBuilds:
+  esbuild: true
+  exifreader: true
+  sharp: true
+minimumReleaseAge: 10080
