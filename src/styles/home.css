@@ -99,7 +99,8 @@
   opacity: 0.5;
 }
 
-.prose .pull {
+.prose .pull,
+.prose blockquote {
   font-size: 1.15rem;
   font-style: italic;
   color: var(--color-accent);
@@ -107,6 +108,10 @@
   padding-left: 1.25rem;
   border-left: 2px solid var(--color-accent);
   opacity: 0.9;
+}
+
+.prose blockquote p {
+  margin: 0;
 }
 
 /* --- Recent notes --- */
