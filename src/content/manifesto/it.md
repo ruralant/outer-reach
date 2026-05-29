@@ -1,4 +1,4 @@
-È la decisione di allontanarsi dalla forza gravitazionale del centro — dal rumore, dalla velocità e dalle aspettative di ciò che viene spesso chiamato il nucleo imperiale — e di esplorare come potrebbe essere una bella vita ai margini.
+È la decisione di allontanarsi dalla forza gravitazionale del centro, dal rumore, dalla velocità e dalle aspettative di ciò che viene spesso chiamato il [[nucleo-imperiale]], e di esplorare come potrebbe essere una vita serena ai margini del nostro sistema economico e della nostra societa'.
 
 Questo sito è un resoconto di quell'esplorazione.
 
