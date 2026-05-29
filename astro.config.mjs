@@ -3,6 +3,7 @@ import { defineConfig, fontProviders } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import remarkWikiLinks from "./src/plugins/remarkWikiLinks.ts";
+import { unified } from "@astrojs/markdown-remark";
 import { readFileSync } from "node:fs";
 
 const { version } = JSON.parse(readFileSync("./package.json", "utf-8"));
@@ -44,8 +45,10 @@ export default defineConfig({
   ],
   integrations: [mdx(), sitemap()],
   markdown: {
-    gfm: true,
-    remarkPlugins: [remarkWikiLinks],
+    processor: unified({
+      gfm: true,
+      remarkPlugins: [remarkWikiLinks],
+    }),
   },
   vite: {
     define: {
