@@ -1,211 +1,125 @@
-# Outer Reach Life - Astro Blog
+# Outer Reach
 
-A static blog built with **Astro v5**, featuring markdown/MDX content, RSS feeds, sitemap, and a light/dark theme system.
+A static, bilingual (English / Italian) site built with **Astro v6**. It combines a **digital garden** of interlinked, evergreen notes, a **blog**, an EXIF-driven **photos** gallery, and standalone `now` / `manifesto` pages — with a light/dark theme. Output is fully static.
+
+Live at [outerreach.life](https://www.outerreach.life).
 
 ## Quick Start
 
+Uses **pnpm** (version pinned in `package.json`).
+
 ```bash
-npm install          # Install dependencies
-npm run dev          # Start dev server at http://localhost:4321
-npm run build        # Build static site to ./dist/
-npm run preview      # Preview production build
-npm run astro check  # Check for TypeScript errors
+pnpm install         # Install dependencies
+pnpm dev             # Dev server at http://localhost:4321
+pnpm build           # Build static site to ./dist/
+pnpm preview         # Preview the production build
+pnpm astro check     # Type-check (strict TypeScript)
 ```
+
+There is no test suite; `pnpm astro check` is the correctness gate. Run `pnpm build` after content or routing changes — backlinks, the note graph, and photo EXIF all resolve at build time.
 
 ## Project Structure
 
 ```
 src/
-├── components/
-│   └── ThemeToggle.astro          # Light/dark theme toggle button
 ├── content/
-│   ├── config.ts                  # Content Collections schema
-│   └── blog/                      # Blog posts (.md and .mdx files)
-├── layouts/
-│   ├── BaseLayout.astro           # Shared layout with theme support
-│   └── BlogPostLayout.astro       # Blog post wrapper layout
-└── pages/
-    ├── index.astro                # Home page
-    ├── blog/
-    │   ├── index.astro            # Blog listing
-    │   └── [...slug].astro        # Dynamic post routes
-    └── rss.xml.ts                 # RSS feed endpoint
+│   ├── garden/{en,it}/      # Garden notes (.md / .mdx), one file per locale
+│   ├── blog/{en,it}/        # Blog posts
+│   ├── now/{en,it}.md       # "Now" page content
+│   └── manifesto/{en,it}.md # Manifesto content
+├── content.config.ts        # Content Collection schemas (garden, blog)
+├── i18n/
+│   ├── ui.ts                # All UI strings (en + it)
+│   └── utils.ts             # Translation + locale-path helpers
+├── lib/
+│   ├── garden.ts            # Backlinks, related notes, note graph
+│   ├── blog.ts              # Post fetching / sorting
+│   └── photos.ts            # EXIF extraction from public/photos
+├── plugins/
+│   └── remarkWikiLinks.ts   # Renders [[wiki-links]] in note bodies
+├── layouts/                 # BaseLayout, BlogPostLayout, GardenNoteLayout
+├── components/              # TopNav, Footer, LanguageSwitcher, Backlinks, …
+├── pages/                   # English routes (Italian mirror under pages/it/)
+└── styles/                  # Per-page CSS
+public/photos/               # Drop .jpg/.jpeg here to add to the gallery
 ```
 
-## Creating Blog Posts
+## Internationalisation
 
-Add `.md` or `.mdx` files to `src/content/blog/`:
+Two locales are configured in `astro.config.mjs`: `en` (default, no URL prefix) and `it` (served under `/it/`).
+
+- **Routes** are mirrored: English under `src/pages/`, Italian under `src/pages/it/`.
+- **Content** is split by directory (`garden/en/`, `garden/it/`, …); add a note in both locales to have it in both.
+- **UI strings** live in `src/i18n/ui.ts` under `ui.en` and `ui.it`. The `en` set must be complete; other locales fall back to `en` per key.
+
+## Content
+
+### Garden notes — `src/content/garden/{locale}/`
 
 ```markdown
 ---
-title: "My Post Title"
-description: "A short description"
-pubDate: 2026-01-15
-updatedDate: 2026-01-16  # optional
-author: "Your Name"
-tags: ["astro", "blog"]  # optional
-draft: false              # set true to hide from listings
+title: "Degrowth"
+description: "A short summary used in listings and meta tags"
+tags: ["economics", "ecology"]   # optional
+status: growing                  # seed | growing | evergreen | experimental (default: seed)
+created: 2026-01-15
+updated: 2026-02-01              # optional
+author: "Your Name"              # optional
+draft: false                     # optional, hides from listings when true
 ---
 
-Your markdown content here...
+Note body. Link to other notes with [[other-note-slug]]
+or [[other-note-slug|Custom display text]].
 ```
 
-For interactive components, use `.mdx` files and import React/Astro components directly.
+Notes grow through statuses (`seed` → `growing` → `evergreen`, plus `experimental`). `[[wiki-links]]` connect notes; the site computes **backlinks**, **related notes** (by shared tags), and a note **graph** (`/garden/graph.json`) at build time.
 
-### Frontmatter Fields
+### Blog posts — `src/content/blog/{locale}/`
 
-| Field         | Type     | Required | Description                          |
-| ------------- | -------- | -------- | ------------------------------------ |
-| `title`       | string   | Yes      | Post title                           |
-| `description` | string   | Yes      | Used in meta tags and listings       |
-| `pubDate`     | date     | Yes      | Publication date                     |
-| `updatedDate` | date     | No       | Last update date                     |
-| `author`      | string   | Yes      | Author name                          |
-| `tags`        | string[] | No       | Tags/categories                      |
-| `draft`       | boolean  | No       | Hide from listings (default: false)  |
+Same frontmatter as garden notes, except the date field is **`published`** (not `created`) and there is no `status`:
 
-## Theme System
-
-The site includes a light/dark theme with automatic OS preference detection, a toggle button (top-right corner), and persistent user preference via `localStorage`.
-
-### Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        Your Astro Blog                          │
-└─────────────────────────────────────────────────────────────────┘
-                                 │
-                ┌────────────────┼────────────────┐
-                │                │                │
-         ┌──────▼────────┐  ┌────▼──────────┐  ┌─▼────────────┐
-         │  index.astro  │  │ blog/index    │  │ [...slug]    │
-         │  (Home Page)  │  │ (Blog List)   │  │ (Blog Post)  │
-         └──────┬────────┘  └────┬──────────┘  └─┬────────────┘
-                │                │              │
-                └────────────────┼──────────────┘
-                                 │
-                        ┌────────▼─────────┐
-                        │ BaseLayout.astro │
-                        │                  │
-                        │ ┌──────────────┐ │
-                        │ │ CSS Variables│ │
-                        │ │   (Colors)   │ │
-                        │ └──────────────┘ │
-                        │ ┌──────────────┐ │
-                        │ │  ThemeToggle │ │
-                        │ │  (Component) │ │
-                        │ └──────────────┘ │
-                        └────────┬─────────┘
-                                 │
-                    ┌────────────┴────────────┐
-                    │                         │
-            ┌───────▼────────┐      ┌────────▼──────┐
-            │  Theme Script  │      │ CSS Vars      │
-            │                │      │               │
-            │ • Detect OS    │      │ Light Theme:  │
-            │ • Check Store  │      │ • #333 text   │
-            │ • Apply Theme  │      │ • #fff bg     │
-            │ • Save Pref    │      │               │
-            │ • Toggle on    │      │ Dark Theme:   │
-            │   click        │      │ • #e0e0e0 txt │
-            └────────┬───────┘      │ • #1a1a1a bg  │
-                     │              └────────┬──────┘
-                     │                       │
-            ┌────────▼───────────────────────▼─────────┐
-            │     localStorage (Browser)                │
-            │                                           │
-            │  Key: 'theme'                             │
-            │  Value: 'light' or 'dark'                │
-            │  (Persists across sessions)               │
-            └───────────────────────────────────────────┘
-```
-
-### Theme Data Flow
-
-```
-PAGE LOAD → Check localStorage → Theme found? → Apply saved theme
-                                → No theme?   → Check OS preference → Apply matching theme
-
-USER CLICKS TOGGLE → Switch theme → Update data-theme attribute
-                                   → CSS variables resolve to new colors (0.3s transition)
-                                   → Save to localStorage
-
-NEXT VISIT → localStorage has saved preference → Apply immediately
-```
-
-### Customising Colours
-
-Edit CSS variables in `src/layouts/BaseLayout.astro`:
-
-```css
-/* Light mode */
-:root {
-  --color-text-primary: #333;
-  --color-background: #ffffff;
-  --color-accent: #667eea;
-}
-
-/* Dark mode */
-[data-theme="dark"] {
-  --color-text-primary: #e0e0e0;
-  --color-background: #1a1a1a;
-  --color-accent: #8b9eff;
-}
-```
-
-### Adding Theme to New Pages
-
-Wrap content with `BaseLayout` - theme applies automatically:
-
-```astro
+```markdown
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+title: "January Roundup"
+description: "Monthly dispatch"
+tags: ["roundup"]   # optional
+published: 2026-01-31
+updated: 2026-02-02 # optional
+author: "Your Name" # optional
+draft: false        # optional
 ---
-
-<BaseLayout title="My Page">
-  Your content here
-</BaseLayout>
 ```
+
+### Photos — `public/photos/`
+
+Drop `.jpg` / `.jpeg` files into `public/photos/`. Camera, lens, exposure, and date are read from EXIF at build time, and photos are sorted newest-first. The filename (without extension) becomes the slug.
+
+### Now / Manifesto
+
+`src/content/now/{locale}.md` and `src/content/manifesto/{locale}.md` are plain markdown files (not collections), rendered by their respective pages.
+
+> The canonical schema is `src/content.config.ts` — consult it if frontmatter validation fails.
+
+## Theme
+
+Light/dark theme with OS-preference detection and a toggle (top-right). The choice persists in `localStorage` and is applied via a `data-theme` attribute. Colours are CSS variables defined in `src/layouts/BaseLayout.astro`.
 
 ## Configuration
 
-Update `astro.config.mjs` before deploying:
+Key settings in `astro.config.mjs`:
 
-```javascript
-export default defineConfig({
-  site: "https://yourdomain.com", // Change this to your domain
-  integrations: [mdx(), sitemap()],
-  markdown: {
-    syntaxHighlight: "prism",
-    gfm: true,
-  },
-});
-```
+- `site` — production domain (`https://www.outerreach.life`); RSS and sitemap depend on it.
+- `i18n` — locales and routing.
+- `fonts` — local variable font (Roboto Serif) from `src/assets/fonts/`.
+- `markdown.remarkPlugins` — includes the wiki-links plugin.
 
 ## Deployment
 
-Build with `npm run build`, then deploy the `dist/` folder. Works with any static host:
-
-- **Vercel** - Import repo, auto-detects Astro, deploy
-- **Netlify** - New site from Git, build command: `npm run build`, publish dir: `dist`
-- **GitHub Pages** - Add a CI/CD workflow (see [Astro docs](https://docs.astro.build/en/guides/deploy/github/))
-- **Cloudflare Pages / AWS Amplify** - Similar flow, set build output to `dist`
-
-After deploying, verify `/rss.xml` and `/sitemap-index.xml` are accessible.
-
-## Troubleshooting
-
-**Posts not appearing** - Check the file is in `src/content/blog/`, frontmatter is valid YAML, and `draft` is not `true`.
-
-**RSS feed empty** - Ensure `site` URL is set in `astro.config.mjs` and rebuild.
-
-**Theme not persisting** - Check that localStorage and JavaScript are enabled in the browser.
-
-**Build errors** - Run `npm install` and `npm run astro check`.
+Run `pnpm build` and deploy the `dist/` folder to any static host (Vercel, Netlify, Cloudflare Pages, GitHub Pages, etc.). After deploying, verify `/rss.xml`, `/it/rss.xml`, and `/sitemap-index.xml` are reachable.
 
 ## Resources
 
 - [Astro Documentation](https://docs.astro.build)
 - [Content Collections](https://docs.astro.build/en/guides/content-collections/)
-- [MDX in Astro](https://docs.astro.build/en/guides/markdown-content/#mdx-only-features)
+- [Astro i18n](https://docs.astro.build/en/guides/internationalization/)
 - [RSS Integration](https://docs.astro.build/en/guides/rss/)
