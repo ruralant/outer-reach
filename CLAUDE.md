@@ -38,14 +38,14 @@ src/
   lib/
     garden.ts               backlinks, related-notes, note-graph (re-parses [[ ]] at build)
     blog.ts                 per-locale fetch + sort
-    photos.ts               reads public/photos/*.jpg EXIF at build
+    photos.ts               reads src/photos/*.jpg EXIF + attaches ImageMetadata (via import.meta.glob) at build
   plugins/
     remarkWikiLinks.ts      renders [[ ]] → <a class="wiki-link"> (wired in astro.config)
   layouts/                  BaseLayout (shell+theme), BlogPostLayout, GardenNoteLayout
   components/               TopNav, Footer, LanguageSwitcher, ThemeToggle, Backlinks, RelatedNotes, StatusBadge
   pages/                    EN routes at root; IT mirror under pages/it/ (see i18n rule)
   styles/*.css              per-page CSS, imported by its page
-public/photos/*.jpg         photo gallery source (filename = slug)
+  photos/*.jpg              photo gallery source (filename = slug); optimized via astro:assets <Image>
 astro.config.mjs            site URL, i18n, local fonts, remark plugin, __APP_VERSION__
 ```
 
@@ -73,7 +73,7 @@ Changing the link format means editing both.
 - **Garden note / blog post:** create the `.md` under **both** `content/<coll>/en/` and `.../it/` (content is per-locale, no auto-fallback for files). Match the schema for that collection.
 - **New page/route:** create it under `pages/` and mirror under `pages/it/`; thread `Astro.currentLocale` → `useTranslations` + `localePath`. Wrap in `BaseLayout`. Import any page CSS from `styles/`.
 - **New UI text:** rule 2.
-- **Photo:** drop a `.jpg`/`.jpeg` into `public/photos/` — EXIF + sort are automatic; slug = filename.
+- **Photo:** drop a `.jpg`/`.jpeg` into `src/photos/` — EXIF + sort + image optimization (WebP/responsive via `<Image>`) are automatic; slug = filename. Use `photo.image` with `astro:assets` `<Image>`, not a raw `<img src>`.
 
 ## Notable details
 
