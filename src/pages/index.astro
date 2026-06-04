@@ -57,7 +57,7 @@ const latestPhotos = await getPhotos({ limit: 3, lite: true });
 				<h2>{t('home.recentPhotos')}</h2>
 				<div class="cards-grid">
 					{latestPhotos.map((photo, i) => (
-						<a href={`/photos/${photo.slug}`} class="photo-card">
+						<a href={localePath(lang, `/photos/${photo.slug}`)} class="photo-card">
 							<Image
 								src={photo.image}
 								alt={photo.slug}

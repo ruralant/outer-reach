@@ -36,6 +36,11 @@ export const ui = {
     // Homepage
     "home.recentPhotos": "Recent Photos",
 
+    // Photos
+    "photos.title": "Photos",
+    "photos.description": "A collection of photographs.",
+    "photos.empty": "No photos yet.",
+
     // Garden index
     "garden.title": "Garden",
     "garden.subtitle":
@@ -121,6 +126,11 @@ export const ui = {
 
     // Homepage
     "home.recentPhotos": "Foto Recenti",
+
+    // Photos
+    "photos.title": "Foto",
+    "photos.description": "Una raccolta di fotografie.",
+    "photos.empty": "Ancora nessuna foto.",
 
     // Garden index
     "garden.title": "Giardino",

@@ -1,12 +1,16 @@
 ---
+/**
+ * Italian photo detail — mirror of src/pages/photos/[slug].astro.
+ * Astro.currentLocale is "it" because this page lives under src/pages/it/.
+ */
 import { Image } from 'astro:assets';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import TopNav from '../../components/TopNav.astro';
-import Footer from '../../components/Footer.astro';
-import { getPhotos } from '../../lib/photos';
-import type { Photo } from '../../lib/photos';
-import { useTranslations, localeDateShort } from '../../i18n/utils';
-import type { Lang } from '../../i18n/ui';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TopNav from '../../../components/TopNav.astro';
+import Footer from '../../../components/Footer.astro';
+import { getPhotos } from '../../../lib/photos';
+import type { Photo } from '../../../lib/photos';
+import { useTranslations, localeDateShort } from '../../../i18n/utils';
+import type { Lang } from '../../../i18n/ui';
 
 export async function getStaticPaths() {
 	const photos = await getPhotos();
@@ -22,7 +26,7 @@ interface Props {
 
 const { photo } = Astro.props;
 const { exif } = photo;
-const lang = (Astro.currentLocale || 'en') as Lang;
+const lang = (Astro.currentLocale || 'it') as Lang;
 const t = useTranslations(lang);
 
 const formattedDate = exif.date ? localeDateShort(exif.date, lang) : undefined;
