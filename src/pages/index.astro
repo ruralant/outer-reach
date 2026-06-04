@@ -63,9 +63,10 @@ const latestPhotos = await getPhotos({ limit: 3, lite: true });
 								alt={photo.slug}
 								width={400}
 								height={400}
-								widths={[220, 400, 760]}
+								widths={[220, 400]}
 								sizes="(max-width: 640px) 100vw, 220px"
 								format="webp"
+								quality={70}
 								loading={i === 0 ? 'eager' : 'lazy'}
 								fetchpriority={i === 0 ? 'high' : 'auto'}
 								decoding="async"
