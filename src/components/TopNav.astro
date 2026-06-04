@@ -35,7 +35,7 @@ function isActive(section: string): boolean {
 		</a>
 		<a href={localePath(lang, '/blog/')} class:list={[{ active: isActive('blog') }]}>{t('nav.blog')}</a>
 		<a href={localePath(lang, '/now/')} class:list={[{ active: isActive('now') }]}>{t('nav.now')}</a>
-		<a href="/photos/" class:list={[{ active: isActive('photos') }]}>{t('nav.photos')}</a>
+		<a href={localePath(lang, '/photos/')} class:list={[{ active: isActive('photos') }]}>{t('nav.photos')}</a>
 		<a href={localePath(lang, '/garden/')} class:list={[{ active: isActive('garden') }]}>{t('nav.garden')}</a>
 	</div>
 	<div class="top-nav-right">

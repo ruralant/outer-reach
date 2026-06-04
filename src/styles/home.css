@@ -180,7 +180,6 @@
 .note-item-date {
   font-size: 0.8rem;
   color: var(--color-text-secondary);
-  opacity: 0.7;
   display: block;
   margin-top: 0.35rem;
 }
@@ -278,7 +277,6 @@
 .post-item-date {
   font-size: 0.8rem;
   color: var(--color-text-secondary);
-  opacity: 0.7;
   display: block;
   margin-top: 0.35rem;
 }
