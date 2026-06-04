@@ -4,26 +4,28 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import TopNav from '../../components/TopNav.astro';
 import Footer from '../../components/Footer.astro';
 import { getPhotos } from '../../lib/photos';
+import { useTranslations, localePath } from '../../i18n/utils';
 import type { Lang } from '../../i18n/ui';
 
 const photos = await getPhotos();
 const lang = (Astro.currentLocale || 'en') as Lang;
+const t = useTranslations(lang);
 ---
 
-<BaseLayout title="Photos — Outer Reach" description="A collection of photographs.">
+<BaseLayout title={`${t('photos.title')} — Outer Reach`} description={t('photos.description') as string}>
 	<div class="photos-page">
 		<TopNav lang={lang} currentPath={Astro.url.pathname} />
 
 		<header class="photos-header">
-			<h1>Photos</h1>
+			<h1>{t('photos.title')}</h1>
 		</header>
 
 		{photos.length === 0 ? (
-			<p class="empty">No photos yet.</p>
+			<p class="empty">{t('photos.empty')}</p>
 		) : (
 			<div class="photos-grid">
 				{photos.map((photo, i) => (
-					<a href={`/photos/${photo.slug}`} class="photo-card">
+					<a href={localePath(lang, `/photos/${photo.slug}`)} class="photo-card">
 						<Image
 							src={photo.image}
 							alt={photo.slug}

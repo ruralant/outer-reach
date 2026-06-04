@@ -5,6 +5,7 @@ import TopNav from '../../components/TopNav.astro';
 import Footer from '../../components/Footer.astro';
 import { getPhotos } from '../../lib/photos';
 import type { Photo } from '../../lib/photos';
+import { useTranslations, localeDateShort } from '../../i18n/utils';
 import type { Lang } from '../../i18n/ui';
 
 export async function getStaticPaths() {
@@ -22,13 +23,12 @@ interface Props {
 const { photo } = Astro.props;
 const { exif } = photo;
 const lang = (Astro.currentLocale || 'en') as Lang;
+const t = useTranslations(lang);
 
-const formattedDate = exif.date
-	? exif.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-	: undefined;
+const formattedDate = exif.date ? localeDateShort(exif.date, lang) : undefined;
 ---
 
-<BaseLayout title={`${photo.slug} — Photos`} description={`Photo: ${photo.filename}`}>
+<BaseLayout title={`${photo.slug} — ${t('photos.title')}`} description={t('photos.description') as string}>
 	<div class="photo-detail">
 		<TopNav lang={lang} currentPath={Astro.url.pathname} />
 

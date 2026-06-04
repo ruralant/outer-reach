@@ -17,9 +17,10 @@ export default defineConfig({
     routing: {
       prefixDefaultLocale: false,
     },
-    fallback: {
-      it: "en",
-    },
+    // No `fallback`: every route is physically duplicated under pages/it/, so
+    // locale fallback is redundant. Enabling it injected a synthetic `/it`
+    // redirect that collided with the real pages/it/index.astro and emitted
+    // empty routes for the (shared, unprefixed) /photos pages.
   },
   fonts: [
     {
