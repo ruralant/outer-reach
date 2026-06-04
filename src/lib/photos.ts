@@ -1,6 +1,18 @@
 import fs from "node:fs";
 import path from "node:path";
 import ExifReader from "exifreader";
+import type { ImageMetadata } from "astro";
+
+/**
+ * Source images live in `src/photos/` so Astro's asset pipeline can optimize
+ * them (modern formats, responsive sizes). EXIF is still read from disk here at
+ * build time; the optimized renditions are produced by the `<Image>` component
+ * from the `image` metadata attached to each photo.
+ */
+const imageModules = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/photos/*.{jpg,jpeg,JPG,JPEG}",
+  { eager: true },
+);
 
 export interface PhotoExif {
   camera?: string;
@@ -17,7 +29,8 @@ export interface PhotoExif {
 export interface Photo {
   filename: string;
   slug: string;
-  src: string;
+  /** Optimizable image metadata for use with Astro's `<Image>` component. */
+  image: ImageMetadata;
   exif: PhotoExif;
 }
 
@@ -137,7 +150,7 @@ function readFullExif(filePath: string): PhotoExif {
 
 export async function getPhotos(options?: GetPhotosOptions): Promise<Photo[]> {
   const { limit, lite = false } = options ?? {};
-  const photosDir = path.join(process.cwd(), "public", "photos");
+  const photosDir = path.join(process.cwd(), "src", "photos");
 
   if (!fs.existsSync(photosDir)) return [];
 
@@ -152,6 +165,9 @@ export async function getPhotos(options?: GetPhotosOptions): Promise<Photo[]> {
     const fp = path.join(photosDir, file);
     const slug = path.basename(file, path.extname(file));
 
+    const imageMod = imageModules[`/src/photos/${file}`];
+    if (!imageMod) continue; // no matching optimizable asset — skip
+
     const exif: PhotoExif = lite
       ? { date: readExifDate(fp) }
       : readFullExif(fp);
@@ -159,7 +175,7 @@ export async function getPhotos(options?: GetPhotosOptions): Promise<Photo[]> {
     photos.push({
       filename: file,
       slug,
-      src: `/photos/${file}`,
+      image: imageMod.default,
       exif,
     });
   }
