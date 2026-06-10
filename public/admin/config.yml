@@ -1,0 +1,211 @@
+# Sveltia CMS configuration — https://sveltiacms.app/en/docs
+#
+# The widget schema below mirrors src/content.config.ts exactly (the source of
+# truth). The CMS conforms to the site: do not add/rename fields here without
+# changing the Zod schema first.
+
+backend:
+  name: github
+  repo: ruralant/outer-reach
+  branch: main
+  # Self-hosted OAuth relay (Cloudflare Worker, see infra/sveltia-auth/).
+  # Replace base_url with your deployed Worker URL — instructions in
+  # infra/sveltia-auth/README.md.
+  base_url: https://sveltia-auth.outerreach.workers.dev
+  auth_endpoint: auth
+
+# Global media settings (media library default). Uploads land in src/assets/
+# so Astro's image pipeline (astro:assets) optimises them at build time —
+# files in public/ would be served as-is, unoptimised.
+media_folder: src/assets/images
+public_folder: /src/assets/images
+
+# Matches the physical layout src/content/<collection>/{en,it}/<slug>.md
+i18n:
+  structure: multiple_folders
+  locales: [en, it]
+  default_locale: en
+
+# Match the YAML style already used in the repo as closely as possible, and
+# never write out empty optional fields (e.g. don't add `updated: null` to
+# files that omit it).
+output:
+  omit_empty_optional_fields: true
+  yaml:
+    quote: double
+    indent_size: 2
+
+collections:
+  - name: blog
+    label: Blog
+    label_singular: Post
+    folder: src/content/blog
+    i18n: true
+    create: true
+    extension: md
+    format: yaml-frontmatter
+    slug: "{{slug}}"
+    sortable_fields: [published, title]
+    # Images inserted into the body use a path RELATIVE to the entry file
+    # (src/content/blog/<locale>/ -> ../../../assets/images). Relative paths
+    # are what trigger Astro's build-time markdown image optimisation.
+    media_folder: /src/assets/images
+    public_folder: ../../../assets/images
+    fields:
+      - { name: title, label: Title, widget: string, i18n: true }
+      - { name: description, label: Description, widget: text, i18n: true }
+      # Blog tags happen to match across locales today, but they are stored
+      # per-locale in the files, so they stay independently editable here.
+      - {
+          name: tags,
+          label: Tags,
+          widget: list,
+          required: false,
+          default: [],
+          i18n: true,
+        }
+      - {
+          name: published,
+          label: Published,
+          widget: datetime,
+          format: "YYYY-MM-DD",
+          time_format: false,
+          i18n: duplicate,
+        }
+      - {
+          name: updated,
+          label: Updated,
+          widget: datetime,
+          format: "YYYY-MM-DD",
+          time_format: false,
+          required: false,
+          i18n: duplicate,
+        }
+      - {
+          name: author,
+          label: Author,
+          widget: string,
+          required: false,
+          default: "Outer Reach",
+          i18n: duplicate,
+        }
+      - {
+          name: draft,
+          label: Draft,
+          widget: boolean,
+          default: false,
+          required: false,
+          i18n: duplicate,
+        }
+      - { name: body, label: Body, widget: markdown, i18n: true }
+
+  - name: garden
+    label: Garden
+    label_singular: Note
+    folder: src/content/garden
+    i18n: true
+    create: true
+    extension: md
+    format: yaml-frontmatter
+    slug: "{{slug}}"
+    sortable_fields: [created, title]
+    media_folder: /src/assets/images
+    public_folder: ../../../assets/images
+    fields:
+      - { name: title, label: Title, widget: string, i18n: true }
+      - { name: description, label: Description, widget: text, i18n: true }
+      # Garden tags ARE translated per locale (e.g. "filosofia") — keep i18n: true.
+      - {
+          name: tags,
+          label: Tags,
+          widget: list,
+          required: false,
+          default: [],
+          i18n: true,
+        }
+      - {
+          name: status,
+          label: Status,
+          widget: select,
+          options: [seed, growing, evergreen, experimental],
+          default: seed,
+          i18n: duplicate,
+        }
+      - {
+          name: created,
+          label: Created,
+          widget: datetime,
+          format: "YYYY-MM-DD",
+          time_format: false,
+          i18n: duplicate,
+        }
+      - {
+          name: updated,
+          label: Updated,
+          widget: datetime,
+          format: "YYYY-MM-DD",
+          time_format: false,
+          required: false,
+          i18n: duplicate,
+        }
+      - {
+          name: author,
+          label: Author,
+          widget: string,
+          required: false,
+          default: "Outer Reach",
+          i18n: duplicate,
+        }
+      - {
+          name: draft,
+          label: Draft,
+          widget: boolean,
+          default: false,
+          required: false,
+          i18n: duplicate,
+        }
+      - { name: body, label: Body, widget: markdown, i18n: true }
+
+  # Single-page markdown files. These files have NO frontmatter — a body-only
+  # field list keeps them as plain markdown on save.
+  - name: pages
+    label: Pages
+    files:
+      - name: now-en
+        label: Now (English)
+        file: src/content/now/en.md
+        media_folder: /src/assets/images
+        public_folder: ../../assets/images
+        fields:
+          - { name: body, label: Body, widget: markdown }
+      - name: now-it
+        label: Now (Italiano)
+        file: src/content/now/it.md
+        media_folder: /src/assets/images
+        public_folder: ../../assets/images
+        fields:
+          - { name: body, label: Body, widget: markdown }
+      - name: manifesto-en
+        label: Manifesto (English)
+        file: src/content/manifesto/en.md
+        media_folder: /src/assets/images
+        public_folder: ../../assets/images
+        fields:
+          - { name: body, label: Body, widget: markdown }
+      - name: manifesto-it
+        label: Manifesto (Italiano)
+        file: src/content/manifesto/it.md
+        media_folder: /src/assets/images
+        public_folder: ../../assets/images
+        fields:
+          - { name: body, label: Body, widget: markdown }
+
+# ---------------------------------------------------------------------------
+# Editorial workflow (draft-as-PR) is NOT yet supported by Sveltia CMS — it is
+# on their roadmap for v1.0 (expected mid-2026). Until then, the equivalent
+# keyed to this site's existing markers is the `draft` toggle above:
+# draft: true commits to main but hides the entry from all listings/RSS.
+# When Sveltia 1.0 ships, draft-as-PR becomes a one-line opt-in here:
+#
+# publish_mode: editorial_workflow
+# ---------------------------------------------------------------------------
