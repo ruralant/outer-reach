@@ -1,6 +1,6 @@
 It's the decision to step away from the gravitational pull of the centre, from the noise, speed, and expectations of what is often called the [[imperial-core]], and to explore what a good life might look like at the edges of our economic system and society.
 
-This site is a record of that exploration.
+This site is a record of that exploration. (test)
 
 ## What I Mean by "Outer Reach"
 
