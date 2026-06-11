@@ -8,9 +8,9 @@ backend:
   name: github
   repo: ruralant/outer-reach
   branch: main
-  # Self-hosted OAuth relay (Cloudflare Worker, see infra/sveltia-auth/).
-  # Replace base_url with your deployed Worker URL — instructions in
-  # infra/sveltia-auth/README.md.
+  # Self-hosted OAuth relay (Cloudflare Worker), shared across sites.
+  # Source + setup instructions: https://github.com/ruralant/sveltia-auth
+  # New hosts must be added to ALLOWED_DOMAINS in that repo's wrangler.toml.
   base_url: https://sveltia-auth.outerreach.workers.dev
   auth_endpoint: auth
 
