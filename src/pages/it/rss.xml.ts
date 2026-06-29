@@ -1,9 +1,10 @@
 import rss from "@astrojs/rss";
+import type { APIContext } from "astro";
 import { getNotesForLocale } from "../../lib/garden";
 import { getSortedPostsForLocale } from "../../lib/blog";
 import { useTranslations, slugFromNoteId } from "../../i18n/utils";
 
-export async function GET(context) {
+export async function GET(context: APIContext) {
   const t = useTranslations("it");
   const notes = await getNotesForLocale("it");
   const publishedNotes = notes.sort(
@@ -14,7 +15,7 @@ export async function GET(context) {
   return rss({
     title: t("rss.title") as string,
     description: t("rss.description") as string,
-    site: context.site,
+    site: context.site!,
     items: [
       ...publishedNotes.map((note) => ({
         title: note.data.title,
