@@ -46,7 +46,9 @@ src/
   pages/                    EN routes at root; IT mirror under pages/it/ (see i18n rule)
   styles/*.css              per-page CSS, imported by its page
   photos/*.jpg              photo gallery source (filename = slug); optimized via astro:assets <Image>
+  assets/images/            CMS media uploads (relative public_folder; see Content editing)
 astro.config.mjs            site URL, i18n, local fonts, remark plugin, __APP_VERSION__
+public/admin/               Sveltia CMS: index.html + config.yml + vendored bundle
 ```
 
 ## The four rules that govern every change
@@ -74,6 +76,23 @@ Changing the link format means editing both.
 - **New page/route:** create it under `pages/` and mirror under `pages/it/`; thread `Astro.currentLocale` → `useTranslations` + `localePath`. Wrap in `BaseLayout`. Import any page CSS from `styles/`.
 - **New UI text:** rule 2.
 - **Photo:** drop a `.jpg`/`.jpeg` into `src/photos/` — EXIF + sort + image optimization (WebP/responsive via `<Image>`) are automatic; slug = filename. Use `photo.image` with `astro:assets` `<Image>`, not a raw `<img src>`.
+
+## Content editing (Sveltia CMS)
+
+Non-code content is edited through **Sveltia CMS** at `/admin/`, which commits markdown straight to `main` on `ruralant/outer-reach`. Two decoupled pieces:
+
+- **`public/admin/`** (this repo) — `index.html` (loader) + `config.yml` (the whole CMS definition) + **vendored** `sveltia-cms.js` (~1.9 MB, committed, no CDN at runtime). Astro copies `public/` verbatim: no build step, and nothing in `src/` or `astro.config.mjs` references it. Upgrade = re-download the bundle per the `curl` comment in `index.html`, then bump the version in that comment.
+- **`../sveltia-auth`** (separate repo `ruralant/sveltia-auth`) — single-file, zero-dependency Cloudflare Worker at `https://sveltia-auth.outerreach.workers.dev` running the GitHub OAuth popup handshake (`/auth` → GitHub → `/callback` → `postMessage`). Self-hosted so login touches no third-party broker; shared with other sites and gated by `ALLOWED_DOMAINS` in its `wrangler.toml`. Client id/secret are wrangler secrets, in neither repo.
+
+**`config.yml` mirrors `content.config.ts`, which stays the source of truth (rule 4)** — change the Zod schema first, then the CMS fields; a field in one but not the other is a bug. Also:
+
+- `i18n: { structure: multiple_folders, locales: [en, it], default_locale: en }` matches the on-disk layout (rule 1). Per field: `i18n: true` = translated (title/description/body, garden `tags`), `i18n: duplicate` = copied across locales (dates, `status`, `author`, `draft`).
+- Uploads go to `src/assets/images`, **not** `public/` — and `public_folder` is deliberately *relative* (`../../../assets/images`), because only relative paths trigger Astro's build-time markdown image optimization.
+- `now` / `manifesto` are body-only entries in the `pages` file collection: those files have no frontmatter and must stay plain markdown on save.
+- `output.omit_empty_optional_fields` + double-quote / 2-space YAML keep CMS commits from churning diffs against hand-written files.
+- No editorial workflow (Sveltia has no draft-as-PR before v1.0) — saves land on `main`; `draft: true` is the stand-in, and the opt-in line sits commented at the bottom of `config.yml`.
+- Wiki-links are plain text to the CMS. Backlinks and the graph resolve at build, so a `[[slug]]` typed in the CMS only materializes on the next deploy.
+- Local editing needs none of the auth stack: `pnpm dev`, open `/admin/`, choose **Work with Local Repository** (Chrome/Edge, File System Access API).
 
 ## Notable details
 
