@@ -7,12 +7,17 @@
     <title>Content Manager · Outer Reach</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <!--
-      Sveltia CMS v0.166.1, vendored (no CDN dependency at runtime).
+      Sveltia CMS v0.203.2, vendored (no CDN dependency at runtime).
       To upgrade: download the new bundle and replace sveltia-cms.js, e.g.
         curl -sL -o public/admin/sveltia-cms.js https://unpkg.com/@sveltia/cms@<version>/dist/sveltia-cms.js
       then update the version in this comment.
+
+      Keep taking dist/sveltia-cms.js (classic build) and loading it WITHOUT
+      type="module" — the package also ships dist/sveltia-cms.mjs (ESM), and
+      pairing the classic build with type="module" makes the CMS warn and
+      breaks the window.CMS JavaScript API.
     -->
-    <script src="/admin/sveltia-cms.js" type="module"></script>
+    <script src="/admin/sveltia-cms.js"></script>
   </head>
   <body></body>
 </html>
