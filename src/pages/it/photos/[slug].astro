@@ -24,7 +24,7 @@ interface Props {
 	photo: Photo;
 }
 
-const { photo } = Astro.props;
+const { photo }: Props = Astro.props;
 const { exif } = photo;
 const lang = (Astro.currentLocale || 'it') as Lang;
 const t = useTranslations(lang);
