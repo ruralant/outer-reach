@@ -55,10 +55,10 @@ const remarkWikiLinks: Plugin<[], Root> = () => {
           type: "link",
           url: `${gardenBase}/${slug}`,
           data: {
-            hProperties: { className: "wiki-link" },
+            hProperties: { className: ["wiki-link"] },
           },
           children: [{ type: "text", value: text }],
-        } as PhrasingContent);
+        });
 
         lastIndex = match.index + fullMatch.length;
       }
