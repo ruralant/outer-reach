@@ -34,15 +34,6 @@ export interface Photo {
   exif: PhotoExif;
 }
 
-function formatShutterSpeed(
-  exposureTime: number | undefined,
-): string | undefined {
-  if (!exposureTime) return undefined;
-  if (exposureTime >= 1) return `${exposureTime}s`;
-  const denominator = Math.round(1 / exposureTime);
-  return `1/${denominator}s`;
-}
-
 function formatCamera(
   make: string | undefined,
   model: string | undefined,
