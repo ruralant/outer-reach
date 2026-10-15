@@ -18,9 +18,10 @@ pnpm 11 enforces the age floor itself, tree-wide and cheaply: pass
 
 This skill touches only `package.json` and `pnpm-lock.yaml` (and source files
 when a major upgrade requires it). It never commits, never pushes (a push to
-`main` *is* a Vercel deploy), never bumps the site's own `"version"`, and never
-uses `npm install` — pnpm is the package manager. `npm view` is fine for
-read-only registry questions.
+`main` *is* a Vercel deploy), and never uses `npm install` — pnpm is the
+package manager. `npm view` is fine for read-only registry questions. A run
+that changed dependencies ends by bumping the site's own `"version"` — at least
+a minor (step 8).
 
 The Sveltia CMS bundle in `public/admin/` is vendored, not a package: upgrading
 it is a separate job (the `curl` comment in `public/admin/index.html`). Out of
@@ -226,12 +227,39 @@ straightforward API change, otherwise put that package back (`pnpm add [-D]
 `/tmp/outer-reach-pkg-backup/` and run `pnpm install` to roll everything back —
 and report it.
 
-### 8. Report
+### 8. Bump the site version
+
+Only once step 7 has passed, and only if something was actually upgraded (a run
+that changed nothing leaves the version alone). The site's `"version"` is what
+`astro.config.mjs` bakes into the build as `__APP_VERSION__` (shown in the
+footer), so a dependency update is a release like any other. Pick the level
+from what went in:
+
+- **Major** (`1.10.1 → 2.0.0`) — the site's platform moved: a major of `astro`,
+  or an upgrade that forced a content/schema migration or a visible change in
+  the rendered site (URLs, markup, image output).
+- **Minor** (`1.10.1 → 1.11.0`) — everything else, including majors of tooling
+  and libraries (`typescript`, `sharp`, `@astrojs/check`, `exifreader`…) and
+  plain patch/minor batches. Never a patch bump.
+
+Bump once per run, against the version at `HEAD`: if `package.json` already
+carries an uncommitted bump (`git diff HEAD -- package.json | grep '"version"'`),
+don't stack another on it — raise it only if this run needs a higher level.
+
+```bash
+pnpm version minor --no-git-tag-version   # or: major
+```
+
+That rewrites `"version"` in `package.json` only (`pnpm-lock.yaml` doesn't
+record the root package's version), and with `--no-git-tag-version` makes no
+commit and no tag. Add `--dry-run` first if you want to see the plan.
+
+### 9. Report
 
 A short table: package, from → to, bump type, and anything skipped or held back
-with the reason (too young, peer-blocked, user declined, warning). Plus `pnpm
-audit`'s result, stale `minimumReleaseAgeExclude` entries, and anything the user
-must decide. Then offer — don't do — a commit (this repo's convention is
+with the reason (too young, peer-blocked, user declined, warning). Plus the site
+version (old → new, and why that level), `pnpm audit`'s result, stale
+`minimumReleaseAgeExclude` entries, and anything the user must decide. Then offer — don't do — a commit (this repo's convention is
 `chore: update packages`) and a PR to `main`.
 
 Leave `/tmp/outer-reach-pkg-backup/` alone until the user is happy; it's their undo.
