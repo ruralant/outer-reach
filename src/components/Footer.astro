@@ -11,10 +11,12 @@ const t = useTranslations(lang);
 const version: string = __APP_VERSION__;
 
 // Static Website Carbon figures — re-test and update when page weight changes.
+// Quick estimate from a build's homepage bytes, before deploying:
+//   curl "https://api.websitecarbon.com/data?bytes=<bytes>&green=0"
 const carbon = {
 	url: 'https://www.websitecarbon.com/website/outerreach-life/',
-	grams: '0.04',
-	cleanerThan: 89,
+	grams: '0.01',
+	cleanerThan: 98,
 };
 ---
 

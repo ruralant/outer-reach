@@ -28,17 +28,23 @@ export default defineConfig({
       name: "Roboto Serif",
       cssVariable: "--font-roboto-serif",
       fallbacks: ["serif"],
+      // Trimmed from the full variable fonts (opsz 8–144, wght 100–900) to cut
+      // page weight: opsz pinned at 20, upright keeps wght 400–700 (all the CSS
+      // uses), italic is a static 400. Regenerate with fonttools:
+      //   fonttools varLib.instancer RobotoSerif-Variable.woff2 opsz=20 wght=400:700 -o up.ttf
+      //   fonttools varLib.instancer RobotoSerif-Italic-Variable.woff2 opsz=20 wght=400 -o it.ttf
+      //   pyftsubset <ttf> --unicodes='*' --layout-features='*' --flavor=woff2 --output-file=<woff2>
       options: {
         variants: [
           {
-            weight: "100 900",
+            weight: "400 700",
             style: "normal",
-            src: ["./src/assets/fonts/RobotoSerif-Variable.woff2"],
+            src: ["./src/assets/fonts/RobotoSerif-Wght400-700.woff2"],
           },
           {
-            weight: "100 900",
+            weight: "400",
             style: "italic",
-            src: ["./src/assets/fonts/RobotoSerif-Italic-Variable.woff2"],
+            src: ["./src/assets/fonts/RobotoSerif-Italic-400.woff2"],
           },
         ],
       },
