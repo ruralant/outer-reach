@@ -3,7 +3,7 @@
  * Italian photo detail — mirror of src/pages/photos/[slug].astro.
  * Astro.currentLocale is "it" because this page lives under src/pages/it/.
  */
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import TopNav from '../../../components/TopNav.astro';
 import Footer from '../../../components/Footer.astro';
@@ -37,12 +37,13 @@ const formattedDate = exif.date ? localeDateShort(exif.date, lang) : undefined;
 		<TopNav lang={lang} currentPath={Astro.url.pathname} />
 
 		<div class="photo-container">
-			<Image
+			<Picture
 				src={photo.image}
 				alt={photo.slug}
 				widths={[640, 933]}
 				sizes="(max-width: 680px) 100vw, 640px"
-				format="webp"
+				formats={['avif']}
+				fallbackFormat="webp"
 				loading="eager"
 				fetchpriority="high"
 				decoding="async"
