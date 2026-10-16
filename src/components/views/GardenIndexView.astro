@@ -1,0 +1,117 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../PageHeader.astro";
+import ListRow from "../ListRow.astro";
+import StatusBadge from "../StatusBadge.astro";
+import Tag from "../Tag.astro";
+import { getNotesForLocale, getAllTags, ALL_STATUSES } from "../../lib/garden";
+import { noteRow } from "../../lib/rows";
+import { useTranslations, localePath, slugFromNoteId } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const notes = (await getNotesForLocale(lang)).sort((a, b) => a.data.title.localeCompare(b.data.title));
+const tags = getAllTags(notes);
+const statuses = ALL_STATUSES.map((status) => ({
+	status,
+	count: notes.filter((n) => n.data.status === status).length,
+})).filter((s) => s.count > 0);
+const randomTargets = notes.map((n) => localePath(lang, `/garden/${slugFromNoteId(n.id)}`));
+---
+
+<BaseLayout title={`${t("garden.title")} — ${t("site.title")}`} description={t("garden.subtitle") as string}>
+	<PageHeader eyebrow={t("garden.title") as string} title={t("garden.heading") as string}>
+		{t("garden.subtitle")}
+	</PageHeader>
+
+	<div class="filters">
+		<div class="filter">
+			<p class="eyebrow">{t("garden.filterStatus")}</p>
+			<ul>
+				{statuses.map(({ status, count }) => <li><StatusBadge status={status} count={count} link /></li>)}
+			</ul>
+		</div>
+		<div class="filter">
+			<p class="eyebrow"><a href={localePath(lang, "/garden/tags/")}>{t("garden.filterTags")}</a></p>
+			<ul>
+				{tags.map((tag) => (
+					<li><Tag label={tag} href={localePath(lang, `/garden/tags/${tag}`)} count={notes.filter((n) => n.data.tags.includes(tag)).length} /></li>
+				))}
+			</ul>
+		</div>
+		{randomTargets.length > 0 && (
+			<button type="button" class="btn btn-outline random" data-random-note={JSON.stringify(randomTargets)}>
+				{t("garden.randomNote")}
+				<span class="arrow" aria-hidden="true">→</span>
+			</button>
+		)}
+	</div>
+
+	{notes.length === 0 ? (
+		<p class="empty">{t("garden.noNotes")}</p>
+	) : (
+		<ul class="rows">
+			{notes.map((note) => <ListRow {...noteRow(note, lang)} headingLevel={2} />)}
+		</ul>
+	)}
+</BaseLayout>
+
+<script>
+	document.querySelector<HTMLButtonElement>("[data-random-note]")?.addEventListener("click", (e) => {
+		const targets: string[] = JSON.parse((e.currentTarget as HTMLButtonElement).dataset.randomNote || "[]");
+		if (targets.length > 0) window.location.href = targets[Math.floor(Math.random() * targets.length)];
+	});
+</script>
+
+<style>
+	.filters {
+		display: grid;
+		gap: 1.5rem;
+		margin-bottom: 3rem;
+	}
+
+	.filter {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.filter ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.filter .eyebrow a {
+		transition: color 150ms;
+	}
+
+	.filter .eyebrow a:hover {
+		color: var(--color-ink);
+	}
+
+	.random {
+		justify-self: start;
+	}
+
+	.empty {
+		color: var(--color-muted);
+	}
+
+	@media (min-width: 800px) {
+		.filter {
+			grid-template-columns: 8.5rem minmax(0, 1fr);
+			column-gap: 2.5rem;
+			align-items: baseline;
+		}
+
+		.random {
+			margin-left: 11rem;
+		}
+	}
+</style>

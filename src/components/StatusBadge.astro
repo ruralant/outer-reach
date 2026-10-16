@@ -1,92 +1,68 @@
 ---
-import { type NoteStatus } from '../lib/garden';
-import { useTranslations } from '../i18n/utils';
-import type { Lang } from '../i18n/ui';
+import type { NoteStatus } from "../lib/garden";
+import { useTranslations, localePath } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
 
 interface Props {
 	status: NoteStatus;
-	size?: 'sm' | 'md';
+	/** Links to the status page when set */
+	link?: boolean;
+	count?: number;
 }
 
-const { status, size = 'md' } = Astro.props;
-const lang = (Astro.currentLocale || 'en') as Lang;
+const { status, link = false, count } = Astro.props;
+const lang = (Astro.currentLocale || "en") as Lang;
 const t = useTranslations(lang);
 
-const STATUS_EMOJI: Record<NoteStatus, string> = {
-	seed: '🌱',
-	growing: '🌿',
-	evergreen: '🌳',
-	experimental: '🧪',
-};
-
-const emoji = STATUS_EMOJI[status];
-const label = t(`status.${status}` as any) as string;
-const description = t(`status.${status}.description` as any) as string;
+const label = t(`status.${status}`) as string;
+const description = t(`status.${status}.description`) as string;
+const Tag = link ? "a" : "span";
 ---
 
-<span class:list={['status-badge', `status-${status}`, `size-${size}`]} title={description}>
-	<span class="status-emoji">{emoji}</span>
-	<span class="status-label">{label}</span>
-</span>
+<Tag
+	class:list={["status", { "status-link": link }]}
+	style={`--dot: var(--color-${status})`}
+	href={link ? localePath(lang, `/garden/status/${status}`) : undefined}
+	title={description}
+>
+	<span class="dot" aria-hidden="true"></span>
+	{label}
+	{count !== undefined && <span class="count">{count}</span>}
+</Tag>
 
 <style>
-	.status-badge {
+	.status {
+		position: relative;
 		display: inline-flex;
 		align-items: center;
-		gap: 0.3rem;
-		padding: 0.2rem 0.65rem;
-		border-radius: 1rem;
-		font-weight: 600;
-		line-height: 1.4;
+		gap: 0.4rem;
+		padding: 0.125rem 0.625rem 0.125rem 0.5rem;
+		border: 1px solid var(--color-line);
+		border-radius: 9999px;
+		font-size: 0.75rem;
+		line-height: 1.25rem;
+		color: var(--color-ink-soft);
 		white-space: nowrap;
 	}
 
-	.size-md {
-		font-size: 0.85rem;
+	.dot {
+		width: 0.4375rem;
+		height: 0.4375rem;
+		border-radius: 50%;
+		background-color: var(--dot);
 	}
 
-	.size-sm {
-		font-size: 0.75rem;
-		padding: 0.15rem 0.5rem;
+	.status-link {
+		transition: border-color 150ms, color 150ms;
 	}
 
-	.status-seed {
-		background-color: rgba(76, 175, 80, 0.15);
-		color: #2e7d32;
+	.status-link:hover {
+		border-color: var(--color-ink);
+		color: var(--color-ink);
 	}
 
-	.status-growing {
-		background-color: rgba(56, 142, 60, 0.15);
-		color: #1b5e20;
-	}
-
-	.status-evergreen {
-		background-color: rgba(27, 94, 32, 0.15);
-		color: #1b5e20;
-	}
-
-	.status-experimental {
-		background-color: rgba(156, 39, 176, 0.15);
-		color: #7b1fa2;
-	}
-
-	:global([data-theme='dark']) .status-seed {
-		background-color: rgba(76, 175, 80, 0.2);
-		color: #81c784;
-	}
-
-	:global([data-theme='dark']) .status-growing {
-		background-color: rgba(56, 142, 60, 0.2);
-		color: #66bb6a;
-	}
-
-	:global([data-theme='dark']) .status-evergreen {
-		background-color: rgba(27, 94, 32, 0.2);
-		color: #4caf50;
-	}
-
-	:global([data-theme='dark']) .status-experimental {
-		background-color: rgba(156, 39, 176, 0.2);
-		color: #ce93d8;
+	.count {
+		font-variant-numeric: tabular-nums;
+		color: var(--color-muted);
 	}
 </style>

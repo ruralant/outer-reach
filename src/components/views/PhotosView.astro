@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../PageHeader.astro";
+import PhotoGrid from "../PhotoGrid.astro";
+import { getPhotos } from "../../lib/photos";
+import { useTranslations } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const photos = await getPhotos({ lite: true });
+---
+
+<BaseLayout title={`${t("photos.title")} — ${t("site.title")}`} description={t("photos.description") as string}>
+	<PageHeader eyebrow={t("photos.title") as string} title={t("photos.heading") as string}>
+		{t("photos.description")}
+	</PageHeader>
+
+	{photos.length === 0 ? <p class="empty">{t("photos.empty")}</p> : <PhotoGrid photos={photos} lang={lang} />}
+</BaseLayout>
+
+<style>
+	.empty {
+		color: var(--color-muted);
+	}
+</style>

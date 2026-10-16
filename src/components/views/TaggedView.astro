@@ -1,0 +1,36 @@
+---
+import type { ComponentProps } from "astro/types";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../PageHeader.astro";
+import ListRow from "../ListRow.astro";
+import { useTranslations, localePath } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+interface Props {
+	lang: Lang;
+	collection: "blog" | "garden";
+	tag: string;
+	rows: ComponentProps<typeof ListRow>[];
+}
+
+const { lang, collection, tag, rows } = Astro.props;
+const t = useTranslations(lang);
+
+const section = collection === "blog" ? (t("blog.title") as string) : (t("garden.title") as string);
+const n = rows.length;
+const unit = collection === "blog" ? (n === 1 ? t("blog.post") : t("blog.posts")) : n === 1 ? t("note.note") : t("note.notes");
+const allText = collection === "blog" ? t("blog.all") : t("garden.all");
+const summary = `${n} ${unit} ${t("garden.withThisTag")}.`;
+---
+
+<BaseLayout title={`${tag} — ${section} — ${t("site.title")}`} description={`${summary.slice(0, -1)}: ${tag}`}>
+	<PageHeader eyebrow={`${section} · ${t("tags.tag")}`} title={tag}>
+		{summary}{" "}
+		<a class="link" href={localePath(lang, `/${collection}/tags/`)}>{t("tags.all")}</a> ·
+		<a class="link" href={localePath(lang, `/${collection}/`)}>{allText}</a>
+	</PageHeader>
+
+	<ul class="rows">
+		{rows.map((row) => <ListRow {...row} headingLevel={2} />)}
+	</ul>
+</BaseLayout>
