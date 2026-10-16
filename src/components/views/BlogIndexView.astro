@@ -1,0 +1,94 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../PageHeader.astro";
+import ListRow from "../ListRow.astro";
+import { getSortedPostsForLocale, type BlogPost } from "../../lib/blog";
+import { postRow } from "../../lib/rows";
+import { useTranslations, localePath } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const posts = await getSortedPostsForLocale(lang);
+
+// Posts arrive newest first, so years come out in descending order too
+const years = posts.reduce<[number, BlogPost[]][]>((groups, post) => {
+	const year = post.data.published.getUTCFullYear();
+	const last = groups.at(-1);
+	if (last?.[0] === year) last[1].push(post);
+	else groups.push([year, [post]]);
+	return groups;
+}, []);
+---
+
+<BaseLayout title={`${t("blog.title")} — ${t("site.title")}`} description={t("blog.subtitle") as string}>
+	<PageHeader eyebrow={t("blog.title") as string} title={t("blog.heading") as string}>
+		{t("blog.subtitle")}{" "}
+		<a class="link" href={localePath(lang, "/blog/tags/")}>{t("blog.tagsSubtitle")}</a>.
+	</PageHeader>
+
+	{posts.length === 0 ? (
+		<p class="empty">{t("blog.noPosts")}</p>
+	) : (
+		<div class="years">
+			{years.map(([year, yearPosts]) => (
+				<section class="year" aria-labelledby={`year-${year}`}>
+					<h2 id={`year-${year}`}>{year}</h2>
+					<ul>
+						{yearPosts.map((post) => <ListRow {...postRow(post, lang)} showYear={false} />)}
+					</ul>
+				</section>
+			))}
+		</div>
+	)}
+</BaseLayout>
+
+<style>
+	.empty {
+		color: var(--color-muted);
+	}
+
+	.years {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.year {
+		display: grid;
+		column-gap: 2.5rem;
+		border-top: 1px solid var(--color-line);
+	}
+
+	h2 {
+		padding-top: 1.75rem;
+		font-family: var(--font-serif);
+		font-size: 1.875rem;
+		line-height: 1;
+		font-variant-numeric: tabular-nums;
+		color: var(--color-muted);
+	}
+
+	@media (min-width: 800px) {
+		.year {
+			grid-template-columns: 7rem minmax(0, 1fr);
+		}
+
+		h2 {
+			position: sticky;
+			top: 1.5rem;
+			align-self: start;
+			padding-top: 1.5rem;
+		}
+
+	}
+
+	/* The year's own hairline already separates the first row */
+	.year ul > :global(li:first-child) {
+		border-top: 0;
+	}
+</style>

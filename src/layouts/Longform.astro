@@ -1,0 +1,262 @@
+---
+import type { MarkdownHeading } from "astro";
+import BaseLayout from "./BaseLayout.astro";
+import { useTranslations } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
+
+interface Props {
+	title: string;
+	description: string;
+	back: { href: string; text: string };
+	/** Short line above the title on small screens, where the side column is hidden */
+	eyebrow: string;
+	headings?: MarkdownHeading[];
+}
+
+const { title, description, back, eyebrow, headings = [] } = Astro.props;
+const lang = (Astro.currentLocale || "en") as Lang;
+const t = useTranslations(lang);
+
+// Short pieces don't need a table of contents
+const toc = headings.filter((h) => h.depth <= 3);
+const showToc = toc.length > 2;
+
+// The meta rows show in the side column on wide screens and after the body on narrow ones
+const meta = await Astro.slots.render("meta");
+---
+
+<BaseLayout title={`${title} — ${t("site.title")}`} description={description}>
+	<article class="longform">
+		<aside>
+			<div class="aside-inner">
+				<a class="back" href={back.href}><span aria-hidden="true">←</span> {back.text}</a>
+				<dl class="meta meta-side" set:html={meta} />
+				{showToc && (
+					<nav class="toc-side" aria-label={t("note.contents") as string}>
+						<p class="eyebrow">{t("note.contents")}</p>
+						<ul>
+							{toc.map((h) => (
+								<li class:list={{ sub: h.depth === 3 }}><a href={`#${h.slug}`}>{h.text}</a></li>
+							))}
+						</ul>
+					</nav>
+				)}
+			</div>
+		</aside>
+
+		<div class="column">
+			<header>
+				<p class="eyebrow mobile-only">{eyebrow}</p>
+				<h1>{title}</h1>
+				<p class="description">{description}</p>
+			</header>
+
+			{showToc && (
+				<details class="toc-inline">
+					<summary class="eyebrow">{t("note.contents")}</summary>
+					<ul>
+						{toc.map((h) => (
+							<li class:list={{ sub: h.depth === 3 }}><a href={`#${h.slug}`}>{h.text}</a></li>
+						))}
+					</ul>
+				</details>
+			)}
+
+			<div class="prose body">
+				<slot />
+			</div>
+
+			<dl class="meta meta-inline" set:html={meta} />
+
+			<slot name="appendix" />
+
+			<footer>
+				<a class="back" href={back.href}><span aria-hidden="true">←</span> {back.text}</a>
+			</footer>
+		</div>
+	</article>
+</BaseLayout>
+
+<style>
+	aside {
+		margin-bottom: 2.5rem;
+	}
+
+	.back {
+		font-size: 0.875rem;
+		color: var(--color-muted);
+		transition: color 150ms;
+	}
+
+	.back:hover {
+		color: var(--color-ink);
+	}
+
+	.column {
+		min-width: 0;
+	}
+
+	header {
+		padding-bottom: 2.5rem;
+		border-bottom: 1px solid var(--color-line);
+	}
+
+	h1 {
+		margin-top: 1rem;
+		font-family: var(--font-serif);
+		font-size: 3rem;
+		line-height: 1.05;
+		letter-spacing: -0.025em;
+		text-wrap: balance;
+		color: var(--color-ink);
+	}
+
+	.description {
+		margin-top: 1.5rem;
+		font-size: 1.125rem;
+		line-height: 1.625;
+		text-wrap: pretty;
+		color: var(--color-ink-soft);
+	}
+
+	.body {
+		margin-top: 2.5rem;
+	}
+
+	/* Meta rows: <div><dt class="eyebrow">…</dt><dd>…</dd></div>, written by the page */
+	.meta {
+		font-size: 0.875rem;
+	}
+
+	.meta :global(dd) {
+		margin-top: 0.5rem;
+		color: var(--color-ink);
+	}
+
+	.meta :global(dd.pills) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.375rem;
+		margin-top: 0.75rem;
+	}
+
+	.meta-side {
+		display: none;
+	}
+
+	.meta-inline {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+		gap: 1.5rem 2rem;
+		margin-top: 4rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--color-line);
+	}
+
+	.toc-side {
+		display: none;
+	}
+
+	.toc-side ul,
+	.toc-inline ul {
+		display: grid;
+		gap: 0.5rem;
+		margin-top: 0.75rem;
+		font-size: 0.875rem;
+		line-height: 1.4;
+	}
+
+	.toc-side .sub,
+	.toc-inline .sub {
+		padding-left: 0.75rem;
+	}
+
+	.toc-side a,
+	.toc-inline a {
+		color: var(--color-muted);
+		transition: color 150ms;
+	}
+
+	.toc-side a:hover,
+	.toc-inline a:hover {
+		color: var(--color-ink);
+	}
+
+	.toc-inline {
+		margin-top: 2rem;
+		padding-block: 1rem;
+		border-bottom: 1px solid var(--color-line);
+	}
+
+	.toc-inline summary {
+		cursor: pointer;
+	}
+
+	footer {
+		margin-top: 4rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--color-line);
+	}
+
+	@media (min-width: 600px) {
+		h1 {
+			font-size: 3.75rem;
+		}
+
+		.description {
+			font-size: 1.25rem;
+		}
+	}
+
+	@media (min-width: 800px) {
+		.longform {
+			display: grid;
+			grid-template-columns: 10rem minmax(0, 1fr);
+			column-gap: 3rem;
+		}
+
+		aside {
+			margin-bottom: 0;
+		}
+
+		.aside-inner {
+			position: sticky;
+			top: 2rem;
+			max-height: calc(100dvh - 4rem);
+			overflow-y: auto;
+		}
+
+		.mobile-only {
+			display: none;
+		}
+
+		h1 {
+			margin-top: 0;
+		}
+
+		.meta-side {
+			display: grid;
+			gap: 1.5rem;
+			margin-top: 2.5rem;
+		}
+
+		.meta-inline,
+		.toc-inline {
+			display: none;
+		}
+
+		.toc-side {
+			display: block;
+			margin-top: 2.5rem;
+			padding-top: 1.5rem;
+			border-top: 1px solid var(--color-line);
+		}
+	}
+
+	@media (min-width: 1000px) {
+		.longform {
+			grid-template-columns: 12rem minmax(0, 42rem);
+			column-gap: 4rem;
+		}
+	}
+</style>

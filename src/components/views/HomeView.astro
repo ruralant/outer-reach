@@ -1,0 +1,160 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SolarpunkHouse from "../SolarpunkHouse.astro";
+import SectionHead from "../SectionHead.astro";
+import ListRow from "../ListRow.astro";
+import PhotoGrid from "../PhotoGrid.astro";
+import { getNotesForLocale } from "../../lib/garden";
+import { getSortedPostsForLocale } from "../../lib/blog";
+import { getPhotos } from "../../lib/photos";
+import { postRow, noteRow } from "../../lib/rows";
+import { useTranslations, localePath } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const latestPosts = (await getSortedPostsForLocale(lang)).slice(0, 3);
+const latestPhotos = await getPhotos({ limit: 3, lite: true });
+const latestNotes = (await getNotesForLocale(lang))
+	.sort((a, b) => b.data.created.valueOf() - a.data.created.valueOf())
+	.slice(0, 3);
+---
+
+<BaseLayout title={t("site.title") as string} description={t("site.tagline") as string}>
+	<section class="hero">
+		<div>
+			<h1>Outer <em>Reach</em></h1>
+			<p class="lede">{t("site.tagline")}</p>
+			<div class="actions">
+				<a class="btn" href={localePath(lang, "/manifesto/")}>
+					{t("nav.manifesto")}
+					<span class="arrow" aria-hidden="true">→</span>
+				</a>
+				<a class="link explore" href={localePath(lang, "/garden/")}>{t("nav.exploreGarden")}</a>
+			</div>
+		</div>
+		<div class="art">
+			<SolarpunkHouse />
+		</div>
+	</section>
+
+	{latestPosts.length > 0 && (
+		<section class="section" aria-labelledby="recent-posts">
+			<SectionHead id="recent-posts" eyebrow={t("home.eyebrowWriting") as string} title={t("blog.recentPosts") as string} href={localePath(lang, "/blog/")} linkText={t("blog.all") as string} />
+			<ul class="rows">
+				{latestPosts.map((post) => <ListRow {...postRow(post, lang, { withTags: false })} />)}
+			</ul>
+		</section>
+	)}
+
+	{latestPhotos.length > 0 && (
+		<section class="section" aria-labelledby="recent-photos">
+			<SectionHead id="recent-photos" eyebrow={t("nav.photos") as string} title={t("home.recentPhotos") as string} href={localePath(lang, "/photos/")} linkText={t("photos.all") as string} />
+			<PhotoGrid photos={latestPhotos} lang={lang} mobileColumns={3} />
+		</section>
+	)}
+
+	{latestNotes.length > 0 && (
+		<section class="section" aria-labelledby="recent-notes">
+			<SectionHead id="recent-notes" eyebrow={t("nav.garden") as string} title={t("garden.recentNotes") as string} href={localePath(lang, "/garden/")} linkText={t("garden.all") as string} />
+			<ul class="rows">
+				{latestNotes.map((note) => <ListRow {...noteRow(note, lang, { withTags: false })} />)}
+			</ul>
+		</section>
+	)}
+</BaseLayout>
+
+<style>
+	.hero {
+		display: grid;
+		align-items: center;
+		gap: 1rem 2.5rem;
+		padding-bottom: 4rem;
+	}
+
+	h1 {
+		font-family: var(--font-serif);
+		font-size: 4.25rem;
+		line-height: 0.95;
+		letter-spacing: -0.02em;
+		color: var(--color-ink);
+	}
+
+	h1 em {
+		color: var(--color-accent);
+	}
+
+	.lede {
+		max-width: 28rem;
+		margin-top: 2rem;
+		font-size: 1.125rem;
+		line-height: 1.625;
+		text-wrap: pretty;
+		color: var(--color-ink-soft);
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1rem 1.75rem;
+		margin-top: 2.5rem;
+	}
+
+	.explore {
+		font-size: 0.9375rem;
+	}
+
+	.art {
+		justify-self: center;
+		width: 100%;
+		max-width: 22rem;
+	}
+
+	.section {
+		padding-block: 3rem;
+	}
+
+	@media (min-width: 600px) {
+		h1 {
+			font-size: 6rem;
+		}
+
+		.lede {
+			font-size: 1.25rem;
+		}
+	}
+
+	@media (min-width: 800px) {
+		.hero {
+			grid-template-columns: minmax(0, 1fr) auto;
+			padding-bottom: 6rem;
+		}
+
+		.art {
+			justify-self: end;
+			width: 20rem;
+		}
+
+		.section {
+			padding-block: 4rem;
+		}
+	}
+
+	@media (min-width: 1000px) {
+		h1 {
+			font-size: 6.5rem;
+		}
+	}
+
+	@media (min-width: 1385px) {
+		.art {
+			width: 22rem;
+		}
+	}
+</style>
