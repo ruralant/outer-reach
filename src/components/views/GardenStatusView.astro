@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../PageHeader.astro";
+import ListRow from "../ListRow.astro";
+import StatusBadge from "../StatusBadge.astro";
+import { ALL_STATUSES, type GardenNote, type NoteStatus } from "../../lib/garden";
+import { noteRow } from "../../lib/rows";
+import { useTranslations, localePath } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+interface Props {
+	lang: Lang;
+	status: NoteStatus;
+	notes: GardenNote[];
+	/** Note counts for every status, for the switcher */
+	counts: Record<NoteStatus, number>;
+}
+
+const { lang, status, notes, counts } = Astro.props;
+const t = useTranslations(lang);
+
+const label = t(`status.${status}`) as string;
+const description = t(`status.${status}.description`) as string;
+const summary = `${description}. ${notes.length} ${notes.length === 1 ? t("note.note") : t("note.notes")}.`;
+const others = ALL_STATUSES.filter((s) => s !== status && counts[s] > 0);
+---
+
+<BaseLayout title={`${label} — ${t("garden.title")} — ${t("site.title")}`} description={description}>
+	<PageHeader eyebrow={`${t("garden.title")} · ${t("garden.filterStatus")}`}>
+		<Fragment slot="title"><span class="dot" style={`--dot: var(--color-${status})`} aria-hidden="true"></span>{label}</Fragment>
+		{summary}{" "}
+		<a class="link" href={localePath(lang, "/garden/")}>{t("garden.all")}</a>
+	</PageHeader>
+
+	{others.length > 0 && (
+		<ul class="others">
+			{others.map((s) => <li><StatusBadge status={s} count={counts[s]} link /></li>)}
+		</ul>
+	)}
+
+	{notes.length === 0 ? (
+		<p class="empty">{t("garden.noNotesStatus")}</p>
+	) : (
+		<ul class="rows">
+			{notes.map((note) => <ListRow {...noteRow(note, lang)} status={undefined} headingLevel={2} />)}
+		</ul>
+	)}
+</BaseLayout>
+
+<style>
+	.dot {
+		display: inline-block;
+		width: 0.3em;
+		height: 0.3em;
+		margin-right: 0.3em;
+		border-radius: 50%;
+		vertical-align: 0.15em;
+		background-color: var(--dot);
+	}
+
+	.others {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-bottom: 2.5rem;
+	}
+
+	.empty {
+		color: var(--color-muted);
+	}
+</style>

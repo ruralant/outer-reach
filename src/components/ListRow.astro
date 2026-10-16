@@ -1,0 +1,153 @@
+---
+import Tag from "./Tag.astro";
+import StatusBadge from "./StatusBadge.astro";
+import type { NoteStatus } from "../lib/garden";
+import { localeDateShort, localeDateString } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
+
+interface Props {
+	href: string;
+	title: string;
+	description?: string;
+	date?: Date;
+	status?: NoteStatus;
+	tags?: { label: string; href: string }[];
+	headingLevel?: 2 | 3;
+	/** Leave the year out where the list is already grouped by year */
+	showYear?: boolean;
+}
+
+const { href, title, description, date, status, tags = [], headingLevel = 3, showYear = true } = Astro.props;
+const lang = (Astro.currentLocale || "en") as Lang;
+const Heading = `h${headingLevel}` as "h2" | "h3";
+---
+
+<!--
+	One row in a list of posts or notes. The title is the row's only link, stretched over the
+	whole row with ::after; the tag links sit above it, so no link is ever nested in another.
+-->
+<li class:list={["row", { "no-date": !date, "no-year": !showYear }]}>
+	{date && <time datetime={date.toISOString().slice(0, 10)}>{showYear ? localeDateShort(date, lang) : localeDateString(date, lang, { day: "numeric", month: "short" })}</time>}
+
+	<div class="body">
+		<Heading class="title"><a href={href}>{title}</a></Heading>
+		{description && <p class="description">{description}</p>}
+		{(status || tags.length > 0) && (
+			<ul class="tags">
+				{status && <li><StatusBadge status={status} /></li>}
+				{tags.map((tag) => <li><Tag label={tag.label} href={tag.href} /></li>)}
+			</ul>
+		)}
+	</div>
+
+	<span class="arrow" aria-hidden="true">→</span>
+</li>
+
+<style>
+	.row {
+		position: relative;
+		display: grid;
+		gap: 0.5rem 2.5rem;
+		padding-block: 1.75rem;
+		border-top: 1px solid var(--color-line);
+	}
+
+	@media (min-width: 800px) {
+		.row {
+			grid-template-columns: 8.5rem minmax(0, 1fr) auto;
+			align-items: baseline;
+		}
+
+		.row.no-year {
+			grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+		}
+
+		.row.no-date {
+			grid-template-columns: minmax(0, 1fr) auto;
+		}
+	}
+
+	time {
+		font-size: 0.875rem;
+		font-variant-numeric: tabular-nums;
+		color: var(--color-muted);
+	}
+
+	.body {
+		min-width: 0;
+	}
+
+	.title {
+		font-family: var(--font-serif);
+		font-size: 1.65rem;
+		line-height: 1.15;
+		letter-spacing: var(--tracking-title);
+		text-wrap: balance;
+		color: var(--color-ink);
+	}
+
+	.title a {
+		text-decoration-color: color-mix(in oklab, var(--color-accent) 60%, transparent);
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.18em;
+	}
+
+	.title a::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+	}
+
+	.title a:focus-visible {
+		outline: none;
+	}
+
+	.title a:focus-visible::after {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 2px;
+	}
+
+	.row:hover .title a {
+		text-decoration-line: underline;
+	}
+
+	.description {
+		max-width: 42rem;
+		margin-top: 0.5rem;
+		line-height: 1.625;
+		text-wrap: pretty;
+		color: var(--color-ink-soft);
+	}
+
+	.tags {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-top: 1rem;
+	}
+
+	.arrow {
+		display: none;
+		font-size: 1.125rem;
+		color: var(--color-muted);
+		transition: color 150ms, translate 150ms;
+	}
+
+	.row:hover .arrow {
+		color: var(--color-accent);
+		translate: 0.25rem 0;
+	}
+
+	@media (min-width: 600px) {
+		.title {
+			font-size: 1.875rem;
+		}
+	}
+
+	@media (min-width: 800px) {
+		.arrow {
+			display: block;
+		}
+	}
+</style>

@@ -1,5 +1,8 @@
 ---
 import { Font } from "astro:assets";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
 
 interface Props {
 	title: string;
@@ -10,102 +13,44 @@ const { title, description } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang={Astro.currentLocale || 'en'}>
+<html lang={Astro.currentLocale || "en"}>
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		{description && <meta name="description" content={description} />}
-		<Font cssVariable="--font-roboto-serif" />
+		<Font cssVariable="--font-serif" />
+		<Font cssVariable="--font-sans" />
 		<script is:inline>
-			// Prevent theme flash by applying theme before page renders
-			(function() {
-				const savedTheme = localStorage.getItem('theme');
-				let themeToApply = savedTheme;
-				
-				// If no saved theme, check system preference
-				if (!themeToApply) {
-					const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-					themeToApply = prefersDark ? 'dark' : 'light';
-				}
-				
-				// Apply theme immediately
-				if (themeToApply === 'dark') {
-					document.documentElement.setAttribute('data-theme', 'dark');
-					document.documentElement.classList.add('dark-mode');
-				} else {
-					document.documentElement.setAttribute('data-theme', 'light');
-					document.documentElement.classList.add('light-mode');
-				}
+			// Runs before first paint so the page never flashes the wrong theme
+			(function () {
+				const saved = localStorage.getItem("theme");
+				const theme = saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+				document.documentElement.setAttribute("data-theme", theme);
 			})();
 		</script>
 	</head>
-	<body class="light-mode">
-        <main>
-            <slot />
-        </main>
-    </body>
+	<body>
+		<Header />
+		<main class="container">
+			<slot />
+		</main>
+		<Footer />
+	</body>
 </html>
 
-<style is:global>
-	:root {
-		/* Light mode — warm parchment, quiet and grounded */
-		--color-text-primary: #2c2c2c;
-		--color-text-secondary: #6b6b6b;
-		--color-background: #f8f6f1;
-		--color-background-secondary: #f0ede6;
-		--color-border: #ddd8ce;
-		--color-accent: #5a7a9b;
-		--color-accent-dark: #3d5a73;
-		--color-gradient-start: #5a7a9b;
-		--color-gradient-end: #3d5a73;
-		--color-card-background: #ffffff;
-		--color-card-shadow: rgba(0, 0, 0, 0.06);
-		--color-link-hover: #3d5a73;
+<style>
+	main {
+		padding-top: 2rem;
+		padding-bottom: 5rem;
 	}
 
-	[data-theme='dark'] {
-		/* Dark mode — deep space, stars and void */
-		--color-text-primary: #c8c8d0;
-		--color-text-secondary: #808090;
-		--color-background: #0d0d12;
-		--color-background-secondary: #14141c;
-		--color-border: #252530;
-		--color-accent: #7b9fc2;
-		--color-accent-dark: #5a7a9b;
-		--color-gradient-start: #1a1a2e;
-		--color-gradient-end: #0d0d12;
-		--color-card-background: #14141c;
-		--color-card-shadow: rgba(0, 0, 0, 0.4);
-		--color-link-hover: #a0c4e8;
+	@media (min-width: 800px) {
+		main {
+			padding-top: 3rem;
+			padding-bottom: 6rem;
+		}
 	}
-
-	* {
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-	}
-
-	body {
-		font-family: var(--font-roboto-serif);
-		line-height: 1.6;
-		color: var(--color-text-primary);
-		background-color: var(--color-background);
-		transition: background-color 0.3s ease, color 0.3s ease;
-		min-height: 100vh;
-	}
-
-	a {
-		color: var(--color-accent);
-		text-decoration: none;
-		transition: color 0.3s ease;
-	}
-
-	a:hover {
-		color: var(--color-link-hover);
-		text-decoration: underline;
-	}
-
 </style>

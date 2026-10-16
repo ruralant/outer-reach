@@ -2,9 +2,7 @@
 import { render } from 'astro:content';
 import GardenNoteLayout from '../../layouts/GardenNoteLayout.astro';
 import { getNotesForLocale, getBacklinks, getRelatedNotes } from '../../lib/garden';
-import { useTranslations, slugFromNoteId } from '../../i18n/utils';
-import type { Lang } from '../../i18n/ui';
-import '../../styles/garden-note.css';
+import { slugFromNoteId } from '../../i18n/utils';
 
 export async function getStaticPaths() {
 	const allNotes = await getNotesForLocale('en');
@@ -20,25 +18,9 @@ export async function getStaticPaths() {
 }
 
 const { note, backlinks, relatedNotes } = Astro.props;
-const lang = (Astro.currentLocale || 'en') as Lang;
-const t = useTranslations(lang);
 const { Content, headings } = await render(note);
 ---
 
-<GardenNoteLayout note={note} backlinks={backlinks} relatedNotes={relatedNotes}>
-	{headings.length > 2 && (
-		<details class="toc">
-			<summary>{t('note.contents')}</summary>
-			<ul>
-				{headings.map((heading) => (
-					<li style={{ marginLeft: `${(heading.depth - 2) * 1}rem` }}>
-						<a href={`#${heading.slug}`}>{heading.text}</a>
-					</li>
-				))}
-			</ul>
-		</details>
-	)}
+<GardenNoteLayout note={note} backlinks={backlinks} relatedNotes={relatedNotes} headings={headings}>
 	<Content />
 </GardenNoteLayout>
-
-

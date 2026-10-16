@@ -1,33 +1,5 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import TopNav from '../components/TopNav.astro';
-import Footer from '../components/Footer.astro';
-import { useTranslations, localePath } from '../i18n/utils';
-import type { Lang } from '../i18n/ui';
-import '../styles/home.css';
-import ManifestoContent from '../content/manifesto/en.md';
-
-const lang = (Astro.currentLocale || 'en') as Lang;
-const t = useTranslations(lang);
+import ManifestoView from '../components/views/ManifestoView.astro';
 ---
 
-<BaseLayout title={`Manifesto — ${t('site.title')}`} description={t('site.tagline') as string}>
-	<div class="manifesto">
-		<TopNav lang={lang} currentPath={Astro.url.pathname} />
-
-		<header class="hero">
-			<h1>{t('site.title')}</h1>
-			<p class="hero-lead">{t('site.tagline')}</p>
-		</header>
-
-		<div class="prose">
-			<ManifestoContent />
-		</div>
-
-		<div class="manifesto-back">
-			<a href={localePath(lang, '/')}>← {t('nav.home')}</a>
-		</div>
-
-		<Footer lang={lang} />
-	</div>
-</BaseLayout>
+<ManifestoView lang="en" />

@@ -1,19 +1,18 @@
 ---
-import BaseLayout from '../../../../layouts/BaseLayout.astro';
-import TopNav from '../../../../components/TopNav.astro';
-import Footer from '../../../../components/Footer.astro';
+import GardenStatusView from '../../../../components/views/GardenStatusView.astro';
 import { getNotesForLocale, ALL_STATUSES, type NoteStatus } from '../../../../lib/garden';
-import { useTranslations, localePath, localeDateShort, gardenNotePath, slugFromNoteId } from '../../../../i18n/utils';
-import type { Lang } from '../../../../i18n/ui';
-import '../../../../styles/garden-status.css';
 
 export async function getStaticPaths() {
 	const allNotes = await getNotesForLocale('it');
+	const counts = Object.fromEntries(
+		ALL_STATUSES.map((s) => [s, allNotes.filter((n) => n.data.status === s).length]),
+	) as Record<NoteStatus, number>;
 
 	return ALL_STATUSES.map((status) => ({
 		params: { status },
 		props: {
 			status,
+			counts,
 			notes: allNotes
 				.filter((n) => n.data.status === status)
 				.sort((a, b) => a.data.title.localeCompare(b.data.title)),
@@ -21,55 +20,7 @@ export async function getStaticPaths() {
 	}));
 }
 
-const { status, notes } = Astro.props as { status: NoteStatus; notes: any[] };
-const lang = (Astro.currentLocale || 'it') as Lang;
-const t = useTranslations(lang);
-
-const STATUS_EMOJI: Record<NoteStatus, string> = {
-	seed: '🌱', growing: '🌿', evergreen: '🌳', experimental: '🧪',
-};
-const emoji = STATUS_EMOJI[status];
-const label = t(`status.${status}` as any) as string;
-const description = t(`status.${status}.description` as any) as string;
+const { status, notes, counts } = Astro.props;
 ---
 
-<BaseLayout title={`${emoji} ${label} — ${t('site.title')}`} description={description}>
-	<div class="container">
-		<TopNav lang={lang} currentPath={Astro.url.pathname} />
-
-		<header class="status-header">
-			<h1>{emoji} {label}</h1>
-			<p class="subtitle">{description}</p>
-			<p class="count">{notes.length} {notes.length === 1 ? t('note.note') : t('note.notes')}</p>
-		</header>
-
-		{notes.length === 0 ? (
-			<p class="no-notes">{t('garden.noNotesStatus')}</p>
-		) : (
-			<div class="notes-list">
-				{notes.map((note) => (
-					<article class="note-row">
-						<a href={gardenNotePath(lang, slugFromNoteId(note.id))} class="note-title">{note.data.title}</a>
-						<p class="note-desc">{note.data.description}</p>
-						<div class="note-meta">
-							<span class="note-date">
-								{localeDateShort(note.data.created, lang)}
-							</span>
-							{note.data.tags.length > 0 && (
-								<span class="note-tags">
-									{note.data.tags.map((tag: string) => (
-										<a href={localePath(lang, `/garden/tags/${tag}`)} class="tag">#{tag}</a>
-									))}
-								</span>
-							)}
-						</div>
-					</article>
-				))}
-			</div>
-		)}
-
-		<Footer lang={lang} />
-	</div>
-</BaseLayout>
-
-
+<GardenStatusView lang="it" status={status} notes={notes} counts={counts} />

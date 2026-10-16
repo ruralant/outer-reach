@@ -1,0 +1,38 @@
+---
+interface Props {
+	/** Id of the heading, for the section's aria-labelledby */
+	id: string;
+	eyebrow: string;
+	title: string;
+	href?: string;
+	linkText?: string;
+}
+
+const { id, eyebrow, title, href, linkText } = Astro.props;
+---
+
+<div class="section-head">
+	<div>
+		<p class="eyebrow">{eyebrow}</p>
+		<h2 id={id} class="section-title">{title}</h2>
+	</div>
+	{href && linkText && (
+		<a class="link more" href={href}>{linkText}<span aria-hidden="true"> →</span></a>
+	)}
+</div>
+
+<style>
+	.section-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 0.75rem 1.5rem;
+		padding-bottom: 2rem;
+	}
+
+	.more {
+		font-size: 0.9375rem;
+		color: var(--color-ink);
+	}
+</style>

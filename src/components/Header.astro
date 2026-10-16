@@ -1,0 +1,258 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import { navigation, isCurrentSection } from "../lib/navigation";
+import { useTranslations, localePath } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
+
+const lang = (Astro.currentLocale || "en") as Lang;
+const t = useTranslations(lang);
+const pathname = Astro.url.pathname.replace(/\/$/, "");
+
+const items = navigation.map((item) => ({
+	text: t(item.key) as string,
+	href: localePath(lang, item.path),
+	current: isCurrentSection(pathname, item.path, lang),
+}));
+---
+
+<header class="site-header container">
+	<a href={localePath(lang, "/")} class="wordmark">Outer Reach</a>
+
+	<div class="actions">
+		<nav aria-label={t("nav.main") as string} class="inline-nav">
+			{items.map((item) => (
+				<a href={item.href} class:list={["nav-link", { current: item.current }]} aria-current={item.current ? "page" : undefined}>
+					{item.text}
+				</a>
+			))}
+		</nav>
+		<LanguageSwitcher />
+		<ThemeToggle />
+		<button type="button" popovertarget="site-menu" class="pill-btn menu-open">{t("menu.open")}</button>
+	</div>
+</header>
+
+<div id="site-menu" popover>
+	<div class="sheet">
+		<div class="sheet-top">
+			<a href={localePath(lang, "/")} class="wordmark">Outer Reach</a>
+			<button type="button" popovertarget="site-menu" popovertargetaction="hide" class="pill-btn">{t("menu.close")}</button>
+		</div>
+
+		<nav aria-label={t("nav.main") as string} class="sheet-nav">
+			{items.map((item, i) => (
+				<a href={item.href} class="sheet-link" aria-current={item.current ? "page" : undefined} style={`--i: ${i}`}>
+					<span class:list={["sheet-text", { current: item.current }]}>{item.text}</span>
+					<span class="sheet-num">0{i + 1}</span>
+				</a>
+			))}
+		</nav>
+
+		<div class="sheet-link sheet-foot" style={`--i: ${items.length + 1}`}>
+			<a class="btn" href={localePath(lang, "/manifesto/")}>
+				{t("nav.manifesto")}
+				<span class="arrow" aria-hidden="true">→</span>
+			</a>
+			<LanguageSwitcher variant="name" class="link sheet-small" />
+			<a class="link sheet-small" href={localePath(lang, "/rss.xml")}>{t("footer.rss")}</a>
+		</div>
+	</div>
+</div>
+
+<style>
+	.site-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		padding-block: 1.5rem;
+	}
+
+	.wordmark {
+		font-family: var(--font-serif);
+		font-size: 1.4rem;
+		line-height: 1;
+		letter-spacing: var(--tracking-title);
+		color: var(--color-ink);
+		transition: color 150ms;
+	}
+
+	.wordmark:hover {
+		color: var(--color-accent);
+	}
+
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	.inline-nav {
+		display: none;
+		align-items: center;
+		gap: 1.5rem;
+		margin-right: 0.75rem;
+	}
+
+	.nav-link {
+		font-size: 0.9375rem;
+		color: var(--color-muted);
+		text-decoration-color: var(--color-accent);
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.4em;
+		transition: color 150ms;
+	}
+
+	.nav-link:hover,
+	.nav-link.current {
+		color: var(--color-ink);
+	}
+
+	.nav-link.current {
+		text-decoration-line: underline;
+	}
+
+	.pill-btn {
+		height: 2.25rem;
+		padding-inline: 0.75rem;
+		border-radius: 9999px;
+		font-size: 0.9375rem;
+		color: var(--color-ink);
+		transition: background-color 150ms;
+	}
+
+	.pill-btn:hover {
+		background-color: var(--color-surface);
+	}
+
+	@media (min-width: 600px) {
+		.inline-nav {
+			display: flex;
+		}
+
+		.menu-open {
+			display: none;
+		}
+	}
+
+	@media (min-width: 800px) {
+		.site-header {
+			padding-block: 2rem;
+		}
+	}
+
+	/* --- Mobile menu: a full-screen popover sheet --- */
+
+	#site-menu {
+		width: 100%;
+		max-width: none;
+		height: 100dvh;
+		max-height: none;
+		margin: 0;
+		padding: 0;
+		overflow-y: auto;
+		border: 0;
+		background-color: var(--color-paper);
+		color: var(--color-ink);
+		opacity: 0;
+		/* display and overlay must transition too, or the sheet vanishes before it fades */
+		transition:
+			opacity 0.25s ease,
+			overlay 0.25s allow-discrete,
+			display 0.25s allow-discrete;
+	}
+
+	#site-menu:popover-open {
+		opacity: 1;
+	}
+
+	@starting-style {
+		#site-menu:popover-open {
+			opacity: 0;
+		}
+	}
+
+	#site-menu::backdrop {
+		background: transparent;
+	}
+
+	.sheet {
+		display: flex;
+		flex-direction: column;
+		min-height: 100%;
+		padding: 0 var(--gutter) 2.5rem;
+	}
+
+	.sheet-top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-block: 1.5rem;
+	}
+
+	.sheet-nav {
+		margin-top: 1.5rem;
+	}
+
+	.sheet-link {
+		opacity: 0;
+		translate: 0 0.75rem;
+		transition:
+			opacity 0.45s ease,
+			translate 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+		transition-delay: calc(var(--i) * 45ms + 60ms);
+	}
+
+	#site-menu:popover-open .sheet-link {
+		opacity: 1;
+		translate: 0 0;
+	}
+
+	@starting-style {
+		#site-menu:popover-open .sheet-link {
+			opacity: 0;
+			translate: 0 0.75rem;
+		}
+	}
+
+	.sheet-nav .sheet-link {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		padding-block: 1rem;
+		border-bottom: 1px solid var(--color-line);
+	}
+
+	.sheet-text {
+		font-family: var(--font-serif);
+		font-size: 2.75rem;
+		line-height: 1;
+		letter-spacing: var(--tracking-title);
+	}
+
+	.sheet-text.current {
+		color: var(--color-accent);
+		font-style: italic;
+	}
+
+	.sheet-num {
+		font-size: 0.75rem;
+		font-variant-numeric: tabular-nums;
+		color: var(--color-muted);
+	}
+
+	.sheet-foot {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1rem 1.5rem;
+		margin-top: auto;
+		padding-top: 3rem;
+	}
+
+	.sheet-foot :global(.sheet-small) {
+		font-size: 0.875rem;
+		color: var(--color-ink-soft);
+	}
+</style>

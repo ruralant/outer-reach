@@ -39,12 +39,19 @@ src/
     garden.ts               backlinks, related-notes, note-graph (re-parses [[ ]] at build)
     blog.ts                 per-locale fetch + sort
     photos.ts               reads src/photos/*.jpg EXIF + attaches ImageMetadata (via import.meta.glob) at build
+    navigation.ts           header / mobile menu / footer links, one list
+    rows.ts                 postRow / noteRow → props for a ListRow
   plugins/
     remarkWikiLinks.ts      renders [[ ]] → <a class="wiki-link"> (wired in astro.config)
-  layouts/                  BaseLayout (shell+theme), BlogPostLayout, GardenNoteLayout
-  components/               TopNav, Footer, LanguageSwitcher, ThemeToggle, Backlinks, RelatedNotes, StatusBadge
-  pages/                    EN routes at root; IT mirror under pages/it/ (see i18n rule)
-  styles/*.css              per-page CSS, imported by its page
+  layouts/                  BaseLayout (head, theme, Header + <main> + Footer), Longform (article grid:
+                            side column + body), BlogPostLayout / GardenNoteLayout (fill Longform's meta)
+  components/views/         ONE view per page (HomeView, BlogIndexView, GardenIndexView, TagsView, TaggedView,
+                            GardenStatusView, PhotosView, PhotoView, NowView, ManifestoView) — markup + styles
+  components/               Header, Footer, PageHeader, SectionHead, ListRow, Tag, StatusBadge, NoteLinks,
+                            PhotoGrid, SolarpunkHouse, LanguageSwitcher, ThemeToggle
+  pages/                    thin route wrappers: EN at root, IT mirror under pages/it/ (see i18n rule)
+  styles/global.css         design tokens, reset, .container/.eyebrow/.link/.btn/.section-title/.prose
+  assets/solarpunk.svg      homepage illustration, copied from the portfolio (see Design)
   photos/*.jpg              photo gallery source (filename = slug); optimized via astro:assets <Image>
   assets/images/            CMS media uploads (relative public_folder; see Content editing)
 astro.config.mjs            site URL, i18n, local fonts, remark plugin, __APP_VERSION__
@@ -54,7 +61,7 @@ public/admin/               Sveltia CMS: index.html + config.yml + vendored bund
 ## The four rules that govern every change
 
 **1. i18n duplication is the backbone.** Default locale `en` has no URL prefix; `it` lives under `/it/`.
-- Routes are physically duplicated: `pages/blog/...` (en) **and** `pages/it/blog/...` (it). Same for `garden/`, `rss.xml.ts`, `manifesto`, `now`. Adding/changing a page → edit **both** trees; `it/` pages call the same `lib/` helpers but pass `"it"`.
+- Routes are physically duplicated: `pages/blog/...` (en) **and** `pages/it/blog/...` (it). Same for `garden/`, `rss.xml.ts`, `manifesto`, `now`. Each route file is a thin wrapper: `getStaticPaths` (which must live in the page, with its locale hard-coded) plus one `<XView lang="en|it" …/>`. Markup and styles live once in `components/views/`, so a design change touches the view, not both trees; adding a route still means adding **both** wrapper files.
 - Content is duplicated by directory, so collection `id` = `en/degrowth` / `it/degrowth`. Use `slugFromNoteId()` to get the bare slug for URLs and wiki-links.
 - Per-locale filtering = `id.startsWith(\`${locale}/\`)` (see `getNotesForLocale`).
 
@@ -73,9 +80,22 @@ Changing the link format means editing both.
 ## Adding things (checklists)
 
 - **Garden note / blog post:** create the `.md` under **both** `content/<coll>/en/` and `.../it/` (content is per-locale, no auto-fallback for files). Match the schema for that collection.
-- **New page/route:** create it under `pages/` and mirror under `pages/it/`; thread `Astro.currentLocale` → `useTranslations` + `localePath`. Wrap in `BaseLayout`. Import any page CSS from `styles/`.
+- **New page/route:** write a view in `components/views/` that takes `lang`, wraps itself in `BaseLayout` (which already renders the header and footer) and keeps its CSS in a scoped `<style>`; then add a wrapper under `pages/` **and** `pages/it/`.
 - **New UI text:** rule 2.
-- **Photo:** drop a `.jpg`/`.jpeg` into `src/photos/` — EXIF + sort + image optimization (WebP/responsive via `<Image>`) are automatic; slug = filename. Use `photo.image` with `astro:assets` `<Image>`, not a raw `<img src>`.
+- **Photo:** drop a `.jpg`/`.jpeg` into `src/photos/` — EXIF + sort + image optimization (WebP/responsive via `<Image>`) are automatic; slug = filename. Grids go through `PhotoGrid`; anything else uses `photo.image` with `astro:assets` `<Picture>` (AVIF + WebP fallback), never a raw `<img src>`.
+
+## Design
+
+Same visual system as antoniorossi.net (`../portfolio`, Tailwind there, plain CSS here — no CSS framework, no new deps). Read before styling:
+
+- **Tokens** live on `:root` in `styles/global.css` and are redefined under `:root[data-theme="dark"]`, so write `var(--color-muted)`, never a dark-mode override: `paper` (bg), `surface`, `ink`, `ink-soft` (body copy), `muted` (meta), `line` / `line-strong` (hairlines), one terracotta `accent`, and `seed|growing|evergreen|experimental` for status dots. Hairlines, not shadows. The reset gives every element `border: 0 solid var(--color-line)`, so `border-top-width: 1px` alone draws a hairline.
+- **Type:** `var(--font-serif)` (Instrument Serif, single weight — never bold it) for titles; `var(--font-sans)` (Geist 400–600) for everything else. Both are vendored latin subsets loaded through Astro's `fonts` config. The serif has no arrow glyphs, so put `→ ←` in sans text; the serif **italic** is Basic Latin only (no à/è/ì/ò/ù), so keep it to fixed English words such as "Outer *Reach*".
+- **Shared classes:** `.container` (64rem page width, shared by header/main/footer), `.eyebrow`, `.link`, `.btn` (+ `.btn-outline`), `.section-title`, `.rows`, `.prose` (all rendered markdown; `a.wiki-link` gets a dotted underline).
+- **Breakpoints** (min-width): 600px (inline nav replaces the menu button), 800px (side columns, list grids), 1000px, 1385px.
+- **Patterns:** `PageHeader` (eyebrow + serif h1 + lede slot) opens every non-article page. Lists are `<ul class="rows">` of `ListRow`, whose title link is stretched over the row while tag pills sit above it — never nest links. Articles go through `Longform`; its `meta` slot is rendered twice (side column on wide screens, after the body on narrow), so keep it to `<div><dt class="eyebrow">…</dt><dd>…</dd></div>` rows.
+- **Whitespace gotcha:** Astro drops the space between back-to-back expressions in slotted text (`{n} {unit}` → "3notes"). Build such sentences as one template string.
+- **Mobile menu** is a `popover` sheet (no JS). **Theme:** `data-theme` on `<html>`, set before paint in `BaseLayout`, toggled by `ThemeToggle`.
+- **Solarpunk house** (`SolarpunkHouse.astro` + `assets/solarpunk.svg`) is copied from the portfolio, where `scripts/solarpunk-house.js` generates both the SVG and the `layout` block. To change it, regenerate there and copy the SVG and the block between the `// generated` markers here; never hand-edit either. The SVG's night palette is picked by its `#night` fragment.
 
 ## Content editing (Sveltia CMS)
 
@@ -96,8 +116,6 @@ Non-code content is edited through **Sveltia CMS** at `/admin/`, which commits m
 
 ## Notable details
 
-- Theme: light/dark via OS detection + `localStorage`, applied as `data-theme` in `BaseLayout`.
-- Fonts: local variable Roboto Serif (`src/assets/fonts/*.woff2`) via Astro `fonts` config, not a CDN.
 - `__APP_VERSION__` global = `version` from `package.json` (Vite `define`).
 - `photos.ts` `lite` mode reads only the first 64 KB for the date (listings) vs full EXIF (detail pages).
 - Production domain `https://www.outerreach.life` (`astro.config.mjs`) — RSS + sitemap depend on it.
