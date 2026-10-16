@@ -4,8 +4,20 @@
     {
       "name": "outer-reach-dev",
       "runtimeExecutable": "node_modules/.bin/astro",
-      "runtimeArgs": ["dev"],
+      "runtimeArgs": [
+        "dev"
+      ],
       "port": 4321
+    },
+    {
+      "name": "outer-reach-preview",
+      "runtimeExecutable": "node_modules/.bin/astro",
+      "runtimeArgs": [
+        "preview",
+        "--port",
+        "4325"
+      ],
+      "port": 4325
     }
   ]
 }
