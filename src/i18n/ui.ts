@@ -17,6 +17,8 @@ export const ui = {
     "site.title": "Outer Reach",
     "site.tagline": "A way of living, not a place on a map.",
     "site.footer": `© 2025-2026 · Outer Reach · Made with ❤️ and care for the 🌍`,
+    "footer.carbon.perView": "/view",
+    "footer.carbon.cleaner": "Cleaner than {pct}% of pages tested",
 
     // Navigation
     "nav.garden": "Garden",
@@ -108,6 +110,8 @@ export const ui = {
     "site.title": "Outer Reach",
     "site.tagline": "Un modo di vivere, non un punto sulla mappa.",
     "site.footer": `© 2025-2026 · Outer Reach · Realizzato con ❤️ da... me`,
+    "footer.carbon.perView": "/visita",
+    "footer.carbon.cleaner": "Più pulito di {pct} pagine testate su 100",
 
     // Navigation
     "nav.garden": "Giardino",
