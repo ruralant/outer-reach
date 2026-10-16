@@ -4,7 +4,7 @@
  * Astro.currentLocale is automatically set to "it" because this page
  * lives under src/pages/it/.
  */
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TopNav from '../../components/TopNav.astro';
 import Footer from '../../components/Footer.astro';
@@ -63,15 +63,15 @@ const latestPhotos = await getPhotos({ limit: 3, lite: true });
 				<div class="cards-grid">
 					{latestPhotos.map((photo, i) => (
 						<a href={localePath(lang, `/photos/${photo.slug}`)} class="photo-card">
-							<Image
+							<Picture
 								src={photo.image}
 								alt={photo.slug}
 								width={400}
 								height={400}
 								widths={[220, 400]}
 								sizes="(max-width: 640px) 100vw, 220px"
-								format="webp"
-								quality={70}
+								formats={['avif']}
+								fallbackFormat="webp"
 								loading={i === 0 ? 'eager' : 'lazy'}
 								fetchpriority={i === 0 ? 'high' : 'auto'}
 								decoding="async"
