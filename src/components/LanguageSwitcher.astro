@@ -1,29 +1,45 @@
 ---
-import type { Lang } from '../i18n/ui';
-import { getAlternateLocaleUrl, useTranslations } from '../i18n/utils';
+import { languages, type Lang } from "../i18n/ui";
+import { getAlternateLocaleUrl, useTranslations } from "../i18n/utils";
 
-const currentLang = (Astro.currentLocale || 'en') as Lang;
+interface Props {
+	/** `code` shows "IT" for the header; `name` shows "Italiano" for menus and the footer */
+	variant?: "code" | "name";
+	class?: string;
+}
+
+const { variant = "code", class: className } = Astro.props;
+const currentLang = (Astro.currentLocale || "en") as Lang;
 const t = useTranslations(currentLang);
-const alternateUrl = getAlternateLocaleUrl(Astro.url, currentLang);
-const targetLang: Lang = currentLang === 'en' ? 'it' : 'en';
+const targetLang: Lang = currentLang === "en" ? "it" : "en";
+const href = getAlternateLocaleUrl(Astro.url, currentLang);
 ---
 
-<a href={alternateUrl} class="lang-switch" aria-label={t('a11y.switchLang') as string}>
-	{targetLang.toUpperCase()}
-</a>
+{variant === "code" ? (
+	<a href={href} hreflang={targetLang} class:list={["lang-code", className]} aria-label={`${t("a11y.switchLang")}: ${languages[targetLang]}`}>
+		{targetLang.toUpperCase()}
+	</a>
+) : (
+	<a href={href} hreflang={targetLang} lang={targetLang} class={className}>{languages[targetLang]}</a>
+)}
 
 <style>
-	.lang-switch {
-		font-size: 0.85rem;
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
-		color: var(--color-text-secondary);
-		text-decoration: none;
-		transition: color 0.2s ease;
+	.lang-code {
+		display: grid;
+		place-items: center;
+		height: 2.25rem;
+		min-width: 2.25rem;
+		padding-inline: 0.5rem;
+		border-radius: 9999px;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		color: var(--color-muted);
+		transition: background-color 150ms, color 150ms;
 	}
 
-	.lang-switch:hover {
-		color: var(--color-accent);
-		text-decoration: none;
+	.lang-code:hover {
+		background-color: var(--color-surface);
+		color: var(--color-ink);
 	}
 </style>

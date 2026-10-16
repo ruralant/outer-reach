@@ -1,0 +1,134 @@
+---
+import { Picture } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import type { Photo } from "../../lib/photos";
+import { useTranslations, localePath, localeDateString } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+interface Props {
+	lang: Lang;
+	photo: Photo;
+}
+
+const { lang, photo } = Astro.props;
+const { exif } = photo;
+const t = useTranslations(lang);
+
+const date = exif.date ? localeDateString(exif.date, lang) : undefined;
+const rows = [
+	{ label: t("exif.date"), value: date },
+	{ label: t("exif.camera"), value: exif.camera },
+	{ label: t("exif.lens"), value: exif.lens },
+	{ label: t("exif.focalLength"), value: exif.focalLength },
+	{ label: t("exif.aperture"), value: exif.aperture },
+	{ label: t("exif.shutter"), value: exif.shutterSpeed },
+	{ label: t("exif.iso"), value: exif.iso?.toString() },
+].filter((row) => row.value);
+---
+
+<BaseLayout title={`${date ?? photo.slug} — ${t("photos.title")} — ${t("site.title")}`} description={t("photos.description") as string}>
+	<article class="photo">
+		<aside>
+			<a class="back" href={localePath(lang, "/photos/")}><span aria-hidden="true">←</span> {t("photos.all")}</a>
+			{rows.length > 0 && (
+				<dl>
+					{rows.map((row) => (
+						<div>
+							<dt class="eyebrow">{row.label}</dt>
+							<dd>{row.value}</dd>
+						</div>
+					))}
+				</dl>
+			)}
+		</aside>
+
+		<div class="frame">
+			<h1 class="sr-only">{t("photos.title")}: {date ?? photo.slug}</h1>
+			<Picture
+				src={photo.image}
+				alt={photo.slug}
+				widths={[640, 933, 1400]}
+				sizes="(max-width: 799px) 100vw, 46rem"
+				formats={["avif"]}
+				fallbackFormat="webp"
+				loading="eager"
+				fetchpriority="high"
+				decoding="async"
+			/>
+		</div>
+	</article>
+</BaseLayout>
+
+<style>
+	.photo {
+		display: grid;
+		gap: 2rem;
+	}
+
+	/* On narrow screens the side column dissolves: back link, then photo, then details */
+	aside {
+		display: contents;
+	}
+
+	.back {
+		font-size: 0.875rem;
+		color: var(--color-muted);
+		transition: color 150ms;
+	}
+
+	.back:hover {
+		color: var(--color-ink);
+	}
+
+	dl {
+		order: 2;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+		gap: 1.5rem 2rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--color-line);
+		font-size: 0.875rem;
+	}
+
+	dd {
+		margin-top: 0.5rem;
+		color: var(--color-ink);
+	}
+
+	.frame {
+		order: 1;
+		min-width: 0;
+	}
+
+	.frame :global(img) {
+		width: 100%;
+		border-radius: 0.75rem;
+		background-color: var(--color-surface);
+	}
+
+	@media (min-width: 800px) {
+		.photo {
+			grid-template-columns: 12rem minmax(0, 1fr);
+			gap: 0;
+			column-gap: 4rem;
+			align-items: start;
+		}
+
+		aside {
+			display: block;
+			position: sticky;
+			top: 2rem;
+		}
+
+		.frame {
+			order: 0;
+		}
+
+		dl {
+			grid-template-columns: 1fr;
+			margin-top: 2.5rem;
+			padding-top: 0;
+			border-top: 0;
+		}
+	}
+</style>

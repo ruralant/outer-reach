@@ -16,7 +16,6 @@ export const ui = {
     // Site-wide
     "site.title": "Outer Reach",
     "site.tagline": "A way of living, not a place on a map.",
-    "site.footer": `© 2025-2026 · Outer Reach · Made with ❤️ and care for the 🌍`,
     "footer.carbon.perView": "/view",
     "footer.carbon.cleaner": "Cleaner than {pct}% of pages tested",
 
@@ -27,30 +26,47 @@ export const ui = {
     "nav.photos": "Photos",
     "nav.home": "Home",
     "nav.rss": "RSS",
-    "nav.backToGarden": "← Garden",
-    "nav.backToGardenLong": "← Back to Garden",
-    "nav.backToBlog": "← Blog",
-    "nav.backToBlogLong": "← Back to Blog",
-    "nav.backToTags": "← Tags",
-    "nav.exploreGarden": "Explore the Garden →",
-    "nav.manifesto": "Read the manifesto →",
+    "nav.exploreGarden": "Explore the garden",
+    "nav.manifesto": "Read the manifesto",
+    "nav.main": "Main",
+    "menu.open": "Menu",
+    "menu.close": "Close",
+
+    // Footer
+    "footer.site": "Site",
+    "footer.elsewhere": "Elsewhere",
+    "footer.rss": "RSS feed",
 
     // Homepage
-    "home.recentPhotos": "Recent Photos",
+    "home.recentPhotos": "Recent photos",
+    "home.eyebrowWriting": "Writing",
+    "home.illustration":
+      "Illustration of a solarpunk house on a floating island: a rammed-earth cottage with solar panels on its roof, a glass dome greenhouse, a wind turbine, fruit trees and cypresses, raised vegetable beds, a beehive and a pond that spills over the edge as a waterfall",
 
     // Photos
     "photos.title": "Photos",
     "photos.description": "A collection of photographs.",
     "photos.empty": "No photos yet.",
+    "photos.heading": "Seen along the way",
+    "photos.all": "All photos",
+    "exif.camera": "Camera",
+    "exif.lens": "Lens",
+    "exif.focalLength": "Focal length",
+    "exif.aperture": "Aperture",
+    "exif.shutter": "Shutter",
+    "exif.iso": "ISO",
+    "exif.date": "Taken",
 
     // Garden index
     "garden.title": "Garden",
     "garden.subtitle":
       "A collection of interconnected notes, ideas, and evergreen content. Notes grow over time — from seeds to evergreen.",
-    "garden.recentNotes": "Recent Notes",
+    "garden.heading": "Notes that grow over time",
+    "garden.recentNotes": "Recent notes",
+    "garden.all": "All notes",
     "garden.filterStatus": "Status",
     "garden.filterTags": "Tags",
-    "garden.randomNote": "🎲 Random Note",
+    "garden.randomNote": "Random note",
     "garden.noNotes": "No notes yet. Start planting seeds.",
     "garden.noNotesStatus": "No notes with this status yet.",
     "garden.withThisTag": "with this tag",
@@ -59,28 +75,31 @@ export const ui = {
     "blog.title": "Blog",
     "blog.subtitle":
       "Monthly reflections, updates, and dispatches from the edge.",
+    "blog.heading": "Dispatches from the edge",
+    "blog.all": "All posts",
     "blog.published": "Published",
     "blog.updated": "Updated",
     "blog.noPosts": "No posts yet.",
     "blog.post": "post",
     "blog.posts": "posts",
     "blog.tagsSubtitle": "Browse blog posts by topic",
-    "blog.postsTagged": "Posts tagged",
-    "blog.recentPosts": "Recent Posts",
+    "blog.recentPosts": "Recent posts",
 
     // Note meta
-    "note.by": "By",
+    "note.author": "Author",
     "note.planted": "Planted",
     "note.tended": "Tended",
     "note.contents": "Contents",
-    "note.linkedFrom": "Linked From",
-    "note.relatedNotes": "Related Notes",
+    "note.linkedFrom": "Linked from",
+    "note.relatedNotes": "Related notes",
     "note.note": "note",
     "note.notes": "notes",
 
     // Tags page
     "tags.title": "Tags",
     "tags.subtitle": "Browse notes by topic",
+    "tags.tag": "Tag",
+    "tags.all": "All tags",
 
     // Status labels
     "status.seed": "Seed",
@@ -109,7 +128,6 @@ export const ui = {
     // Site-wide
     "site.title": "Outer Reach",
     "site.tagline": "Un modo di vivere, non un punto sulla mappa.",
-    "site.footer": `© 2025-2026 · Outer Reach · Realizzato con ❤️ da... me`,
     "footer.carbon.perView": "/visita",
     "footer.carbon.cleaner": "Più pulito di {pct} pagine testate su 100",
 
@@ -120,30 +138,47 @@ export const ui = {
     "nav.photos": "Foto",
     "nav.home": "Home",
     "nav.rss": "RSS",
-    "nav.backToGarden": "← Giardino",
-    "nav.backToGardenLong": "← Torna al Giardino",
-    "nav.backToBlog": "← Blog",
-    "nav.backToBlogLong": "← Torna al Blog",
-    "nav.backToTags": "← Tag",
-    "nav.exploreGarden": "Esplora il Giardino →",
-    "nav.manifesto": "Leggi il manifesto →",
+    "nav.exploreGarden": "Esplora il giardino",
+    "nav.manifesto": "Leggi il manifesto",
+    "nav.main": "Principale",
+    "menu.open": "Menu",
+    "menu.close": "Chiudi",
+
+    // Footer
+    "footer.site": "Sito",
+    "footer.elsewhere": "Altrove",
+    "footer.rss": "Feed RSS",
 
     // Homepage
-    "home.recentPhotos": "Foto Recenti",
+    "home.recentPhotos": "Foto recenti",
+    "home.eyebrowWriting": "Scritti",
+    "home.illustration":
+      "Illustrazione di una casa solarpunk su un'isola sospesa: un cottage in terra cruda con pannelli solari sul tetto, una serra a cupola di vetro, una turbina eolica, alberi da frutto e cipressi, orti rialzati, un alveare e uno stagno che trabocca dal bordo in una cascata",
 
     // Photos
     "photos.title": "Foto",
     "photos.description": "Una raccolta di fotografie.",
     "photos.empty": "Ancora nessuna foto.",
+    "photos.heading": "Visto lungo la strada",
+    "photos.all": "Tutte le foto",
+    "exif.camera": "Fotocamera",
+    "exif.lens": "Obiettivo",
+    "exif.focalLength": "Lunghezza focale",
+    "exif.aperture": "Apertura",
+    "exif.shutter": "Tempo di scatto",
+    "exif.iso": "ISO",
+    "exif.date": "Scattata",
 
     // Garden index
     "garden.title": "Giardino",
     "garden.subtitle":
       "Una raccolta di note interconnesse, idee e contenuti sempreverdi. Le note crescono nel tempo — da semi a sempreverdi.",
-    "garden.recentNotes": "Note Recenti",
+    "garden.heading": "Note che crescono nel tempo",
+    "garden.recentNotes": "Note recenti",
+    "garden.all": "Tutte le note",
     "garden.filterStatus": "Stato",
     "garden.filterTags": "Tag",
-    "garden.randomNote": "🎲 Nota Casuale",
+    "garden.randomNote": "Nota casuale",
     "garden.noNotes": "Ancora nessuna nota. Inizia a piantare semi.",
     "garden.noNotesStatus": "Ancora nessuna nota con questo stato.",
     "garden.withThisTag": "con questo tag",
@@ -152,28 +187,31 @@ export const ui = {
     "blog.title": "Blog",
     "blog.subtitle":
       "Riflessioni mensili, aggiornamenti e dispacci dal margine.",
+    "blog.heading": "Dispacci dal margine",
+    "blog.all": "Tutti gli articoli",
     "blog.published": "Pubblicato",
     "blog.updated": "Aggiornato",
     "blog.noPosts": "Ancora nessun articolo.",
     "blog.post": "articolo",
     "blog.posts": "articoli",
     "blog.tagsSubtitle": "Esplora gli articoli per argomento",
-    "blog.postsTagged": "Articoli con tag",
-    "blog.recentPosts": "Articoli Recenti",
+    "blog.recentPosts": "Articoli recenti",
 
     // Note meta
-    "note.by": "Di",
+    "note.author": "Autore",
     "note.planted": "Piantato",
     "note.tended": "Curato",
     "note.contents": "Indice",
-    "note.linkedFrom": "Collegato Da",
-    "note.relatedNotes": "Note Correlate",
+    "note.linkedFrom": "Collegato da",
+    "note.relatedNotes": "Note correlate",
     "note.note": "nota",
     "note.notes": "note",
 
     // Tags page
     "tags.title": "Tag",
     "tags.subtitle": "Esplora le note per argomento",
+    "tags.tag": "Tag",
+    "tags.all": "Tutti i tag",
 
     // Status labels
     "status.seed": "Seme",

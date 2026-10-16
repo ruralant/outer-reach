@@ -1,0 +1,114 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../PageHeader.astro";
+import { getSortedPostsForLocale, getAllBlogTags } from "../../lib/blog";
+import { getNotesForLocale, getAllTags } from "../../lib/garden";
+import { useTranslations, localePath } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+interface Props {
+	lang: Lang;
+	collection: "blog" | "garden";
+}
+
+const { lang, collection } = Astro.props;
+const t = useTranslations(lang);
+
+const withCounts = (names: string[], entries: { data: { tags: string[] } }[]) =>
+	names.map((tag) => ({ tag, count: entries.filter((e) => e.data.tags.includes(tag)).length }));
+
+let tags: { tag: string; count: number }[];
+if (collection === "blog") {
+	const posts = await getSortedPostsForLocale(lang);
+	tags = withCounts(getAllBlogTags(posts), posts);
+} else {
+	const notes = await getNotesForLocale(lang);
+	tags = withCounts(getAllTags(notes), notes);
+}
+
+const section = collection === "blog" ? (t("blog.title") as string) : (t("garden.title") as string);
+const lede = collection === "blog" ? t("blog.tagsSubtitle") : t("tags.subtitle");
+const allHref = localePath(lang, `/${collection}/`);
+const allText = collection === "blog" ? t("blog.all") : t("garden.all");
+const unit = (n: number) =>
+	collection === "blog" ? (n === 1 ? t("blog.post") : t("blog.posts")) : n === 1 ? t("note.note") : t("note.notes");
+---
+
+<BaseLayout title={`${t("tags.title")} — ${section} — ${t("site.title")}`} description={lede as string}>
+	<PageHeader eyebrow={section} title={t("tags.title") as string}>
+		{`${lede}.`}{" "}<a class="link" href={allHref}>{allText}</a>
+	</PageHeader>
+
+	<ul class="tags">
+		{tags.map(({ tag, count }) => (
+			<li>
+				<a href={localePath(lang, `/${collection}/tags/${tag}`)}>
+					<span class="name">{tag}</span>
+					<span class="count">{count} {unit(count)}</span>
+				</a>
+			</li>
+		))}
+	</ul>
+</BaseLayout>
+
+<style>
+	.tags {
+		display: grid;
+		column-gap: 2.5rem;
+		border-bottom: 1px solid var(--color-line);
+	}
+
+	@media (min-width: 600px) {
+		.tags {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			border-bottom: 0;
+		}
+	}
+
+	@media (min-width: 1000px) {
+		.tags {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+
+	.tags li {
+		border-top: 1px solid var(--color-line);
+	}
+
+	@media (min-width: 600px) {
+		.tags li {
+			border-bottom: 1px solid var(--color-line);
+			margin-bottom: -1px;
+		}
+	}
+
+	.tags a {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		padding-block: 1.25rem;
+	}
+
+	.name {
+		font-family: var(--font-serif);
+		font-size: 1.65rem;
+		line-height: 1.15;
+		letter-spacing: var(--tracking-title);
+		color: var(--color-ink);
+		text-decoration-color: color-mix(in oklab, var(--color-accent) 60%, transparent);
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.18em;
+	}
+
+	.tags a:hover .name {
+		text-decoration-line: underline;
+	}
+
+	.count {
+		font-size: 0.875rem;
+		font-variant-numeric: tabular-nums;
+		color: var(--color-muted);
+		white-space: nowrap;
+	}
+</style>

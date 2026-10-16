@@ -1,144 +1,174 @@
 ---
-import { useTranslations, localePath } from '../i18n/utils';
-import type { Lang } from '../i18n/ui';
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import { navigation } from "../lib/navigation";
+import { useTranslations, localePath } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
 
-interface Props {
-	lang: Lang;
-}
-
-const { lang } = Astro.props;
+const lang = (Astro.currentLocale || "en") as Lang;
 const t = useTranslations(lang);
 const version: string = __APP_VERSION__;
+const year = new Date().getFullYear();
 
 // Static Website Carbon figures — re-test and update when page weight changes.
 // Quick estimate from a build's homepage bytes, before deploying:
 //   curl "https://api.websitecarbon.com/data?bytes=<bytes>&green=0"
 const carbon = {
-	url: 'https://www.websitecarbon.com/website/outerreach-life/',
-	grams: '0.01',
+	url: "https://www.websitecarbon.com/website/outerreach-life/",
+	grams: "0.01",
 	cleanerThan: 98,
 };
 ---
 
-<footer class="site-footer">
-	<a href={localePath(lang, '/rss.xml')} class="rss-link" aria-label="RSS Feed">
-		<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-			<path d="M4 11a9 9 0 0 1 9 9"></path>
-			<path d="M4 4a16 16 0 0 1 16 16"></path>
-			<circle cx="5" cy="19" r="1"></circle>
-		</svg>
-	</a>
-	<p>{t('site.footer')}</p>
-	<div class="carbon">
-		<a href={carbon.url} target="_blank" rel="noopener noreferrer" class="carbon-badge">
-			<span class="carbon-badge__value">{carbon.grams}g CO<sub>2</sub>{t('footer.carbon.perView')}</span><span class="carbon-badge__label">Website Carbon</span>
-		</a>
-		<a href={carbon.url} target="_blank" rel="noopener noreferrer" class="carbon-badge__detail">
-			{String(t('footer.carbon.cleaner')).replace('{pct}', String(carbon.cleanerThan))}
-		</a>
+<footer class="site-footer container">
+	<div class="main">
+		<div>
+			<p class="brand">Outer Reach</p>
+			<p class="blurb">{t("site.tagline")}</p>
+			<a class="carbon" href={carbon.url} target="_blank" rel="noopener noreferrer">
+				<span class="carbon-value">{carbon.grams} g CO<sub>2</sub>{t("footer.carbon.perView")}</span>
+				<span class="carbon-label">Website Carbon<span aria-hidden="true"> ↗</span></span>
+			</a>
+			<p class="carbon-detail">{String(t("footer.carbon.cleaner")).replace("{pct}", String(carbon.cleanerThan))}</p>
+		</div>
+
+		<div class="columns">
+			<nav aria-label={t("footer.site") as string}>
+				<p class="eyebrow">{t("footer.site")}</p>
+				<ul>
+					<li><a href={localePath(lang, "/")}>{t("nav.home")}</a></li>
+					{navigation.map((item) => (
+						<li><a href={localePath(lang, item.path)}>{t(item.key)}</a></li>
+					))}
+				</ul>
+			</nav>
+			<nav aria-label={t("footer.elsewhere") as string}>
+				<p class="eyebrow">{t("footer.elsewhere")}</p>
+				<ul>
+					<li><a href={localePath(lang, "/manifesto/")}>Manifesto</a></li>
+					<li><a href={localePath(lang, "/rss.xml")}>{t("footer.rss")}</a></li>
+					<li><LanguageSwitcher variant="name" /></li>
+				</ul>
+			</nav>
+		</div>
 	</div>
-	<div class="site-version">v{version}</div>
+
+	<div class="bottom">
+		<p>© 2025–{year} Outer Reach</p>
+		<p>v{version}</p>
+	</div>
 </footer>
 
-<style is:global>
-	footer.site-footer {
-		margin-top: 3rem;
-		padding-top: 2rem;
-		border-top: 1px solid var(--color-border);
-		text-align: center;
+<style>
+	.main {
+		display: grid;
+		gap: 2.5rem;
+		padding-top: 3rem;
+		padding-bottom: 2.5rem;
+		border-top: 1px solid var(--color-line);
 	}
 
-	footer.site-footer .rss-link {
-		display: inline-flex;
-		color: var(--color-text-secondary);
-		opacity: 0.5;
-		transition: opacity 0.2s ease, color 0.2s ease;
+	@media (min-width: 800px) {
+		.main {
+			grid-template-columns: 1fr auto;
+		}
 	}
 
-	footer.site-footer .rss-link:hover {
-		opacity: 1;
-		color: var(--color-accent);
-		text-decoration: none;
-	}
-
-	footer.site-footer p {
-		font-size: 0.8rem;
-		color: var(--color-text-secondary);
-		margin-top: 0.75rem;
-		margin-bottom: 0;
-	}
-
-	footer.site-footer .carbon {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.35rem;
-		margin-top: 1rem;
-	}
-
-	footer.site-footer .carbon-badge {
-		--carbon-label: var(--color-accent-dark);
-		display: inline-flex;
-		font-size: 0.7rem;
+	.brand {
+		font-family: var(--font-serif);
+		font-size: 1.75rem;
 		line-height: 1;
-		letter-spacing: 0.02em;
-		text-decoration: none;
+		letter-spacing: var(--tracking-title);
 	}
 
-	[data-theme='dark'] footer.site-footer .carbon-badge {
-		--carbon-label: var(--color-accent);
+	.blurb {
+		max-width: 20rem;
+		margin-top: 0.75rem;
+		font-size: 0.875rem;
+		line-height: 1.6;
+		color: var(--color-muted);
 	}
 
-	footer.site-footer .carbon-badge__value,
-	footer.site-footer .carbon-badge__label {
+	.carbon {
 		display: inline-flex;
-		align-items: center;
-		padding: 0.4em 0.65em;
+		align-items: stretch;
+		margin-top: 1.5rem;
+		overflow: hidden;
+		border: 1px solid var(--color-line-strong);
+		border-radius: 9999px;
+		font-size: 0.75rem;
+		line-height: 1;
+		transition: border-color 150ms;
 	}
 
-	footer.site-footer .carbon-badge__value {
-		border: 1px solid var(--color-border);
-		border-right: 0;
-		border-radius: 4px 0 0 4px;
-		color: var(--color-text-secondary);
-		transition: color 0.2s ease, border-color 0.2s ease;
+	.carbon:hover {
+		border-color: var(--color-ink);
 	}
 
-	footer.site-footer .carbon-badge__value sub {
+	.carbon-value,
+	.carbon-label {
+		padding: 0.5rem 0.75rem;
+	}
+
+	.carbon-value {
+		font-variant-numeric: tabular-nums;
+		color: var(--color-ink-soft);
+	}
+
+	.carbon-value sub {
 		font-size: 0.75em;
-		vertical-align: baseline;
-		position: relative;
-		top: 0.25em;
+		line-height: 0;
 	}
 
-	footer.site-footer .carbon-badge__label {
-		border: 1px solid var(--carbon-label);
-		border-radius: 0 4px 4px 0;
-		background: var(--carbon-label);
-		color: var(--color-background);
-		font-weight: 600;
+	.carbon-label {
+		border-left: 1px solid var(--color-line-strong);
+		background-color: var(--color-surface);
+		font-weight: 500;
+		color: var(--color-ink);
+		transition: border-color 150ms, color 150ms;
 	}
 
-	footer.site-footer .carbon-badge:hover .carbon-badge__value {
-		color: var(--color-text-primary);
-		border-color: var(--carbon-label);
-	}
-
-	footer.site-footer .carbon-badge__detail {
-		font-size: 0.7rem;
-		color: var(--color-text-secondary);
-		transition: color 0.2s ease;
-	}
-
-	footer.site-footer .carbon-badge__detail:hover {
+	.carbon:hover .carbon-label {
+		border-color: var(--color-ink);
 		color: var(--color-accent);
-		text-decoration: none;
 	}
 
-	footer.site-footer .site-version {
-		font-size: 0.65rem;
-		color: var(--color-text-secondary);
+	.carbon-detail {
+		margin-top: 0.5rem;
+		font-size: 0.75rem;
+		color: var(--color-muted);
+	}
+
+	.columns {
+		display: grid;
+		grid-template-columns: repeat(2, auto);
+		justify-content: start;
+		gap: 2rem 4rem;
+		font-size: 0.875rem;
+	}
+
+	.columns ul {
+		display: grid;
+		gap: 0.625rem;
 		margin-top: 1rem;
-		user-select: none;
+	}
+
+	.columns :global(a) {
+		color: var(--color-ink-soft);
+		transition: color 150ms;
+	}
+
+	.columns :global(a:hover) {
+		color: var(--color-accent);
+	}
+
+	.bottom {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 0.5rem;
+		padding-bottom: 2.5rem;
+		font-size: 0.75rem;
+		font-variant-numeric: tabular-nums;
+		color: var(--color-muted);
 	}
 </style>

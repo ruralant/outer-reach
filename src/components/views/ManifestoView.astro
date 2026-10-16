@@ -1,0 +1,64 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../PageHeader.astro";
+import { useTranslations, localePath } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+import { Content as ManifestoEn } from "../../content/manifesto/en.md";
+import { Content as ManifestoIt } from "../../content/manifesto/it.md";
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const Content = lang === "it" ? ManifestoIt : ManifestoEn;
+---
+
+<BaseLayout title={`Manifesto — ${t("site.title")}`} description={t("site.tagline") as string}>
+	<article class="manifesto">
+		<PageHeader eyebrow="Manifesto">
+			<Fragment slot="title">Outer <em>Reach</em></Fragment>
+			{t("site.tagline")}
+		</PageHeader>
+
+		<div class="prose">
+			<Content />
+		</div>
+
+		<footer>
+			<a class="back" href={localePath(lang, "/")}><span aria-hidden="true">←</span> {t("nav.home")}</a>
+		</footer>
+	</article>
+</BaseLayout>
+
+<style>
+	.manifesto {
+		max-width: 42rem;
+	}
+
+	em {
+		color: var(--color-accent);
+	}
+
+	.prose {
+		padding-top: 2.5rem;
+		border-top: 1px solid var(--color-line);
+	}
+
+	footer {
+		margin-top: 4rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--color-line);
+	}
+
+	.back {
+		font-size: 0.875rem;
+		color: var(--color-muted);
+		transition: color 150ms;
+	}
+
+	.back:hover {
+		color: var(--color-ink);
+	}
+</style>

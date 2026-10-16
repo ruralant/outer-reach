@@ -22,29 +22,41 @@ export default defineConfig({
     // redirect that collided with the real pages/it/index.astro and emitted
     // empty routes for the (shared, unprefixed) /photos pages.
   },
+  // Same type as antoniorossi.net: Instrument Serif for titles, Geist for text. The files are
+  // the portfolio's latin subsets, vendored. The italic is Basic Latin only (no à/è/ì/ò/ù), so
+  // keep it to short English accents such as the homepage title.
   fonts: [
     {
       provider: fontProviders.local(),
-      name: "Roboto Serif",
-      cssVariable: "--font-roboto-serif",
-      fallbacks: ["serif"],
-      // Trimmed from the full variable fonts (opsz 8–144, wght 100–900) to cut
-      // page weight: opsz pinned at 20, upright keeps wght 400–700 (all the CSS
-      // uses), italic is a static 400. Regenerate with fonttools:
-      //   fonttools varLib.instancer RobotoSerif-Variable.woff2 opsz=20 wght=400:700 -o up.ttf
-      //   fonttools varLib.instancer RobotoSerif-Italic-Variable.woff2 opsz=20 wght=400 -o it.ttf
-      //   pyftsubset <ttf> --unicodes='*' --layout-features='*' --flavor=woff2 --output-file=<woff2>
+      name: "Instrument Serif",
+      cssVariable: "--font-serif",
+      fallbacks: ["Georgia", "serif"],
       options: {
         variants: [
           {
-            weight: "400 700",
+            weight: "400",
             style: "normal",
-            src: ["./src/assets/fonts/RobotoSerif-Wght400-700.woff2"],
+            src: ["./src/assets/fonts/instrument-serif-latin-400-subset.woff2"],
           },
           {
             weight: "400",
             style: "italic",
-            src: ["./src/assets/fonts/RobotoSerif-Italic-400.woff2"],
+            src: ["./src/assets/fonts/instrument-serif-latin-400-italic-subset.woff2"],
+          },
+        ],
+      },
+    },
+    {
+      provider: fontProviders.local(),
+      name: "Geist",
+      cssVariable: "--font-sans",
+      fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"],
+      options: {
+        variants: [
+          {
+            weight: "400 600",
+            style: "normal",
+            src: ["./src/assets/fonts/geist-latin-400-600-subset.woff2"],
           },
         ],
       },
