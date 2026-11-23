@@ -36,6 +36,7 @@ export const ui = {
     "footer.site": "Site",
     "footer.elsewhere": "Elsewhere",
     "footer.rss": "RSS feed",
+    "footer.terms": "Terms",
 
     // Homepage
     "home.recentPhotos": "Recent photos",
@@ -123,6 +124,13 @@ export const ui = {
     // Now page
     "now.title": "Now",
     "now.lastUpdated": "Last updated",
+
+    // Terms page
+    "terms.eyebrow": "Legal",
+    "terms.title": "Terms and Conditions",
+    "terms.description":
+      "The terms and conditions that govern access to outerreach.life, including the Search Only Terms Contract and its Access Fee.",
+    "terms.lastUpdated": "Last updated",
   },
   it: {
     // Site-wide
@@ -148,6 +156,7 @@ export const ui = {
     "footer.site": "Sito",
     "footer.elsewhere": "Altrove",
     "footer.rss": "Feed RSS",
+    "footer.terms": "Termini",
 
     // Homepage
     "home.recentPhotos": "Foto recenti",
@@ -236,5 +245,12 @@ export const ui = {
     // Now page
     "now.title": "Ora",
     "now.lastUpdated": "Ultimo aggiornamento",
+
+    // Terms page
+    "terms.eyebrow": "Note legali",
+    "terms.title": "Termini e Condizioni",
+    "terms.description":
+      "I termini e le condizioni che regolano l’accesso a outerreach.life, incluso il Search Only Terms Contract e la sua Access Fee.",
+    "terms.lastUpdated": "Ultimo aggiornamento",
   },
 } as const;

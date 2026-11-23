@@ -1,0 +1,6 @@
+# License https://m4ow.uk/socw/3.txt
+User-agent: *
+tdl: https://m4ow.uk/socw/3.txt
+Allow: /
+
+Sitemap: https://www.outerreach.life/sitemap-index.xml

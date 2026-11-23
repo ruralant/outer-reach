@@ -2,6 +2,7 @@
 import { Font } from "astro:assets";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import { CONTRACT_URL } from "../lib/terms";
 import "../styles/global.css";
 
 interface Props {
@@ -21,6 +22,7 @@ const { title, description } = Astro.props;
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		{description && <meta name="description" content={description} />}
+		<link rel="terms-of-service" href={CONTRACT_URL} />
 		<Font cssVariable="--font-serif" />
 		<Font cssVariable="--font-sans" />
 		<script is:inline>

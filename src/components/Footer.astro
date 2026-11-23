@@ -53,7 +53,7 @@ const carbon = {
 	</div>
 
 	<div class="bottom">
-		<p>© 2025–{year} Outer Reach</p>
+		<p>© 2025–{year} Outer Reach · <a href={localePath(lang, "/terms/")}>{t("footer.terms")}</a></p>
 		<p>v{version}</p>
 	</div>
 </footer>
@@ -170,5 +170,13 @@ const carbon = {
 		font-size: 0.75rem;
 		font-variant-numeric: tabular-nums;
 		color: var(--color-muted);
+	}
+
+	.bottom a {
+		transition: color 150ms;
+	}
+
+	.bottom a:hover {
+		color: var(--color-accent);
 	}
 </style>
