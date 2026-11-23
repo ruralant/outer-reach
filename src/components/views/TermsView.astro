@@ -1,0 +1,129 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../PageHeader.astro";
+import { useTranslations, localePath, localeDateString } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+import { CONTRACT_URL } from "../../lib/terms";
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Bump when the clauses below change.
+const updated = new Date("2026-11-23");
+const contract = "Search Only Terms Contract: for Access and Use of Website";
+---
+
+<BaseLayout title={`${t("terms.title")} — ${t("site.title")}`} description={t("terms.description") as string}>
+	<article class="terms">
+		<PageHeader eyebrow={t("terms.eyebrow") as string} title={t("terms.title") as string}>
+			{lang === "it"
+				? "Questi Termini e Condizioni regolano l’accesso a www.outerreach.life (il “Sito”), gestito da Antonio Rossi, e il suo utilizzo da parte di persone e di sistemi automatizzati come crawler, scraper e strumenti di intelligenza artificiale."
+				: "These Terms and Conditions govern access to and use of www.outerreach.life (the “Website”), operated by Antonio Rossi, by people and by automated systems such as crawlers, scrapers and AI tools."}
+		</PageHeader>
+
+		<div class="prose">
+			<p class="eyebrow">{`${t("terms.lastUpdated")} ${localeDateString(updated, lang)}`}</p>
+
+			{lang === "it" ? (
+				<>
+					<h2>1. Accesso al Sito</h2>
+
+					<p>
+						<strong>1.1</strong> Il nostro {contract} (disponibile all’URL con controllo di versione
+						pubblicato da MOW, attualmente il seguente: <a href={CONTRACT_URL}>{CONTRACT_URL}</a>)
+						regola l’accesso al Sito e ai suoi contenuti.
+					</p>
+
+					<p>
+						<strong>1.2</strong> In caso di incongruenza tra le disposizioni dei presenti Termini e
+						Condizioni e quelle del {contract} indicato sopra, prevalgono le disposizioni
+						del {contract} nella versione pubblicata all’URL di MOW sopra citato.
+					</p>
+
+					<p>
+						<strong>1.3</strong> Ai fini della Clausola 4.3 del {contract}, l’Access Fee dovuta per
+						ciascun Product a cui si accede in seguito a un Access Event che costituisce Unlicenced
+						Access è di £100 (cento sterline) IVA esclusa, che sarà dovuta in aggiunta ove
+						applicabile.
+					</p>
+
+					<p>
+						<strong>1.4</strong> L’Access Fee costituisce un debito contrattuale che diventa
+						immediatamente esigibile ai sensi della Clausola 4 del {contract}. I termini con
+						iniziale maiuscola usati nelle Clausole 1.3 e 1.4 e non altrimenti definiti nei presenti
+						Termini e Condizioni hanno il significato loro attribuito nel {contract}.
+					</p>
+
+					<p>
+						<strong>1.5</strong> Questa pagina è una traduzione. In caso di divergenza prevale la <a href={localePath("en", "/terms/")}>versione inglese</a>.
+					</p>
+				</>
+			) : (
+				<>
+					<h2>1. Access to the Website</h2>
+
+					<p>
+						<strong>1.1</strong> Our {contract} (available at the version-controlled URL published by
+						MOW, currently being the following link: <a href={CONTRACT_URL}>{CONTRACT_URL}</a>)
+						governs access to the Website and its content.
+					</p>
+
+					<p>
+						<strong>1.2</strong> If there is an inconsistency between any of the provisions of these
+						Terms and Conditions and the provisions of the {contract} as linked above, the provisions
+						of the {contract}, the version hosted at the referenced MOW URL shall prevail.
+					</p>
+
+					<p>
+						<strong>1.3</strong> For the purposes of Clause 4.3 of the {contract}, the Access Fee
+						payable in respect of each Product accessed as a result of an Access Event that is
+						Unlicenced Access is £100 (one hundred pounds sterling) exclusive of VAT, which shall be
+						payable in addition where applicable.
+					</p>
+
+					<p>
+						<strong>1.4</strong> The Access Fee is a contractual debt which becomes immediately due and
+						payable in accordance with Clause 4 of the {contract}. Capitalised terms used in Clauses
+						1.3 and 1.4 and not otherwise defined in these Terms and Conditions have the meanings
+						given to them in the {contract}.
+					</p>
+				</>
+			)}
+		</div>
+
+		<footer>
+			<a class="back" href={localePath(lang, "/")}><span aria-hidden="true">←</span> {t("nav.home")}</a>
+		</footer>
+	</article>
+</BaseLayout>
+
+<style>
+	.terms {
+		max-width: 42rem;
+	}
+
+	.prose {
+		padding-top: 2.5rem;
+		border-top: 1px solid var(--color-line);
+	}
+
+	footer {
+		margin-top: 4rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--color-line);
+	}
+
+	.back {
+		font-size: 0.875rem;
+		color: var(--color-muted);
+		transition: color 150ms;
+	}
+
+	.back:hover {
+		color: var(--color-ink);
+	}
+</style>
