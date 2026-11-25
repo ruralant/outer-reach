@@ -3,6 +3,7 @@ import { defineConfig, fontProviders } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import remarkWikiLinks from "./src/plugins/remarkWikiLinks.ts";
+import noGpsInImages from "./src/plugins/noGpsInImages.ts";
 import { unified } from "@astrojs/markdown-remark";
 import { readFileSync } from "node:fs";
 
@@ -62,7 +63,7 @@ export default defineConfig({
       },
     },
   ],
-  integrations: [mdx(), sitemap()],
+  integrations: [noGpsInImages(), mdx(), sitemap()],
   markdown: {
     processor: unified({
       gfm: true,

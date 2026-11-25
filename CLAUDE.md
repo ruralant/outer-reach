@@ -43,6 +43,8 @@ src/
     rows.ts                 postRow / noteRow → props for a ListRow
   plugins/
     remarkWikiLinks.ts      renders [[ ]] → <a class="wiki-link"> (wired in astro.config)
+    noGpsInImages.ts        integration: `build` fails (dev warns) if an image in src/photos or
+                            src/assets/images carries a GPS location — the repo is public
   layouts/                  BaseLayout (head, theme, Header + <main> + Footer), Longform (article grid:
                             side column + body), BlogPostLayout / GardenNoteLayout (fill Longform's meta)
   components/views/         ONE view per page (HomeView, BlogIndexView, GardenIndexView, TagsView, TaggedView,
@@ -54,7 +56,7 @@ src/
   assets/solarpunk.svg      homepage illustration, copied from the portfolio (see Design)
   photos/*.jpg              photo gallery source (filename = slug); optimized via astro:assets <Image>
   assets/images/            CMS media uploads (relative public_folder; see Content editing)
-astro.config.mjs            site URL, i18n, local fonts, remark plugin, __APP_VERSION__
+astro.config.mjs            site URL, i18n, local fonts, remark plugin, GPS check, __APP_VERSION__
 public/admin/               Sveltia CMS: index.html + config.yml + vendored bundle
 ```
 
@@ -82,7 +84,7 @@ Changing the link format means editing both.
 - **Garden note / blog post:** create the `.md` under **both** `content/<coll>/en/` and `.../it/` (content is per-locale, no auto-fallback for files). Match the schema for that collection.
 - **New page/route:** write a view in `components/views/` that takes `lang`, wraps itself in `BaseLayout` (which already renders the header and footer) and keeps its CSS in a scoped `<style>`; then add a wrapper under `pages/` **and** `pages/it/`.
 - **New UI text:** rule 2.
-- **Photo:** drop a `.jpg`/`.jpeg` into `src/photos/` — EXIF + sort + image optimization (WebP/responsive via `<Image>`) are automatic; slug = filename. Grids go through `PhotoGrid`; anything else uses `photo.image` with `astro:assets` `<Picture>` (AVIF + WebP fallback), never a raw `<img src>`.
+- **Photo:** drop a `.jpg`/`.jpeg` into `src/photos/` — EXIF + sort + image optimization (WebP/responsive via `<Image>`) are automatic; slug = filename. Grids go through `PhotoGrid`; anything else uses `photo.image` with `astro:assets` `<Picture>` (AVIF + WebP fallback), never a raw `<img src>`. The original file, with all its EXIF, is committed to a public repo, so strip any GPS location first; `pnpm build` refuses a photo that has one (`plugins/noGpsInImages.ts`).
 
 ## Design
 
@@ -108,6 +110,7 @@ Non-code content is edited through **Sveltia CMS** at `/admin/`, which commits m
 
 - `i18n: { structure: multiple_folders, locales: [en, it], default_locale: en }` matches the on-disk layout (rule 1). Per field: `i18n: true` = translated (title/description/body, garden `tags`), `i18n: duplicate` = copied across locales (dates, `status`, `author`, `draft`).
 - Uploads go to `src/assets/images`, **not** `public/` — and `public_folder` is deliberately *relative* (`../../../assets/images`), because only relative paths trigger Astro's build-time markdown image optimization.
+- `media_libraries.default.config.transformations.raster_image` re-encodes every JPEG/PNG/WebP/AVIF/GIF upload to WebP (max 2400px) in the browser before commit. Redrawing on a canvas drops all metadata, so phone GPS never reaches the repo. HEIC passes through untouched; the build's GPS check catches it.
 - `now` / `manifesto` are body-only entries in the `pages` file collection: those files have no frontmatter and must stay plain markdown on save.
 - `output.omit_empty_optional_fields` + double-quote / 2-space YAML keep CMS commits from churning diffs against hand-written files.
 - No editorial workflow (Sveltia has no draft-as-PR before v1.0) — saves land on `main`; `draft: true` is the stand-in, and the opt-in line sits commented at the bottom of `config.yml`.
