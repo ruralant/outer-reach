@@ -20,6 +20,23 @@ backend:
 media_folder: src/assets/images
 public_folder: /src/assets/images
 
+# Re-encode every raster upload (JPEG, PNG, WebP, AVIF, GIF) to WebP in the
+# browser before it is committed. Redrawing the image on a canvas drops all its
+# metadata, so a phone photo's GPS location never reaches the public repo.
+# Larger images are scaled down to fit 2400px; Astro re-optimises for display
+# anyway. Side effect: an animated GIF becomes a still image. HEIC files pass
+# through untouched, so the build's location check (src/plugins/noGpsInImages.ts)
+# is the backstop for those.
+media_libraries:
+  default:
+    config:
+      transformations:
+        raster_image:
+          format: webp
+          quality: 90
+          width: 2400
+          height: 2400
+
 # Matches the physical layout src/content/<collection>/{en,it}/<slug>.md
 i18n:
   structure: multiple_folders
